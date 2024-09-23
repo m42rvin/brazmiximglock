@@ -109,9 +109,11 @@ $images = loadImages($json_file);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Upload de Imagens</title>
     <style>
-        .image-list {
+        body {
             display: flex;
-            flex-wrap: wrap;
+        }
+        .image-list {
+            flex: 1
         }
         .image-item {
             margin: 10px;
@@ -119,37 +121,51 @@ $images = loadImages($json_file);
             padding: 10px;
         }
         .image-item img {
-            max-width: 150px;
-            max-height: 150px;
+            width: 150px;
             display: block;
         }
+        .uploadImg {
+            flex: 1
+        }
     </style>
+    <?php include "header.php"; ?>
 </head>
 <body>
-
+<div class="uploadImg">
 <h1>Upload de Imagens</h1>
 
 <!-- Formulário para upload de imagem -->
 <form action="" method="POST" enctype="multipart/form-data">
     <label for="image">Escolha uma imagem:</label>
     <input type="file" name="image" id="image" required>
-    <button type="submit">Enviar</button>
+    <button type="submit" class="btn btn-dark">Enviar</button>
 </form>
+    </div>
+    
+    <!-- Exibe as imagens enviadas -->
+    <div class="image-list">
+        
 
-<h2>Imagens enviadas:</h2>
 
-<!-- Exibe as imagens enviadas -->
-<div class="image-list">
+    <h2>Imagens enviadas:</h2>
     <?php if (!empty($images)) : ?>
         <?php foreach ($images as $img) : ?>
             <div class="image-item">
-                <img class="img-uploaded" src="<?php echo $img['path']; ?>" alt="<?php echo $img['name']; ?>">
-                <p><strong>Nome:</strong> <?php echo $img['name']; ?></p>
+                <table>
+                    <tr>
+                        <td><img class="img-uploaded" src="<?php echo $img['path']; ?>" alt="<?php echo $img['name']; ?>">
+                        </td>
+                        <td>
+                        <p><strong>Nome:</strong> <?php echo $img['name']; ?></p>
                 <p><strong>Enviado em:</strong> <?php echo $img['uploaded_at']; ?></p>
                 <?php if (!empty($img['exif'])) : ?>
                     <p><strong>EXIF:</strong> <?php echo json_encode($img['exif'], JSON_PRETTY_PRINT); ?></p>
                 <?php endif; ?>
                 <a href="?delete=<?php echo urlencode($img['path']); ?>" onclick="return confirm('Tem certeza que deseja excluir esta imagem?');">Excluir</a>
+                        </td>
+                    </tr>
+                </table>
+                
             </div>
         <?php endforeach; ?>
     <?php else : ?>
@@ -166,4 +182,5 @@ document.querySelectorAll('.img-uploaded').forEach(function(img) {
 });
 </script>
 </body>
+<?php include "footer.php"; ?>
 </html>
