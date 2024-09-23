@@ -85,9 +85,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['image'])) {
             exit(); // Encerra o script para evitar o reenvio do formulário
         } else {
             echo "Erro ao fazer o upload da imagem.";
+            header('Location: ' . $_SERVER['PHP_SELF']);
+            exit();
         }
     } else {
         echo "Formato de imagem inválido. Apenas JPEG, PNG e GIF são permitidos.";
+        header('Location: ' . $_SERVER['PHP_SELF']);
+        exit();
     }
 }
 
