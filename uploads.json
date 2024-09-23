@@ -1,13 +1,35 @@
 [
     {
+        "name": "a-surreal-chaotic-album-cover-for-the-single-insan-SqtOX9ysQmuw4oPJ7Id1lg-g8J6UZ9cRiCPA-GI_OKK6Q (1) (1).jpeg",
+        "path": "_img\/a-surreal-chaotic-album-cover-for-the-single-insan-SqtOX9ysQmuw4oPJ7Id1lg-g8J6UZ9cRiCPA-GI_OKK6Q (1) (1).jpeg",
+        "type": "image\/jpeg",
+        "size": 1338936,
+        "uploaded_at": "2024-09-23 13:26:16",
+        "exif": {
+            "FileName": "a-surreal-chaotic-album-cover-for-the-single-insan-SqtOX9ysQmuw4oPJ7Id1lg-g8J6UZ9cRiCPA-GI_OKK6Q (1) (1).jpeg",
+            "FileDateTime": 1727108776,
+            "FileSize": 1338936,
+            "FileType": 2,
+            "MimeType": "image\/jpeg",
+            "SectionsFound": "",
+            "COMPUTED": {
+                "html": "width=\"2000\" height=\"2000\"",
+                "Height": 2000,
+                "Width": 2000,
+                "IsColor": 1
+            }
+        }
+    },
+    {
+        "id": "66f1a572e7c12",
         "name": "a-dark-and-moody-illustration-of-a-lone-figure-wal-Om0SZHLsSHKvbldqLI_ZKw-70J61BdMQjWx7BpuGSGBeA.jpeg",
-        "path": "_img\/a-dark-and-moody-illustration-of-a-lone-figure-wal-Om0SZHLsSHKvbldqLI_ZKw-70J61BdMQjWx7BpuGSGBeA.jpeg",
+        "path": "_img\/66f1a572e7ae1_a-dark-and-moody-illustration-of-a-lone-figure-wal-Om0SZHLsSHKvbldqLI_ZKw-70J61BdMQjWx7BpuGSGBeA.jpeg",
         "type": "image\/jpeg",
         "size": 137145,
-        "uploaded_at": "2024-09-23 13:25:41",
+        "uploaded_at": "2024-09-23 14:29:22",
         "exif": {
-            "FileName": "a-dark-and-moody-illustration-of-a-lone-figure-wal-Om0SZHLsSHKvbldqLI_ZKw-70J61BdMQjWx7BpuGSGBeA.jpeg",
-            "FileDateTime": 1727108741,
+            "FileName": "66f1a572e7ae1_a-dark-and-moody-illustration-of-a-lone-figure-wal-Om0SZHLsSHKvbldqLI_ZKw-70J61BdMQjWx7BpuGSGBeA.jpeg",
+            "FileDateTime": 1727112562,
             "FileSize": 137145,
             "FileType": 2,
             "MimeType": "image\/jpeg",
@@ -26,22 +48,23 @@
         }
     },
     {
-        "name": "a-surreal-chaotic-album-cover-for-the-single-insan-SqtOX9ysQmuw4oPJ7Id1lg-g8J6UZ9cRiCPA-GI_OKK6Q (1) (1).jpeg",
-        "path": "_img\/a-surreal-chaotic-album-cover-for-the-single-insan-SqtOX9ysQmuw4oPJ7Id1lg-g8J6UZ9cRiCPA-GI_OKK6Q (1) (1).jpeg",
+        "id": "66f1a58536019",
+        "name": "WhatsApp Image 2024-09-21 at 13.12.03.jpeg",
+        "path": "_img\/66f1a58535f96_WhatsApp Image 2024-09-21 at 13.12.03.jpeg",
         "type": "image\/jpeg",
-        "size": 1338936,
-        "uploaded_at": "2024-09-23 13:26:16",
+        "size": 164295,
+        "uploaded_at": "2024-09-23 14:29:41",
         "exif": {
-            "FileName": "a-surreal-chaotic-album-cover-for-the-single-insan-SqtOX9ysQmuw4oPJ7Id1lg-g8J6UZ9cRiCPA-GI_OKK6Q (1) (1).jpeg",
-            "FileDateTime": 1727108776,
-            "FileSize": 1338936,
+            "FileName": "66f1a58535f96_WhatsApp Image 2024-09-21 at 13.12.03.jpeg",
+            "FileDateTime": 1727112581,
+            "FileSize": 164295,
             "FileType": 2,
             "MimeType": "image\/jpeg",
             "SectionsFound": "",
             "COMPUTED": {
-                "html": "width=\"2000\" height=\"2000\"",
-                "Height": 2000,
-                "Width": 2000,
+                "html": "width=\"960\" height=\"1280\"",
+                "Height": 1280,
+                "Width": 960,
                 "IsColor": 1
             }
         }

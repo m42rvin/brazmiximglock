@@ -35,12 +35,12 @@ function saveImageDetails($json_file, $image_details) {
 }
 
 // Função para excluir uma imagem
-function deleteImage($json_file, $image_path) {
+function deleteImage($json_file, $image_id) {
     $current_images = loadImages($json_file);
     $updated_images = [];
 
     foreach ($current_images as $img) {
-        if ($img['path'] !== $image_path) {
+        if ($img['id'] !== $image_id) {
             $updated_images[] = $img;
         } else {
             // Remove o arquivo da pasta _img/
@@ -61,7 +61,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['image'])) {
     $allowed_types = ['image/jpeg', 'image/png', 'image/gif'];
     if (in_array($image['type'], $allowed_types)) {
         $image_name = basename($image['name']);
-        $target_file = $upload_dir . $image_name;
+        $target_file = $upload_dir . uniqid() . '_' . $image_name; // Gera um ID único
 
         // Move a imagem para a pasta _img/
         if (move_uploaded_file($image['tmp_name'], $target_file)) {
@@ -71,6 +71,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['image'])) {
 
             // Armazena os detalhes da imagem no arquivo JSON
             $image_details = [
+                'id' => uniqid(), // Gera um ID único para a imagem
                 'name' => $image_name,
                 'path' => $target_file,
                 'type' => $image['type'],
@@ -92,8 +93,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['image'])) {
 
 // Processa a exclusão de imagem
 if (isset($_GET['delete'])) {
-    $image_path = $_GET['delete'];
-    deleteImage($json_file, $image_path);
+    $image_id = $_GET['delete'];
+    deleteImage($json_file, $image_id);
     header('Location: ' . $_SERVER['PHP_SELF']); // Redireciona para a mesma página
     exit();
 }
@@ -113,7 +114,7 @@ $images = loadImages($json_file);
             display: flex;
         }
         .image-list {
-            flex: 1
+            flex: 1;
         }
         .image-item {
             margin: 10px;
@@ -125,7 +126,7 @@ $images = loadImages($json_file);
             display: block;
         }
         .uploadImg {
-            flex: 1
+            flex: 1;
         }
     </style>
     <?php include "header.php"; ?>
@@ -140,32 +141,27 @@ $images = loadImages($json_file);
     <input type="file" name="image" id="image" required>
     <button type="submit" class="btn btn-dark">Enviar</button>
 </form>
-    </div>
+</div>
     
-    <!-- Exibe as imagens enviadas -->
-    <div class="image-list">
-        
-
-
+<!-- Exibe as imagens enviadas -->
+<div class="image-list">
     <h2>Imagens enviadas:</h2>
     <?php if (!empty($images)) : ?>
         <?php foreach ($images as $img) : ?>
             <div class="image-item">
                 <table>
                     <tr>
-                        <td><img class="img-uploaded" src="<?php echo $img['path']; ?>" alt="<?php echo $img['name']; ?>">
-                        </td>
+                        <td><img class="img-uploaded" src="<?php echo $img['path']; ?>" alt="<?php echo $img['name']; ?>"></td>
                         <td>
-                        <p><strong>Nome:</strong> <?php echo $img['name']; ?></p>
-                <p><strong>Enviado em:</strong> <?php echo $img['uploaded_at']; ?></p>
-                <?php if (!empty($img['exif'])) : ?>
-                    <p><strong>EXIF:</strong> <?php echo json_encode($img['exif'], JSON_PRETTY_PRINT); ?></p>
-                <?php endif; ?>
-                <a href="?delete=<?php echo urlencode($img['path']); ?>" onclick="return confirm('Tem certeza que deseja excluir esta imagem?');">Excluir</a>
+                            <p><strong>Nome:</strong> <?php echo $img['name']; ?></p>
+                            <p><strong>Enviado em:</strong> <?php echo $img['uploaded_at']; ?></p>
+                            <?php if (!empty($img['exif'])) : ?>
+                                <p><strong>EXIF:</strong> <?php echo json_encode($img['exif'], JSON_PRETTY_PRINT); ?></p>
+                            <?php endif; ?>
+                            <a href="?delete=<?php echo urlencode($img['id']); ?>" onclick="return confirm('Tem certeza que deseja excluir esta imagem?');">Excluir</a>
                         </td>
                     </tr>
                 </table>
-                
             </div>
         <?php endforeach; ?>
     <?php else : ?>
