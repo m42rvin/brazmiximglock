@@ -19,54 +19,5 @@
                 "IsColor": 1
             }
         }
-    },
-    {
-        "id": "66f1a572e7c12",
-        "name": "a-dark-and-moody-illustration-of-a-lone-figure-wal-Om0SZHLsSHKvbldqLI_ZKw-70J61BdMQjWx7BpuGSGBeA.jpeg",
-        "path": "_img\/66f1a572e7ae1_a-dark-and-moody-illustration-of-a-lone-figure-wal-Om0SZHLsSHKvbldqLI_ZKw-70J61BdMQjWx7BpuGSGBeA.jpeg",
-        "type": "image\/jpeg",
-        "size": 137145,
-        "uploaded_at": "2024-09-23 14:29:22",
-        "exif": {
-            "FileName": "66f1a572e7ae1_a-dark-and-moody-illustration-of-a-lone-figure-wal-Om0SZHLsSHKvbldqLI_ZKw-70J61BdMQjWx7BpuGSGBeA.jpeg",
-            "FileDateTime": 1727112562,
-            "FileSize": 137145,
-            "FileType": 2,
-            "MimeType": "image\/jpeg",
-            "SectionsFound": "ANY_TAG, IFD0",
-            "COMPUTED": {
-                "html": "width=\"736\" height=\"1312\"",
-                "Height": 1312,
-                "Width": 736,
-                "IsColor": 1,
-                "ByteOrderMotorola": 1
-            },
-            "Make": "Ideogram AI",
-            "DateTime": "2024:08:26 18:38:39",
-            "DateTimeOriginal": "2024:08:26 18:38:39",
-            "DateTimeDigitized": "2024:08:26 18:38:39"
-        }
-    },
-    {
-        "id": "66f1a58536019",
-        "name": "WhatsApp Image 2024-09-21 at 13.12.03.jpeg",
-        "path": "_img\/66f1a58535f96_WhatsApp Image 2024-09-21 at 13.12.03.jpeg",
-        "type": "image\/jpeg",
-        "size": 164295,
-        "uploaded_at": "2024-09-23 14:29:41",
-        "exif": {
-            "FileName": "66f1a58535f96_WhatsApp Image 2024-09-21 at 13.12.03.jpeg",
-            "FileDateTime": 1727112581,
-            "FileSize": 164295,
-            "FileType": 2,
-            "MimeType": "image\/jpeg",
-            "SectionsFound": "",
-            "COMPUTED": {
-                "html": "width=\"960\" height=\"1280\"",
-                "Height": 1280,
-                "Width": 960,
-                "IsColor": 1
-            }
-        }
     }
 ]
