@@ -1,0 +1,49 @@
+[
+    {
+        "name": "a-dark-and-moody-illustration-of-a-lone-figure-wal-Om0SZHLsSHKvbldqLI_ZKw-70J61BdMQjWx7BpuGSGBeA.jpeg",
+        "path": "_img\/a-dark-and-moody-illustration-of-a-lone-figure-wal-Om0SZHLsSHKvbldqLI_ZKw-70J61BdMQjWx7BpuGSGBeA.jpeg",
+        "type": "image\/jpeg",
+        "size": 137145,
+        "uploaded_at": "2024-09-23 13:25:41",
+        "exif": {
+            "FileName": "a-dark-and-moody-illustration-of-a-lone-figure-wal-Om0SZHLsSHKvbldqLI_ZKw-70J61BdMQjWx7BpuGSGBeA.jpeg",
+            "FileDateTime": 1727108741,
+            "FileSize": 137145,
+            "FileType": 2,
+            "MimeType": "image\/jpeg",
+            "SectionsFound": "ANY_TAG, IFD0",
+            "COMPUTED": {
+                "html": "width=\"736\" height=\"1312\"",
+                "Height": 1312,
+                "Width": 736,
+                "IsColor": 1,
+                "ByteOrderMotorola": 1
+            },
+            "Make": "Ideogram AI",
+            "DateTime": "2024:08:26 18:38:39",
+            "DateTimeOriginal": "2024:08:26 18:38:39",
+            "DateTimeDigitized": "2024:08:26 18:38:39"
+        }
+    },
+    {
+        "name": "a-surreal-chaotic-album-cover-for-the-single-insan-SqtOX9ysQmuw4oPJ7Id1lg-g8J6UZ9cRiCPA-GI_OKK6Q (1) (1).jpeg",
+        "path": "_img\/a-surreal-chaotic-album-cover-for-the-single-insan-SqtOX9ysQmuw4oPJ7Id1lg-g8J6UZ9cRiCPA-GI_OKK6Q (1) (1).jpeg",
+        "type": "image\/jpeg",
+        "size": 1338936,
+        "uploaded_at": "2024-09-23 13:26:16",
+        "exif": {
+            "FileName": "a-surreal-chaotic-album-cover-for-the-single-insan-SqtOX9ysQmuw4oPJ7Id1lg-g8J6UZ9cRiCPA-GI_OKK6Q (1) (1).jpeg",
+            "FileDateTime": 1727108776,
+            "FileSize": 1338936,
+            "FileType": 2,
+            "MimeType": "image\/jpeg",
+            "SectionsFound": "",
+            "COMPUTED": {
+                "html": "width=\"2000\" height=\"2000\"",
+                "Height": 2000,
+                "Width": 2000,
+                "IsColor": 1
+            }
+        }
+    }
+]
