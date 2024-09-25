@@ -85,13 +85,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['image'])) {
             exit(); // Encerra o script para evitar o reenvio do formulário
         } else {
             echo "Erro ao fazer o upload da imagem.";
-            header('Location: ' . $_SERVER['PHP_SELF']);
-            exit();
+            //header('Location: ' . $_SERVER['PHP_SELF']);
+            //exit();
         }
     } else {
         echo "Formato de imagem inválido. Apenas JPEG, PNG e GIF são permitidos.";
-        header('Location: ' . $_SERVER['PHP_SELF']);
-        exit();
+        //header('Location: ' . $_SERVER['PHP_SELF']);
+        //exit();
     }
 }
 
@@ -105,6 +105,30 @@ if (isset($_GET['delete'])) {
 
 // Carrega todas as imagens do arquivo JSON
 $images = loadImages($json_file);
+function renderTable($data, $title = null) {
+    echo '<table border="1" cellpadding="10" cellspacing="0">';
+    
+    if ($title) {
+        echo "<caption><strong>$title</strong></caption>";
+    }
+    
+    foreach ($data as $key => $value) {
+        echo '<tr>';
+        echo "<td><strong>$key</strong></td>";
+        
+        if (is_array($value)) {
+            echo '<td>';
+            renderTable($value); // Chama recursivamente se o valor for um array
+            echo '</td>';
+        } else {
+            echo "<td>$value</td>";
+        }
+        
+        echo '</tr>';
+    }
+    
+    echo '</table>';
+}
 ?>
 
 <!DOCTYPE html>
@@ -160,7 +184,11 @@ $images = loadImages($json_file);
                             <p><strong>Nome:</strong> <?php echo $img['name']; ?></p>
                             <p><strong>Enviado em:</strong> <?php echo $img['uploaded_at']; ?></p>
                             <?php if (!empty($img['exif'])) : ?>
-                                <p><strong>EXIF:</strong> <?php echo json_encode($img['exif'], JSON_PRETTY_PRINT); ?></p>
+                                <?php
+                                    
+                                    renderTable($img['exif']);
+                                    
+                                ?>
                             <?php endif; ?>
                             <a href="?delete=<?php echo urlencode($img['id']); ?>" onclick="return confirm('Tem certeza que deseja excluir esta imagem?');">Excluir</a>
                         </td>
