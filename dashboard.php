@@ -266,8 +266,10 @@ function renderTable($data, $title = null) {
                 <table>
                     <tr>
                         <td class="imgInfo" imgId="<?php echo $img['id'];?>">
-                            <a href="?delete=<?php echo urlencode($img['id']); ?>" onclick="return confirm('Tem certeza que deseja excluir esta imagem?');">Excluir</a>
-                             <?php if (!empty($img['exif'])) : ?>
+                            <a class="btn btn-danger" href="?delete=<?php echo urlencode($img['id']); ?>" onclick="return confirm('Tem certeza que deseja excluir esta imagem?');"><i class="fa-solid fa-trash"></i> Excluir</a>
+                            <button type="button" class="btn btn-success"><i class="fa-solid fa-share-from-square"></i> Gerar Link</button>
+                            <hr/> 
+                            <?php if (!empty($img['exif'])) : ?>
                                 <?php renderTable($img['exif']); ?>
                             <?php endif; ?>
                         </td>
