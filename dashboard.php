@@ -142,10 +142,9 @@ function renderTable($data, $title = null) {
     <title>Upload de Imagens</title>
     <style>
         body {
-            display: flex;
+            display: block;
         }
         .image-list {
-            flex: 1;
         }
         .image-item {
             margin: 10px;
@@ -159,7 +158,6 @@ function renderTable($data, $title = null) {
             display: block;
         }
         .uploadImg {
-            flex: 1;
         }
         .imgInfo{
             display:none;
@@ -225,7 +223,29 @@ function renderTable($data, $title = null) {
     <?php include "header.php"; ?>
 </head>
 <body>
-<div class="uploadImg">
+<div class="container">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <a class="navbar-brand" href="#"><img src="https://www.brazmix.com/www/imagens/site/logo.png?1" alt=""></a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarNavDropdown">
+    <ul class="navbar-nav">
+      <li class="nav-item active">
+        <a class="nav-link" href="/dashboard.php">Home <span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Opções
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+          <a class="dropdown-item" href="/logout.php">Sair</a>
+        </div>
+      </li>
+    </ul>
+  </div>
+</nav>
+<div class="uploadImg jumbotron">
 <h1>Upload de Imagens</h1>
 
 <!-- Formulário para upload de imagem -->
@@ -297,6 +317,7 @@ document.querySelector('.modal-bg').addEventListener('click', function() {
     divElement.classList.remove('show');  
 })
 </script>
+</div>
 </body>
 <?php include "footer.php"; ?>
 </html>
