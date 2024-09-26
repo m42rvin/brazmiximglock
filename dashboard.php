@@ -38,11 +38,13 @@ function saveImageDetails($json_file, $image_details) {
 function deleteImage($json_file, $image_id) {
     $current_images = loadImages($json_file);
     $updated_images = [];
+    $image_found = false; // Para rastrear se a imagem foi encontrada e excluída
 
     foreach ($current_images as $img) {
         if ($img['id'] !== $image_id) {
             $updated_images[] = $img;
         } else {
+            $image_found = true;
             // Remove o arquivo da pasta _img/
             if (file_exists($img['path'])) {
                 unlink($img['path']);
@@ -50,7 +52,10 @@ function deleteImage($json_file, $image_id) {
         }
     }
 
-    file_put_contents($json_file, json_encode($updated_images, JSON_PRETTY_PRINT));
+    // Atualiza o arquivo JSON apenas se a imagem foi encontrada
+    if ($image_found) {
+        file_put_contents($json_file, json_encode($updated_images, JSON_PRETTY_PRINT));
+    }
 }
 
 // Processa o envio de imagem
@@ -85,13 +90,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['image'])) {
             exit(); // Encerra o script para evitar o reenvio do formulário
         } else {
             echo "Erro ao fazer o upload da imagem.";
-            //header('Location: ' . $_SERVER['PHP_SELF']);
-            //exit();
         }
     } else {
         echo "Formato de imagem inválido. Apenas JPEG, PNG e GIF são permitidos.";
-        //header('Location: ' . $_SERVER['PHP_SELF']);
-        //exit();
     }
 }
 
@@ -105,6 +106,8 @@ if (isset($_GET['delete'])) {
 
 // Carrega todas as imagens do arquivo JSON
 $images = loadImages($json_file);
+
+// Função para renderizar uma tabela recursivamente
 function renderTable($data, $title = null) {
     echo '<table border="1" cellpadding="10" cellspacing="0">';
     
@@ -179,16 +182,12 @@ function renderTable($data, $title = null) {
             <div class="image-item">
                 <table>
                     <tr>
-                        <td><img class="img-uploaded" src="<?php echo $img['path']; ?>" alt="<?php echo $img['name']; ?>"></td>
+                        <td><img class="img-uploaded" jsonObj='<?php echo json_encode($img);?>' src="<?php echo $img['path']; ?>" alt="<?php echo $img['name']; ?>"></td>
                         <td>
                             <p><strong>Nome:</strong> <?php echo $img['name']; ?></p>
                             <p><strong>Enviado em:</strong> <?php echo $img['uploaded_at']; ?></p>
                             <?php if (!empty($img['exif'])) : ?>
-                                <?php
-                                    
-                                    renderTable($img['exif']);
-                                    
-                                ?>
+                                <?php renderTable($img['exif']); ?>
                             <?php endif; ?>
                             <a href="?delete=<?php echo urlencode($img['id']); ?>" onclick="return confirm('Tem certeza que deseja excluir esta imagem?');">Excluir</a>
                         </td>
