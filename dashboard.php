@@ -151,13 +151,75 @@ function renderTable($data, $title = null) {
             margin: 10px;
             border: 1px solid #ddd;
             padding: 10px;
+            width: 160px;
+            display: inline-block;
         }
         .image-item img {
-            width: 150px;
+            width: 100%;
             display: block;
         }
         .uploadImg {
             flex: 1;
+        }
+        .imgInfo{
+            display:none;
+        }
+        .displayImg {
+            position: absolute;
+            top: 30px;
+            left: 30px;
+            width: 90vw;
+            height: 90vh;
+            background: white;
+            padding: 30px;
+            display: flex;
+        }
+        .imgShow, .infoShow {
+            display: block;
+        }
+        .imgShow {
+            width:52vw;
+        }
+        .infoShow {
+            width: 34vw;
+            display: flow; /* Flexbox para garantir que o conteúdo se ajuste corretamente */
+            justify-content: center; /* Centraliza horizontalmente */
+            align-items: center; /* Centraliza verticalmente */
+            overflow: auto;
+        }
+        .imgShow img{
+            width: auto;
+            height: 80vh;
+        }
+        .show {
+            display:flex;
+        }
+        .hide {
+            display: none;
+        }
+        /* A tabela dentro da div */
+        .infoShow table {
+            width: 100%; /* Faz com que a tabela ocupe 100% da largura da div */
+            height: 100%; /* Faz com que a tabela ocupe 100% da altura da div */
+            font-size: 8pt;
+        }
+
+        .infoShow th, .infoShow td {
+            word-wrap: break-word; /* Faz as palavras quebrarem, se necessário, para evitar overflow */
+            text-align: left; /* Alinha o texto à esquerda nas células (pode ajustar conforme necessário) */
+        }
+        .modal-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0,0,0,0.5);
+            display:block;
+            
+        }
+        .modal-bg.hide {
+            display:none;
         }
     </style>
     <?php include "header.php"; ?>
@@ -179,17 +241,15 @@ function renderTable($data, $title = null) {
     <h2>Imagens enviadas:</h2>
     <?php if (!empty($images)) : ?>
         <?php foreach ($images as $img) : ?>
-            <div class="image-item">
+            <div imgId="<?php echo $img['id'];?>" class="image-item">
+                <img imgId="<?php echo $img['id'];?>" class="img-uploaded" src="<?php echo $img['path']; ?>" alt="<?php echo $img['name']; ?>">
                 <table>
                     <tr>
-                        <td><img class="img-uploaded" jsonObj='<?php echo json_encode($img);?>' src="<?php echo $img['path']; ?>" alt="<?php echo $img['name']; ?>"></td>
-                        <td>
-                            <p><strong>Nome:</strong> <?php echo $img['name']; ?></p>
-                            <p><strong>Enviado em:</strong> <?php echo $img['uploaded_at']; ?></p>
-                            <?php if (!empty($img['exif'])) : ?>
+                        <td class="imgInfo" imgId="<?php echo $img['id'];?>">
+                            <a href="?delete=<?php echo urlencode($img['id']); ?>" onclick="return confirm('Tem certeza que deseja excluir esta imagem?');">Excluir</a>
+                             <?php if (!empty($img['exif'])) : ?>
                                 <?php renderTable($img['exif']); ?>
                             <?php endif; ?>
-                            <a href="?delete=<?php echo urlencode($img['id']); ?>" onclick="return confirm('Tem certeza que deseja excluir esta imagem?');">Excluir</a>
                         </td>
                     </tr>
                 </table>
@@ -199,14 +259,43 @@ function renderTable($data, $title = null) {
         <p>Nenhuma imagem enviada.</p>
     <?php endif; ?>
 </div>
-
+<div class="modal-bg hide"></div>
+<div class="displayImg hide">
+        <div class="imgShow">
+            <img src="http://localhost:8000/_img/66f2ba6f22658_IMG_20210316_141444023.jpg" alt="">
+        </div>
+        <div class="infoShow"></div>
+</div>
 <script>
 // Adiciona um evento de clique a todas as imagens com a classe .img-uploaded
 document.querySelectorAll('.img-uploaded').forEach(function(img) {
     img.addEventListener('click', function() {
-        window.open(this.src, '_blank'); // Abre a imagem em uma nova aba
+        var imgId= this.getAttribute('imgId');
+        var element = document.querySelector('.image-item[imgId="'+imgId+'"] .imgInfo');
+        var innerHTML = element.innerHTML; // Pega o HTML interno do elemento
+        var targetElement = document.querySelector('.infoShow');
+        targetElement.innerHTML = innerHTML;
+        var imageElement = document.querySelector('.imgShow > img');
+        imageElement.src = this.src;
+        //window.open(this.src, '_blank'); // Abre a imagem em uma nova aba
+        var divElement = document.querySelector('.displayImg.hide');
+
+// Verifica se o elemento existe
+if (divElement) {
+    document.querySelector('.modal-bg').classList.remove('hide')
+    divElement.classList.remove('hide');  // Remove a classe 'hide'
+    divElement.classList.add('show');     // Adiciona a classe 'show'
+} else {
+    console.log('Elemento não encontrado');
+}
     });
 });
+document.querySelector('.modal-bg').addEventListener('click', function() {
+    var divElement = document.querySelector('.displayImg');
+    document.querySelector('.modal-bg').classList.add('hide')
+    divElement.classList.add('hide');  // Remove a classe 'hide'
+    divElement.classList.remove('show');  
+})
 </script>
 </body>
 <?php include "footer.php"; ?>
