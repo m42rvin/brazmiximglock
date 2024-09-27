@@ -1,2 +1,12 @@
 # Definir a página padrão como index.php
 DirectoryIndex index.php
+
+<Files "uploads.json">
+    Order Allow,Deny
+    Deny from all
+</Files>
+
+<FilesMatch "\.json$">
+    Order Allow,Deny
+    Deny from all
+</FilesMatch>
