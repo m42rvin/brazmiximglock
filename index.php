@@ -47,6 +47,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $_SESSION["loggedin"] = true;
             $_SESSION["username"] = $user['username'];  // Salvar o nome de usuário na sessão
             $_SESSION["role"] = $user['role'];  // Salvar o role na sessão
+            $_SESSION["id"] = $user['id'];  // Salvar o id na sessão
 
             header("Location: dashboard.php"); // Redirecionar para a página de dashboard
             exit;
