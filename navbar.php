@@ -13,6 +13,7 @@
           Opções
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+          <a class="dropdown-item" href="/create_user.php">Usuários</a>
           <a class="dropdown-item" href="/logout.php">Sair</a>
         </div>
       </li>

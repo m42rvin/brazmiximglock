@@ -32,7 +32,39 @@ function hashPassword($password) {
     return hash('sha256', $password);
 }
 
-// Verifica se o formulário foi enviado
+// Função para gerar o próximo ID único
+function generateNextId($users) {
+    $maxId = 0;
+    foreach ($users as $user) {
+        if ($user['id'] > $maxId) {
+            $maxId = $user['id'];
+        }
+    }
+    return $maxId + 1;
+}
+
+// Função para deletar usuário
+function deleteUser($id, $users) {
+    foreach ($users as $key => $user) {
+        if ($user['id'] == $id) {
+            unset($users[$key]); // Remove o usuário
+            return $users; // Retorna a lista atualizada
+        }
+    }
+    return $users;
+}
+
+// Verifica se a requisição é para deletar um usuário
+if (isset($_GET['delete'])) {
+    $idToDelete = $_GET['delete'];
+    $users = readJsonFile($jsonFile);
+    $users = deleteUser($idToDelete, $users);
+    saveJsonFile($jsonFile, $users);
+    header("Location: create_user.php"); // Redireciona após deletar para atualizar a lista
+    exit;
+}
+
+// Verifica se o formulário foi enviado para criar um novo usuário
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $username = $_POST['username'];
     $password = $_POST['password'];
@@ -45,9 +77,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // Lê os dados existentes do arquivo JSON
         $users = readJsonFile($jsonFile);
 
-        // Gera um novo ID baseado no último usuário
-        $lastUser = end($users);
-        $newId = $lastUser ? $lastUser['id'] + 1 : 1;
+        // Gera um novo ID único, baseado no maior ID existente
+        $newId = generateNextId($users);
 
         // Cria um novo usuário
         $newUser = [
@@ -66,6 +97,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         echo "Usuário criado com sucesso!";
     }
 }
+
+// Exibe a lista de usuários
+$users = readJsonFile($jsonFile);
 ?>
 
 <!-- Formulário para criar um novo usuário -->
@@ -74,7 +108,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Criar Usuário</title>
+    <title>Gerenciar Usuários</title>
     <?php include "header.php"; ?>
 </head>
 <body>
@@ -96,6 +130,26 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             <input type="submit" value="Criar Usuário">
         </form>
+
+        <h2>Lista de Usuários</h2>
+        <table border="1">
+            <tr>
+                <th>ID</th>
+                <th>Nome de Usuário</th>
+                <th>Função</th>
+                <th>Ações</th>
+            </tr>
+            <?php foreach ($users as $user): ?>
+            <tr>
+                <td><?php echo $user['id']; ?></td>
+                <td><?php echo $user['username']; ?></td>
+                <td><?php echo $user['role']; ?></td>
+                <td>
+                    <a href="create_user.php?delete=<?php echo $user['id']; ?>" onclick="return confirm('Tem certeza que deseja deletar este usuário?');">Deletar</a>
+                </td>
+            </tr>
+            <?php endforeach; ?>
+        </table>
     </div>
     <?php include "footer.php"; ?>
 </body>
