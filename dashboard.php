@@ -223,8 +223,8 @@ function renderTable($data, $title = null) {
     <?php include "header.php"; ?>
 </head>
 <body>
-<div class="container">
 <?php include "navbar.php"; ?>
+<div class="container">
 <div class="uploadImg jumbotron">
 <h1>Upload de Imagens</h1>
 
