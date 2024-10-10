@@ -13,7 +13,9 @@
           Opções
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+          <?php if ($_SESSION["role"] == "admin") : ?>
           <a class="dropdown-item" href="/create_user.php">Usuários</a>
+          <?php endif ?>
           <a class="dropdown-item" href="/logout.php">Sair</a>
         </div>
       </li>

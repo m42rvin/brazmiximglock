@@ -7,6 +7,10 @@ if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
     header("Location: index.php"); // Redirecionar para o login se não estiver logado
     exit;
 }
+if ($_SESSION["role"] !== "admin") {
+    header("Location: dashboard.php"); // Redirecionar para o dashboard se não for admin
+    exit;
+}
 
 // Caminho para o arquivo JSON
 $jsonFile = 'users.json';

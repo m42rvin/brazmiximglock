@@ -10,5 +10,11 @@
         "username": "marvin",
         "password": "ec29d642b77fbabee13ae5b906358739895e350900deef7004a1e317b6d02445",
         "role": "admin"
+    },
+    {
+        "id": 3,
+        "username": "marvin2",
+        "password": "ec29d642b77fbabee13ae5b906358739895e350900deef7004a1e317b6d02445",
+        "role": "user"
     }
 ]
