@@ -321,28 +321,42 @@ function validatePassword() {
 function validateEmail() {
     var email = document.getElementById("email").value;
     var errorMessage = document.getElementById("email-error");
+    var submitButton = document.querySelector("input[type='submit']");
 
-    if (email === '') {
+    // Expressão regular para validar e-mail
+    var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    // Verifica se o campo está vazio ou o e-mail não é válido
+    if (email === '' || !emailRegex.test(email)) {
         errorMessage.textContent = "Por favor, insira um e-mail válido.";
+        submitButton.disabled = true; // Desabilita o botão de envio
         return false;
+    } else {
+        errorMessage.textContent = ""; // Limpa a mensagem de erro se o formato for válido
+        submitButton.disabled = false; // Habilita o botão de envio para a próxima etapa
     }
 
+    // Verifica via fetch se o e-mail já está cadastrado no servidor
     fetch('check_email.php?email=' + encodeURIComponent(email))
         .then(response => response.json())
         .then(data => {
             if (data.exists) {
                 errorMessage.textContent = "Este e-mail já está em uso.";
-                document.querySelector("input[type='submit']").disabled = true;
+                submitButton.disabled = true; // Desabilita o botão de envio se o e-mail já existe
             } else {
-                errorMessage.textContent = ""; // Limpa a mensagem de erro
-                document.querySelector("input[type='submit']").disabled = false;
+                errorMessage.textContent = ""; // Limpa a mensagem de erro se o e-mail não existe
+                submitButton.disabled = false; // Habilita o botão de envio
             }
         })
         .catch(error => {
             console.error("Erro ao verificar o e-mail:", error);
             errorMessage.textContent = "Erro ao verificar o e-mail.";
+            submitButton.disabled = true; // Desabilita o botão de envio em caso de erro
         });
+
+    return true;
 }
+
 
 function validateForm() {
     return validatePassword(); // Chama a validação de senha
