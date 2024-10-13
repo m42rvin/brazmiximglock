@@ -69,8 +69,8 @@ if (isset($_GET['delete'])) {
         $users = readJsonFile($jsonFile);
         $users = deleteUser($idToDelete, $users);
         saveJsonFile($jsonFile, $users);
-        header("Location: create_user.php"); // Redireciona após deletar para atualizar a lista
-        exit;
+        header('Location: ' . $_SERVER['PHP_SELF'] . '?success=1'); 
+        exit();
     }
 }
 
@@ -94,9 +94,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     if ($userExists) {
-        echo "Nome de usuário ou e-mail já estão em uso. Escolha outro.";
+        header('Location: ' . $_SERVER['PHP_SELF'] . '?success=1'); 
+        exit();
     } elseif (empty($username) || empty($password) || empty($role) || empty($email)) {
-        echo "Por favor, preencha todos os campos.";
+        header('Location: ' . $_SERVER['PHP_SELF'] . '?success=1'); 
+        exit();
     } else {
         // Gera um novo ID único, baseado no maior ID existente
         $newId = generateNextId($users);
@@ -115,8 +117,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         // Salva a lista atualizada no arquivo JSON
         saveJsonFile($jsonFile, $users);
-
-        echo "Usuário criado com sucesso!";
+        header('Location: ' . $_SERVER['PHP_SELF'] . '?success=1'); 
+        exit();
     }
 }
 
@@ -149,6 +151,16 @@ $users = readJsonFile($jsonFile);
             display:inline-block;
             width: 20vw;
         }
+        #eye {
+            margin:0;
+            padding:0;
+            margin-top: 4px;
+        }
+        #eye button {
+            background: transparent;
+            color: #333;
+            border:none;
+        }
     </style>
 </head>
 <body>
@@ -158,22 +170,35 @@ $users = readJsonFile($jsonFile);
             <h2>Criar Usuário</h2>
             <form action="create_user.php" method="post" class="form-group" onsubmit="return validateForm()">
                 <label for="username">Nome de usuário:</label><br>
-                <input type="text" id="username" name="username" class="form-text text-muted" onkeyup="checkUsername()">
+                <div class="input-group">
+                    <input required type="text" id="username" name="username" class="form-control form-text text-muted" onkeyup="checkUsername()">
+                </div>
                 <span id="username-error" style="color: red;"></span>
                 <span id="username-success" style="color: green;"></span>
                 <br>
-
+                
+                
                 <label for="password">Senha:</label><br>
-                <input type="password" id="password" name="password" class="form-text text-muted" onkeyup="validatePassword()">
+                <div class="input-group">
+                    <input required type="password" id="password" name="password" onkeyup="validatePassword()" class="form-control form-text text-muted" >
+                    <div class="input-group-append">
+                        <span class="input-group-text" id="eye">
+                            <button class="btn btn-info" id="button_eye">
+                                <i class="fa-solid fa-eye-slash"></i>
+                            </button>
+                        </span>
+                    </div>
+                </div>
                 <span id="password-error" style="color: red;"></span><br>
 
+
                 <label for="email">E-mail:</label><br>
-                <input type="email" id="email" name="email" class="form-text text-muted" onkeyup="validateEmail()">
+                <input required type="email" id="email" name="email" class="form-control form-text text-muted" onkeyup="validateEmail()">
                 <span id="email-error" style="color: red;"></span>
                 <br>
 
                 <label for="role">Função (role):</label><br>
-                <select class="form-control" id="role" name="role">
+                <select required class="form-control" id="role" name="role">
                     <option value="admin">Admin</option>
                     <option value="user">User</option>
                 </select><br><br>
@@ -213,6 +238,20 @@ $users = readJsonFile($jsonFile);
 
     <!-- Verificação do nome de usuário e e-mail com JavaScript -->
     <script>
+        // Impede o comportamento padrão do segundo botão
+document.getElementById("button_eye").addEventListener("click", function(event) {
+    event.preventDefault(); // Previne a ação padrão do botão
+
+    var passwordField = document.getElementById("password");
+    if (passwordField.type === "password") {
+        passwordField.type = "text"; // Mostra a senha
+        document.getElementById("button_eye").innerHTML = '<i class="fa-solid fa-eye"></i>';
+    } else {
+        passwordField.type = "password"; // Oculta a senha
+        document.getElementById("button_eye").innerHTML = '<i class="fa-solid fa-eye-slash"></i>';
+    }
+});
+
 function checkUsername() {
     var username = document.getElementById("username").value;
     var errorMessage = document.getElementById("username-error");
@@ -220,6 +259,7 @@ function checkUsername() {
     
     var passwordField = document.getElementById("password");
     var roleField = document.getElementById("role");
+    var emailField = document.getElementById("email");
     var submitButton = document.querySelector("input[type='submit']");
 
     if (username.length === 0) {
@@ -243,6 +283,7 @@ function checkUsername() {
                 passwordField.disabled = true;
                 roleField.disabled = true;
                 submitButton.disabled = true;
+                emailField.disabled = true;
             } else {
                 errorMessage.style.display = "none";
                 successMessage.textContent = "Nome de usuário disponível!";
@@ -250,6 +291,7 @@ function checkUsername() {
                 passwordField.disabled = false;
                 roleField.disabled = false;
                 submitButton.disabled = false;
+                emailField.disabled = false;
             }
         })
         .catch(error => {

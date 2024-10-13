@@ -19,5 +19,12 @@
         "password": "d0a53c16dbaaa759a6601cc279fd1d5b71091e92c80677fb35aed6756b62a98a",
         "email": "marvin.medeiros52@gmail.com",
         "role": "admin"
+    },
+    "8": {
+        "id": 9,
+        "username": "teste2",
+        "password": "b0f19745b8059e6d5b55c2b900c5410712f0a3de980d6aa908305604b4da786a",
+        "email": "mr@gmail.com",
+        "role": "admin"
     }
 }
