@@ -247,120 +247,61 @@ document.getElementById("button_eye").addEventListener("click", function(event) 
         passwordField.type = "text"; // Mostra a senha
         document.getElementById("button_eye").innerHTML = '<i class="fa-solid fa-eye"></i>';
     } else {
-        passwordField.type = "password"; // Oculta a senha
+        passwordField.type = "password"; // Esconde a senha
         document.getElementById("button_eye").innerHTML = '<i class="fa-solid fa-eye-slash"></i>';
     }
 });
 
-function checkUsername() {
-    var username = document.getElementById("username").value;
-    var errorMessage = document.getElementById("username-error");
-    var successMessage = document.getElementById("username-success");
-    
-    var passwordField = document.getElementById("password");
-    var roleField = document.getElementById("role");
-    var emailField = document.getElementById("email");
-    var submitButton = document.querySelector("input[type='submit']");
-
-    if (username.length === 0) {
-        errorMessage.style.display = "none";
-        successMessage.style.display = "none";
-        passwordField.disabled = false;
-        roleField.disabled = false;
-        submitButton.disabled = false;
-    } else {
-        errorMessage.style.display = "block";
-        successMessage.style.display = "block";
-    }
-
-    fetch('check_username.php?username=' + encodeURIComponent(username))
-        .then(response => response.json())
-        .then(data => {
-            if (data.exists) {
-                errorMessage.textContent = "Nome de usuário já está em uso!";
-                successMessage.textContent = "";
-                successMessage.style.display = "none";
-                passwordField.disabled = true;
-                roleField.disabled = true;
-                submitButton.disabled = true;
-                emailField.disabled = true;
-            } else {
-                errorMessage.style.display = "none";
-                successMessage.textContent = "Nome de usuário disponível!";
-                successMessage.style.display = "block";
-                passwordField.disabled = false;
-                roleField.disabled = false;
-                submitButton.disabled = false;
-                emailField.disabled = false;
-            }
-        })
-        .catch(error => {
-            console.error("Erro na verificação do nome de usuário:", error);
-            errorMessage.textContent = "Erro ao verificar nome de usuário.";
-        });
-}
-
 function validatePassword() {
-    var password = document.getElementById("password").value;
-    var errorMessage = document.getElementById("password-error");
-    
-    var hasUpperCase = /[A-Z]/.test(password);
-    var hasLowerCase = /[a-z]/.test(password);
-    var hasNumbers = /\d/.test(password);
-    var hasSpecialChars = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+    var password = document.getElementById('password').value;
+    var errorElement = document.getElementById('password-error');
+    // Regex atualizado para incluir caractere especial
+    var regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 
-    if (password.length < 8 || !hasUpperCase || !hasLowerCase || !hasNumbers || !hasSpecialChars) {
-        errorMessage.textContent = "A senha deve ter no mínimo 8 caracteres, incluindo letra maiúscula, minúscula, número e caractere especial.";
+    if (!regex.test(password)) {
+        errorElement.textContent = 'A senha deve ter pelo menos 8 caracteres, uma letra maiúscula, uma letra minúscula, um número e um caractere especial (@$!%*?&).';
         return false;
     } else {
-        errorMessage.textContent = ""; // Limpa a mensagem de erro
+        errorElement.textContent = ''; // Limpa a mensagem de erro
         return true;
     }
 }
 
-function validateEmail() {
-    var email = document.getElementById("email").value;
-    var errorMessage = document.getElementById("email-error");
-    var submitButton = document.querySelector("input[type='submit']");
 
-    // Expressão regular para validar e-mail
+function validateEmail() {
+    var email = document.getElementById('email').value;
+    var emailErrorElement = document.getElementById('email-error');
     var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-    // Verifica se o campo está vazio ou o e-mail não é válido
-    if (email === '' || !emailRegex.test(email)) {
-        errorMessage.textContent = "Por favor, insira um e-mail válido.";
-        submitButton.disabled = true; // Desabilita o botão de envio
+    if (!emailRegex.test(email)) {
+        emailErrorElement.textContent = 'Por favor, insira um e-mail válido.';
         return false;
     } else {
-        errorMessage.textContent = ""; // Limpa a mensagem de erro se o formato for válido
-        submitButton.disabled = false; // Habilita o botão de envio para a próxima etapa
+        emailErrorElement.textContent = ''; // Limpa a mensagem de erro
+        return true;
     }
-
-    // Verifica via fetch se o e-mail já está cadastrado no servidor
-    fetch('check_email.php?email=' + encodeURIComponent(email))
-        .then(response => response.json())
-        .then(data => {
-            if (data.exists) {
-                errorMessage.textContent = "Este e-mail já está em uso.";
-                submitButton.disabled = true; // Desabilita o botão de envio se o e-mail já existe
-            } else {
-                errorMessage.textContent = ""; // Limpa a mensagem de erro se o e-mail não existe
-                submitButton.disabled = false; // Habilita o botão de envio
-            }
-        })
-        .catch(error => {
-            console.error("Erro ao verificar o e-mail:", error);
-            errorMessage.textContent = "Erro ao verificar o e-mail.";
-            submitButton.disabled = true; // Desabilita o botão de envio em caso de erro
-        });
-
-    return true;
 }
 
+function checkUsername() {
+    var username = document.getElementById('username').value;
+    var usernameErrorElement = document.getElementById('username-error');
+    var usernameSuccessElement = document.getElementById('username-success');
 
+    if (username.length < 3) {
+        usernameErrorElement.textContent = 'O nome de usuário deve ter pelo menos 3 caracteres.';
+        usernameSuccessElement.textContent = '';
+        return false;
+    } else {
+        usernameErrorElement.textContent = '';
+        usernameSuccessElement.textContent = 'Nome de usuário válido.';
+        return true;
+    }
+}
+
+// Função para validar o formulário antes de enviar
 function validateForm() {
-    return validatePassword(); // Chama a validação de senha
+    return validatePassword() && validateEmail() && checkUsername();
 }
-</script>
+    </script>
 </body>
 </html>
