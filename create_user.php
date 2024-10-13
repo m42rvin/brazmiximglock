@@ -145,6 +145,10 @@ $users = readJsonFile($jsonFile);
         #table-users table {
             width: 100%;
         }
+        #password-error {
+            display:inline-block;
+            width: 20vw;
+        }
     </style>
 </head>
 <body>
@@ -160,7 +164,8 @@ $users = readJsonFile($jsonFile);
                 <br>
 
                 <label for="password">Senha:</label><br>
-                <input type="password" id="password" name="password" class="form-text text-muted"><br>
+                <input type="password" id="password" name="password" class="form-text text-muted" onkeyup="validatePassword()">
+                <span id="password-error" style="color: red;"></span><br>
 
                 <label for="email">E-mail:</label><br>
                 <input type="email" id="email" name="email" class="form-text text-muted" onkeyup="validateEmail()">
@@ -239,40 +244,67 @@ function checkUsername() {
                 roleField.disabled = true;
                 submitButton.disabled = true;
             } else {
-                errorMessage.textContent = "";
                 errorMessage.style.display = "none";
                 successMessage.textContent = "Nome de usuário disponível!";
                 successMessage.style.display = "block";
-
                 passwordField.disabled = false;
                 roleField.disabled = false;
                 submitButton.disabled = false;
             }
         })
         .catch(error => {
-            console.error('Erro ao verificar o nome de usuário:', error);
+            console.error("Erro na verificação do nome de usuário:", error);
+            errorMessage.textContent = "Erro ao verificar nome de usuário.";
         });
 }
 
-// Função para validar o formato do e-mail com regex
-function validateEmail() {
-    var email = document.getElementById("email").value;
-    var emailError = document.getElementById("email-error");
-    var regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+function validatePassword() {
+    var password = document.getElementById("password").value;
+    var errorMessage = document.getElementById("password-error");
+    
+    var hasUpperCase = /[A-Z]/.test(password);
+    var hasLowerCase = /[a-z]/.test(password);
+    var hasNumbers = /\d/.test(password);
+    var hasSpecialChars = /[!@#$%^&*(),.?":{}|<>]/.test(password);
 
-    if (!regex.test(email)) {
-        emailError.textContent = "Formato de e-mail inválido!";
+    if (password.length < 8 || !hasUpperCase || !hasLowerCase || !hasNumbers || !hasSpecialChars) {
+        errorMessage.textContent = "A senha deve ter no mínimo 8 caracteres, incluindo letra maiúscula, minúscula, número e caractere especial.";
         return false;
     } else {
-        emailError.textContent = "";
+        errorMessage.textContent = ""; // Limpa a mensagem de erro
         return true;
     }
 }
 
-// Função para validar o formulário
-function validateForm() {
-    return validateEmail(); // Verifica o e-mail antes de enviar
+function validateEmail() {
+    var email = document.getElementById("email").value;
+    var errorMessage = document.getElementById("email-error");
+
+    if (email === '') {
+        errorMessage.textContent = "Por favor, insira um e-mail válido.";
+        return false;
+    }
+
+    fetch('check_email.php?email=' + encodeURIComponent(email))
+        .then(response => response.json())
+        .then(data => {
+            if (data.exists) {
+                errorMessage.textContent = "Este e-mail já está em uso.";
+                document.querySelector("input[type='submit']").disabled = true;
+            } else {
+                errorMessage.textContent = ""; // Limpa a mensagem de erro
+                document.querySelector("input[type='submit']").disabled = false;
+            }
+        })
+        .catch(error => {
+            console.error("Erro ao verificar o e-mail:", error);
+            errorMessage.textContent = "Erro ao verificar o e-mail.";
+        });
 }
-    </script>
+
+function validateForm() {
+    return validatePassword(); // Chama a validação de senha
+}
+</script>
 </body>
 </html>
