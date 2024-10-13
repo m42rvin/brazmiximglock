@@ -78,23 +78,24 @@ if (isset($_GET['delete'])) {
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $username = $_POST['username'];
     $password = $_POST['password'];
+    $email = $_POST['email']; // Captura o e-mail
     $role = $_POST['role'];
 
     // Lê os dados existentes do arquivo JSON
     $users = readJsonFile($jsonFile);
 
-    // Verifica se o nome de usuário já está em uso
+    // Verifica se o nome de usuário ou o e-mail já estão em uso
     $userExists = false;
     foreach ($users as $user) {
-        if ($user['username'] === $username) {
+        if ($user['username'] === $username || $user['email'] === $email) {
             $userExists = true;
             break;
         }
     }
 
     if ($userExists) {
-        echo "Nome de usuário já está em uso. Escolha outro.";
-    } elseif (empty($username) || empty($password) || empty($role)) {
+        echo "Nome de usuário ou e-mail já estão em uso. Escolha outro.";
+    } elseif (empty($username) || empty($password) || empty($role) || empty($email)) {
         echo "Por favor, preencha todos os campos.";
     } else {
         // Gera um novo ID único, baseado no maior ID existente
@@ -105,6 +106,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             'id' => $newId,
             'username' => $username,
             'password' => hashPassword($password), // Salva a senha com hash
+            'email' => $email, // Adiciona o e-mail
             'role' => $role
         ];
 
@@ -150,7 +152,7 @@ $users = readJsonFile($jsonFile);
     <div class="container">
         <div>
             <h2>Criar Usuário</h2>
-            <form action="create_user.php" method="post" class="form-group">
+            <form action="create_user.php" method="post" class="form-group" onsubmit="return validateForm()">
                 <label for="username">Nome de usuário:</label><br>
                 <input type="text" id="username" name="username" class="form-text text-muted" onkeyup="checkUsername()">
                 <span id="username-error" style="color: red;"></span>
@@ -159,6 +161,11 @@ $users = readJsonFile($jsonFile);
 
                 <label for="password">Senha:</label><br>
                 <input type="password" id="password" name="password" class="form-text text-muted"><br>
+
+                <label for="email">E-mail:</label><br>
+                <input type="email" id="email" name="email" class="form-text text-muted" onkeyup="validateEmail()">
+                <span id="email-error" style="color: red;"></span>
+                <br>
 
                 <label for="role">Função (role):</label><br>
                 <select class="form-control" id="role" name="role">
@@ -175,6 +182,7 @@ $users = readJsonFile($jsonFile);
                 <tr>
                     <th scope="col">ID</th>
                     <th scope="col">Nome de Usuário</th>
+                    <th scope="col">E-mail</th> <!-- Nova coluna de e-mail -->
                     <th scope="col">Função</th>
                     <th scope="col">Ações</th>
                 </tr>
@@ -182,6 +190,7 @@ $users = readJsonFile($jsonFile);
                 <tr>
                     <td><?php echo $user['id']; ?></td>
                     <td><?php echo $user['username']; ?></td>
+                    <td><?php echo $user['email']; ?></td> <!-- Exibir o e-mail -->
                     <td><?php echo $user['role']; ?></td>
                     <td>
                         <?php if ($user['id'] == $_SESSION['id']): ?>
@@ -197,14 +206,13 @@ $users = readJsonFile($jsonFile);
     </div>
     <?php include "footer.php"; ?>
 
-    <!-- Verificação do nome de usuário com JavaScript -->
+    <!-- Verificação do nome de usuário e e-mail com JavaScript -->
     <script>
 function checkUsername() {
     var username = document.getElementById("username").value;
     var errorMessage = document.getElementById("username-error");
     var successMessage = document.getElementById("username-success");
     
-    // Obter referências aos campos de senha, função e botão de envio
     var passwordField = document.getElementById("password");
     var roleField = document.getElementById("role");
     var submitButton = document.querySelector("input[type='submit']");
@@ -212,8 +220,6 @@ function checkUsername() {
     if (username.length === 0) {
         errorMessage.style.display = "none";
         successMessage.style.display = "none";
-
-        // Habilitar campos e botão se o campo de usuário estiver vazio
         passwordField.disabled = false;
         roleField.disabled = false;
         submitButton.disabled = false;
@@ -222,7 +228,6 @@ function checkUsername() {
         successMessage.style.display = "block";
     }
 
-    // Faz uma requisição para o servidor para verificar o nome de usuário
     fetch('check_username.php?username=' + encodeURIComponent(username))
         .then(response => response.json())
         .then(data => {
@@ -230,25 +235,44 @@ function checkUsername() {
                 errorMessage.textContent = "Nome de usuário já está em uso!";
                 successMessage.textContent = "";
                 successMessage.style.display = "none";
-
-                // Desabilitar campos e botão se o nome de usuário já existir
                 passwordField.disabled = true;
                 roleField.disabled = true;
                 submitButton.disabled = true;
             } else {
                 errorMessage.textContent = "";
                 errorMessage.style.display = "none";
-                successMessage.textContent = "Nome de usuário disponível";
+                successMessage.textContent = "Nome de usuário disponível!";
+                successMessage.style.display = "block";
 
-                // Habilitar campos e botão se o nome de usuário estiver disponível
                 passwordField.disabled = false;
                 roleField.disabled = false;
                 submitButton.disabled = false;
             }
         })
-        .catch(error => console.error('Erro:', error));
+        .catch(error => {
+            console.error('Erro ao verificar o nome de usuário:', error);
+        });
 }
-</script>
 
+// Função para validar o formato do e-mail com regex
+function validateEmail() {
+    var email = document.getElementById("email").value;
+    var emailError = document.getElementById("email-error");
+    var regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+
+    if (!regex.test(email)) {
+        emailError.textContent = "Formato de e-mail inválido!";
+        return false;
+    } else {
+        emailError.textContent = "";
+        return true;
+    }
+}
+
+// Função para validar o formulário
+function validateForm() {
+    return validateEmail(); // Verifica o e-mail antes de enviar
+}
+    </script>
 </body>
 </html>
