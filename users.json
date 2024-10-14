@@ -5,5 +5,12 @@
         "password": "8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92",
         "email": "admin@gmail.com",
         "role": "admin"
+    },
+    "7": {
+        "id": 8,
+        "username": "marvin",
+        "password": "d0a53c16dbaaa759a6601cc279fd1d5b71091e92c80677fb35aed6756b62a98a",
+        "email": "m42rvin@gmail.com",
+        "role": "admin"
     }
 }
