@@ -124,6 +124,27 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 // Exibe a lista de usuários
 $users = readJsonFile($jsonFile);
+
+// Caminho para o arquivo JSON
+$jsonFile = 'users.json';
+
+// Ler o conteúdo do arquivo JSON
+$jsonData = file_get_contents($jsonFile);
+
+// Converter o conteúdo JSON para um array associativo do PHP
+$usersArray = json_decode($jsonData, true);
+
+// Filtrar apenas username e email
+$filteredUsers = [];
+foreach ($usersArray as $user) {
+    $filteredUsers[] = [
+        'username' => $user['username'],
+        'email' => $user['email']
+    ];
+}
+
+// Converter o array filtrado para um JSON que será usado no JavaScript
+$filteredUsersJson = json_encode($filteredUsers);
 ?>
 
 <!-- Formulário para criar um novo usuário -->
@@ -238,6 +259,8 @@ $users = readJsonFile($jsonFile);
 
     <!-- Verificação do nome de usuário e e-mail com JavaScript -->
     <script>
+        document.users = <?php echo $filteredUsersJson; ?>;
+        console.log(document.users)
         // Impede o comportamento padrão do segundo botão
 document.getElementById("button_eye").addEventListener("click", function(event) {
     event.preventDefault(); // Previne a ação padrão do botão
@@ -269,16 +292,23 @@ function validatePassword() {
 
 
 function validateEmail() {
-    var email = document.getElementById('email').value;
+    var email = document.getElementById('email').value.trim();
+    console.log(email)
     var emailErrorElement = document.getElementById('email-error');
-    var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    var emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
 
     if (!emailRegex.test(email)) {
         emailErrorElement.textContent = 'Por favor, insira um e-mail válido.';
         return false;
     } else {
-        emailErrorElement.textContent = ''; // Limpa a mensagem de erro
-        return true;
+        if(verifyExist('email', email)){
+            emailErrorElement.textContent = 'E-mail em uso!';
+            return false;
+        } else {
+            emailErrorElement.textContent = ''; // Limpa a mensagem de erro
+            return true;
+        }
     }
 }
 
@@ -296,6 +326,19 @@ function checkUsername() {
         usernameSuccessElement.textContent = 'Nome de usuário válido.';
         return true;
     }
+}
+
+function verifyExist(type, value){
+    try {
+        for(var i = 0; document.users.length; i++){
+            if(document.users[i][type] === value){
+                return true;
+            }
+        }
+    } catch(e){
+        return false
+    }
+    return false;
 }
 
 // Função para validar o formulário antes de enviar
