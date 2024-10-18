@@ -322,9 +322,15 @@ function checkUsername() {
         usernameSuccessElement.textContent = '';
         return false;
     } else {
-        usernameErrorElement.textContent = '';
-        usernameSuccessElement.textContent = 'Nome de usuário válido.';
-        return true;
+        if(!verifyExist('username', username)){
+            usernameErrorElement.textContent = '';
+            usernameSuccessElement.textContent = 'Nome de usuário válido.';
+            return true;
+        } else {
+            usernameErrorElement.textContent = 'Nome de Usuário ocupado';
+            usernameSuccessElement.textContent = '';
+            return false;
+        }
     }
 }
 
