@@ -10,12 +10,17 @@ if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
 
 // Caminho para a pasta onde as imagens serão salvas
 $upload_dir = '_img/';
+// Caminho para a pasta de miniaturas
+$thumb_dir = '_thumb/';
 // Arquivo JSON para armazenar os detalhes das imagens
 $json_file = 'uploads.json';
 
-// Cria a pasta _img/ se não existir
+// Cria a pasta _img/ e _thumb/ se não existirem
 if (!is_dir($upload_dir)) {
     mkdir($upload_dir, 0777, true);
+}
+if (!is_dir($thumb_dir)) {
+    mkdir($thumb_dir, 0777, true);
 }
 
 // Função para carregar as imagens já enviadas do arquivo JSON
@@ -45,9 +50,12 @@ function deleteImage($json_file, $image_id) {
             $updated_images[] = $img;
         } else {
             $image_found = true;
-            // Remove o arquivo da pasta _img/
+            // Remove o arquivo da pasta _img/ e da pasta _thumb/
             if (file_exists($img['path'])) {
                 unlink($img['path']);
+            }
+            if (file_exists($img['thumb_path'])) {
+                unlink($img['thumb_path']);
             }
         }
     }
@@ -66,28 +74,40 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['image'])) {
     $allowed_types = ['image/jpeg', 'image/png', 'image/gif'];
     if (in_array($image['type'], $allowed_types)) {
         $image_name = basename($image['name']);
-        $target_file = $upload_dir . uniqid() . '_' . $image_name; // Gera um ID único
+        $unique_id = uniqid();
+        $target_file = $upload_dir . $unique_id . '_' . $image_name; // Gera um ID único
+        $thumb_file = $thumb_dir . $unique_id . '_thumb_' . $image_name; // Caminho para a miniatura
 
         // Move a imagem para a pasta _img/
         if (move_uploaded_file($image['tmp_name'], $target_file)) {
-            // Lê os dados EXIF da imagem
-            $exif_data = @exif_read_data($target_file);
-            $exif_info = !empty($exif_data) ? $exif_data : [];
+            // Gera a miniatura usando ImageMagick
+            $command = "convert $target_file -resize 150x150 $thumb_file";
+            exec($command, $output, $return_var);
 
-            // Armazena os detalhes da imagem no arquivo JSON
-            $image_details = [
-                'id' => uniqid(), // Gera um ID único para a imagem
-                'name' => $image_name,
-                'path' => $target_file,
-                'type' => $image['type'],
-                'size' => $image['size'],
-                'uploaded_at' => date('Y-m-d H:i:s'),
-                'exif' => $exif_info // Adiciona os dados EXIF
-            ];
-            saveImageDetails($json_file, $image_details);
-            
-            header('Location: ' . $_SERVER['PHP_SELF'] . '?success=1'); // Redireciona para a mesma página (PRG)
-            exit(); // Encerra o script para evitar o reenvio do formulário
+            // Verifica se a miniatura foi criada corretamente
+            if ($return_var === 0) {
+                // Lê os dados EXIF da imagem
+                $exif_data = @exif_read_data($target_file);
+                $exif_info = !empty($exif_data) ? $exif_data : [];
+
+                // Armazena os detalhes da imagem no arquivo JSON, incluindo o caminho da miniatura
+                $image_details = [
+                    'id' => $unique_id, // Gera um ID único para a imagem
+                    'name' => $image_name,
+                    'path' => $target_file,
+                    'thumb_path' => $thumb_file, // Adiciona o caminho da miniatura
+                    'type' => $image['type'],
+                    'size' => $image['size'],
+                    'uploaded_at' => date('Y-m-d H:i:s'),
+                    'exif' => $exif_info // Adiciona os dados EXIF
+                ];
+                saveImageDetails($json_file, $image_details);
+
+                header('Location: ' . $_SERVER['PHP_SELF'] . '?success=1'); // Redireciona para a mesma página (PRG)
+                exit(); // Encerra o script para evitar o reenvio do formulário
+            } else {
+                echo "Erro ao criar a miniatura da imagem.";
+            }
         } else {
             echo "Erro ao fazer o upload da imagem.";
         }

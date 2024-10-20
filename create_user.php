@@ -324,7 +324,7 @@ function checkUsername() {
     } else {
         if(!verifyExist('username', username)){
             usernameErrorElement.textContent = '';
-            usernameSuccessElement.textContent = 'Nome de usuário válido.';
+            usernameSuccessElement.textContent = 'Nome de usuário disponível.';
             return true;
         } else {
             usernameErrorElement.textContent = 'Nome de Usuário ocupado';
