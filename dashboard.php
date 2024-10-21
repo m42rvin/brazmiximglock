@@ -1,4 +1,6 @@
 <?php
+try {
+
 // Iniciar sessão
 session_start();
 
@@ -274,7 +276,7 @@ function renderTable($data, $title = null) {
     <?php if (!empty($images)) : ?>
         <?php foreach ($images as $img) : ?>
             <div imgId="<?php echo $img['id'];?>" class="image-item">
-                <img imgId="<?php echo $img['id'];?>" class="img-uploaded" src="<?php echo $img['path']; ?>" alt="<?php echo $img['name']; ?>">
+                <img imgId="<?php echo $img['id'];?>" class="img-uploaded" src="<?php echo $img['thumb_path']; ?>" alt="<?php echo $img['name']; ?>">
                 <p><strong>Nome personalizado:</strong> <?php echo !empty($img['custom_name']) ? $img['custom_name'] : 'N/A'; ?></p>
                 <table>
                     <tr>
@@ -336,3 +338,12 @@ document.querySelector('.modal-bg').addEventListener('click', function() {
 </body>
 <?php include "footer.php"; ?>
 </html>
+<?php
+
+} catch (Exception $e) {
+    // Capturar exceções e tratar o erro
+    echo "Erro capturado: " . $e->getMessage();
+} catch (ErrorException $e) {
+    // Capturar erros tratados como exceções
+    echo "Erro de execução capturado: " . $e->getMessage();
+}
