@@ -69,10 +69,11 @@ function deleteImage($json_file, $image_id) {
 // Processa o envio de imagem
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['image'])) {
     $image = $_FILES['image'];
+    $custom_name = isset($_POST['custom_name']) ? $_POST['custom_name'] : ''; // Captura o nome personalizado
 
-    // Verifica se o arquivo é uma imagem válida
-    $allowed_types = ['image/jpeg', 'image/png', 'image/gif'];
-    if (in_array($image['type'], $allowed_types)) {
+    // Verifica se o arquivo enviado é uma imagem
+    $check = getimagesize($image['tmp_name']);
+    if ($check !== false) {
         $image_name = basename($image['name']);
         $unique_id = uniqid();
         $target_file = $upload_dir . $unique_id . '_' . $image_name; // Gera um ID único
@@ -86,33 +87,40 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['image'])) {
 
             // Verifica se a miniatura foi criada corretamente
             if ($return_var === 0) {
-                // Lê os dados EXIF da imagem
-                $exif_data = @exif_read_data($target_file);
-                $exif_info = !empty($exif_data) ? $exif_data : [];
-
-                // Armazena os detalhes da imagem no arquivo JSON, incluindo o caminho da miniatura
-                $image_details = [
-                    'id' => $unique_id, // Gera um ID único para a imagem
-                    'name' => $image_name,
-                    'path' => $target_file,
-                    'thumb_path' => $thumb_file, // Adiciona o caminho da miniatura
-                    'type' => $image['type'],
-                    'size' => $image['size'],
-                    'uploaded_at' => date('Y-m-d H:i:s'),
-                    'exif' => $exif_info // Adiciona os dados EXIF
-                ];
-                saveImageDetails($json_file, $image_details);
-
-                header('Location: ' . $_SERVER['PHP_SELF'] . '?success=1'); // Redireciona para a mesma página (PRG)
-                exit(); // Encerra o script para evitar o reenvio do formulário
+                // Miniatura criada corretamente
+                $thumb_path = $thumb_file;
             } else {
-                echo "Erro ao criar a miniatura da imagem.";
+                // Se a miniatura não puder ser criada, usa o caminho da imagem original como thumb
+                $thumb_path = $target_file;
             }
+            
+            // Lê os dados EXIF da imagem
+            $exif_data = @exif_read_data($target_file);
+            $exif_info = !empty($exif_data) ? $exif_data : [];
+            
+            // Armazena os detalhes da imagem no arquivo JSON, incluindo o caminho da miniatura ou da imagem original
+            $image_details = [
+                'id' => $unique_id, // Gera um ID único para a imagem
+                'name' => $image_name,
+                'custom_name' => $custom_name, // Adiciona o nome personalizado
+                'path' => $target_file,
+                'thumb_path' => $thumb_path, // Caminho da miniatura ou da imagem original
+                'type' => $image['type'],
+                'size' => $image['size'],
+                'uploaded_at' => date('Y-m-d H:i:s'),
+                'exif' => $exif_info // Adiciona os dados EXIF
+            ];
+            
+            saveImageDetails($json_file, $image_details);
+            
+            header('Location: ' . $_SERVER['PHP_SELF'] . '?success=1'); // Redireciona para a mesma página (PRG)
+            exit(); // Encerra o script para evitar o reenvio do formulário
+            
         } else {
             echo "Erro ao fazer o upload da imagem.";
         }
     } else {
-        echo "Formato de imagem inválido. Apenas JPEG, PNG e GIF são permitidos.";
+        echo "O arquivo enviado não é uma imagem válida.";
     }
 }
 
@@ -251,7 +259,11 @@ function renderTable($data, $title = null) {
 <!-- Formulário para upload de imagem -->
 <form action="" method="POST" enctype="multipart/form-data">
     <label for="image">Escolha uma imagem:</label>
-    <input type="file" name="image" id="image" required>
+    <input type="file" name="image" id="image" required><br><br>
+    
+    <label for="custom_name">Nome personalizado:</label>
+    <input type="text" name="custom_name" id="custom_name" placeholder="Digite um nome para o arquivo"><br><br>
+    
     <button type="submit" class="btn btn-dark">Enviar</button>
 </form>
 </div>
@@ -263,6 +275,7 @@ function renderTable($data, $title = null) {
         <?php foreach ($images as $img) : ?>
             <div imgId="<?php echo $img['id'];?>" class="image-item">
                 <img imgId="<?php echo $img['id'];?>" class="img-uploaded" src="<?php echo $img['path']; ?>" alt="<?php echo $img['name']; ?>">
+                <p><strong>Nome personalizado:</strong> <?php echo !empty($img['custom_name']) ? $img['custom_name'] : 'N/A'; ?></p>
                 <table>
                     <tr>
                         <td class="imgInfo" imgId="<?php echo $img['id'];?>">
@@ -284,7 +297,7 @@ function renderTable($data, $title = null) {
 <div class="modal-bg hide"></div>
 <div class="displayImg hide">
         <div class="imgShow">
-            <img src="http://localhost:8000/_img/66f2ba6f22658_IMG_20210316_141444023.jpg" alt="">
+            <img src="" alt="">
         </div>
         <div class="infoShow"></div>
 </div>
