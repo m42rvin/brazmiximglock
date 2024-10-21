@@ -195,7 +195,7 @@ function renderTable($data, $title = null) {
             display:none;
         }
         .displayImg {
-            position: absolute;
+            position: fixed;
             top: 30px;
             left: 30px;
             width: 90vw;
@@ -239,7 +239,7 @@ function renderTable($data, $title = null) {
             text-align: left; /* Alinha o texto à esquerda nas células (pode ajustar conforme necessário) */
         }
         .modal-bg {
-            position: absolute;
+            position: fixed;
             top: 0;
             left: 0;
             width: 100vw;
@@ -277,6 +277,8 @@ function renderTable($data, $title = null) {
     <h2>Imagens enviadas:</h2>
     <?php if (!empty($images)) : ?>
         <?php foreach ($images as $img) : ?>
+
+            
             <div imgId="<?php echo $img['id'];?>" class="image-item">
                 <img imgId="<?php echo $img['id'];?>" class="img-uploaded" src="<?php echo $img['thumb_path']; ?>" alt="<?php echo $img['name']; ?>">
                 <p><strong>Nome personalizado:</strong> <?php echo !empty($img['custom_name']) ? $img['custom_name'] : 'N/A'; ?></p>
