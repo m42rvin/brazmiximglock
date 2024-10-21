@@ -83,15 +83,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['image'])) {
 
         // Move a imagem para a pasta _img/
         if (move_uploaded_file($image['tmp_name'], $target_file)) {
-            // Gera a miniatura usando ImageMagick
-            $command = "convert $target_file -resize 150x150 $thumb_file";
-            exec($command, $output, $return_var);
+            // Gera a miniatura usando Imagick
+            try {
+                $imagick = new Imagick($target_file);
+                $imagick->resizeImage(150, 150, Imagick::FILTER_LANCZOS, 1);
+                $imagick->writeImage($thumb_file);
+                $imagick->clear();
+                $imagick->destroy();
 
-            // Verifica se a miniatura foi criada corretamente
-            if ($return_var === 0) {
                 // Miniatura criada corretamente
                 $thumb_path = $thumb_file;
-            } else {
+            } catch (ImagickException $e) {
                 // Se a miniatura não puder ser criada, usa o caminho da imagem original como thumb
                 $thumb_path = $target_file;
             }
