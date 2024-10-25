@@ -219,6 +219,7 @@ function renderTable($data, $title = null) {
         }
         .imgShow img{
             width: auto;
+            max-width: 50vw;
             height: 80vh;
         }
         .show {
@@ -280,7 +281,7 @@ function renderTable($data, $title = null) {
 
             
             <div imgId="<?php echo $img['id'];?>" class="image-item">
-                <img imgId="<?php echo $img['id'];?>" class="img-uploaded" src="<?php echo $img['thumb_path']; ?>" alt="<?php echo $img['name']; ?>">
+                <img imgId="<?php echo $img['id'];?>" class="img-uploaded" src="<?php echo $img['thumb_path']; ?>" alt="<?php echo $img['name']; ?>" path="<?php echo $img['path']; ?>">
                 <p><strong>Nome personalizado:</strong> <?php echo !empty($img['custom_name']) ? $img['custom_name'] : 'N/A'; ?></p>
                 <table>
                     <tr>
@@ -317,7 +318,8 @@ document.querySelectorAll('.img-uploaded').forEach(function(img) {
         var targetElement = document.querySelector('.infoShow');
         targetElement.innerHTML = innerHTML;
         var imageElement = document.querySelector('.imgShow > img');
-        imageElement.src = this.src;
+
+        imageElement.src = this.getAttribute('path');
         //window.open(this.src, '_blank'); // Abre a imagem em uma nova aba
         var divElement = document.querySelector('.displayImg.hide');
 
