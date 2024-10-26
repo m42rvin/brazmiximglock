@@ -12,5 +12,12 @@
         "password": "d0a53c16dbaaa759a6601cc279fd1d5b71091e92c80677fb35aed6756b62a98a",
         "email": "marvin.medeiros52@gmail.com",
         "role": "admin"
+    },
+    "8": {
+        "id": 9,
+        "username": "paulojunior",
+        "password": "fcbb719bcfa29fb1e5494542aae276cde8013ea132f7b8d76645880d5cc2db1e",
+        "email": "pauloc_jr_jr@hotmail.com",
+        "role": "admin"
     }
 }

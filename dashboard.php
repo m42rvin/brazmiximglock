@@ -29,16 +29,34 @@ if (!is_dir($thumb_dir)) {
 function loadImages($json_file) {
     if (file_exists($json_file)) {
         $json_data = file_get_contents($json_file);
-        return json_decode($json_data, true);
+        $images = json_decode($json_data, true);
+
+        // Verifica se a decodificação do JSON foi bem-sucedida
+        if (json_last_error() === JSON_ERROR_NONE) {
+            return $images;
+        } else {
+            return []; // Retorna um array vazio se o JSON estiver corrompido
+        }
     }
     return [];
 }
 
-// Função para salvar os detalhes da imagem no arquivo JSON
+// Função para salvar os detalhes da imagem no arquivo JSON com bloqueio de arquivo
 function saveImageDetails($json_file, $image_details) {
+    // Carregar as imagens existentes
     $current_images = loadImages($json_file);
+
+    // Adiciona os novos detalhes da imagem ao array existente
     $current_images[] = $image_details;
-    file_put_contents($json_file, json_encode($current_images, JSON_PRETTY_PRINT));
+
+    // Escreve o JSON atualizado no arquivo com LOCK_EX para evitar acesso concorrente
+    $json_data = json_encode($current_images, JSON_PRETTY_PRINT);
+    
+    if ($json_data !== false) { // Verifica se a conversão do JSON foi bem-sucedida
+        file_put_contents($json_file, $json_data, LOCK_EX);
+    } else {
+        echo "Erro ao codificar dados JSON.";
+    }
 }
 
 // Função para excluir uma imagem
@@ -64,7 +82,7 @@ function deleteImage($json_file, $image_id) {
 
     // Atualiza o arquivo JSON apenas se a imagem foi encontrada
     if ($image_found) {
-        file_put_contents($json_file, json_encode($updated_images, JSON_PRETTY_PRINT));
+        file_put_contents($json_file, json_encode($updated_images, JSON_PRETTY_PRINT), LOCK_EX);
     }
 }
 
@@ -340,6 +358,50 @@ document.querySelector('.modal-bg').addEventListener('click', function() {
     divElement.classList.remove('show');  
 })
 </script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const form = document.querySelector('form'); // Seleciona o formulário
+    const submitButton = form.querySelector('button[type="submit"]'); // Seleciona o botão de envio
+    const loadingMessage = document.createElement('p'); // Cria um elemento para a mensagem de carregamento
+    loadingMessage.textContent = "Carregando, por favor, aguarde...";
+    loadingMessage.style.display = "none"; // Inicialmente, a mensagem está oculta
+    form.appendChild(loadingMessage); // Adiciona a mensagem ao formulário
+
+    form.addEventListener('submit', function (event) {
+        // Desabilita o botão de envio para evitar múltiplos envios
+        submitButton.disabled = true;
+        // Mostra a mensagem de carregamento
+        loadingMessage.style.display = "block";
+
+        // Evitar múltiplos envios via tecla Enter ou clique no botão
+        event.preventDefault();
+
+        // Cria um objeto FormData para processar o envio do formulário via AJAX
+        const formData = new FormData(form);
+
+        // Envia o formulário usando Fetch API para manter o comportamento assíncrono
+        fetch(form.action, {
+            method: 'POST',
+            body: formData
+        }).then(response => {
+            if (response.ok) {
+                // Se o upload for bem-sucedido, redireciona ou exibe a confirmação
+                window.location.href = window.location.href + '?success=1';
+            } else {
+                // Se houver erro, reabilita o botão de envio
+                submitButton.disabled = false;
+                loadingMessage.textContent = "Erro no upload, tente novamente.";
+            }
+        }).catch(error => {
+            // Se ocorrer um erro de rede, reabilita o botão de envio
+            console.error('Erro:', error);
+            submitButton.disabled = false;
+            loadingMessage.textContent = "Erro no upload, tente novamente.";
+        });
+    });
+});
+</script>
+
 </div>
 </body>
 <?php include "footer.php"; ?>
