@@ -58,46 +58,28 @@ $images = loadImages($json_file);
             top: 30px;
             left: 30px;
             width: 90vw;
-            height: 90vh;
+            max-height: 90vh;
             background: white;
             padding: 30px;
-            display: flex;
+            display:inline-block;
+            overflow:auto;
+            overflow-x: hidden;
         }
         .imgShow, .infoShow {
             display: block;
         }
         .imgShow {
-            width:52vw;
-        }
-        .infoShow {
-            width: 34vw;
-            display: flow; /* Flexbox para garantir que o conteúdo se ajuste corretamente */
-            justify-content: center; /* Centraliza horizontalmente */
-            align-items: center; /* Centraliza verticalmente */
-            overflow: auto;
-        }
-        .imgShow img{
-            width: auto;
-            max-width: 50vw;
-            height: 80vh;
+            width:100%;
+            overflow: scroll;
         }
         .show {
-            display:flex;
+            display:block;
         }
         .hide {
             display: none;
         }
-        /* A tabela dentro da div */
-        .infoShow table {
-            width: 100%; /* Faz com que a tabela ocupe 100% da largura da div */
-            height: 100%; /* Faz com que a tabela ocupe 100% da altura da div */
-            font-size: 8pt;
-        }
+        
 
-        .infoShow th, .infoShow td {
-            word-wrap: break-word; /* Faz as palavras quebrarem, se necessário, para evitar overflow */
-            text-align: left; /* Alinha o texto à esquerda nas células (pode ajustar conforme necessário) */
-        }
         .modal-bg {
             position: fixed;
             top: 0;
@@ -111,7 +93,9 @@ $images = loadImages($json_file);
         .modal-bg.hide {
             display:none;
         }
-
+        .imgDetalhes {
+            max-width: 60vw;
+        }
     </style>
 </head>
 <body>
@@ -158,7 +142,6 @@ $images = loadImages($json_file);
 
 <div class="modal-bg hide"></div>
 <div class="displayImg hide">
-        <div class="infoShow"></div>
 </div>
     </div>
 </body>
@@ -208,10 +191,27 @@ function renderTable(data, title = null) {
 
 
 function abreDetalhes(data){
-    let img = data.getAttribute('data')
-    console.log(img)
-}
+    let img = JSON.parse(data.getAttribute('data'))
+    
+    let displayImg = document.querySelector('.displayImg');
+    displayImg.innerHTML="";
 
+    displayImg.innerHTML = `<img class="imgDetalhes" src='${img['path']}'/><br/>`;
+
+    displayImg.append(renderTable(img));
+
+    document.querySelector('.modal-bg').classList.remove('hide')
+    displayImg.classList.remove('hide');  // Remove a classe 'hide'
+    displayImg.classList.add('show'); 
+
+
+}
+document.querySelector('.modal-bg').addEventListener('click', function() {
+    var divElement = document.querySelector('.displayImg');
+    document.querySelector('.modal-bg').classList.add('hide')
+    divElement.classList.add('hide');  // Remove a classe 'hide'
+    divElement.classList.remove('show');  
+})
 </script>
 <?php include 'footer.php';?>
 </html>
