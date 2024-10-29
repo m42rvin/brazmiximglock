@@ -43,11 +43,27 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         // Verificar se a senha inserida bate com a senha do arquivo JSON
         if ($password_hash === $user['password']) {
-            // Login bem-sucedido, armazenar informações na sessão
+            // Login bem-sucedido
+            $user_id = $user['id'];
+
+            // Verificar se já existe uma sessão ativa com o mesmo ID
+            if (isset($_SESSION['active_users'][$user_id])) {
+                // Destruir a sessão ativa anterior do usuário
+                session_id($_SESSION['active_users'][$user_id]);
+                session_start();
+                session_destroy();
+                
+                // Voltar para a sessão atual
+                session_id(session_create_id());
+                session_start();
+            }
+
+            // Salvar informações na sessão atual
             $_SESSION["loggedin"] = true;
-            $_SESSION["username"] = $user['username'];  // Salvar o nome de usuário na sessão
-            $_SESSION["role"] = $user['role'];  // Salvar o role na sessão
-            $_SESSION["id"] = $user['id'];  // Salvar o id na sessão
+            $_SESSION["username"] = $user['username'];
+            $_SESSION["role"] = $user['role'];
+            $_SESSION["id"] = $user_id;
+            $_SESSION['active_users'][$user_id] = session_id(); // Registra a sessão ativa do usuário
 
             header("Location: dashboard.php"); // Redirecionar para a página de dashboard
             exit;
