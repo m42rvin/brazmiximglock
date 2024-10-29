@@ -199,12 +199,12 @@ function abreDetalhes(data){
     displayImg.innerHTML = `<img class="imgDetalhes" src='${img['path']}'/><br/>`;
     
     displayImg.append(renderTable(img));
-    displayImg.scrollTop = 0;
-
+    
     document.querySelector('.modal-bg').classList.remove('hide')
     displayImg.classList.remove('hide');  // Remove a classe 'hide'
     displayImg.classList.add('show'); 
-
+    
+    displayImg.scrollTop = 0;
 
 }
 document.querySelector('.modal-bg').addEventListener('click', function() {
