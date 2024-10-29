@@ -195,10 +195,11 @@ function abreDetalhes(data){
     
     let displayImg = document.querySelector('.displayImg');
     displayImg.innerHTML="";
-
+    
     displayImg.innerHTML = `<img class="imgDetalhes" src='${img['path']}'/><br/>`;
-
+    
     displayImg.append(renderTable(img));
+    displayImg.scrollTop = 0;
 
     document.querySelector('.modal-bg').classList.remove('hide')
     displayImg.classList.remove('hide');  // Remove a classe 'hide'
