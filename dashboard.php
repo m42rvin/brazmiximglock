@@ -90,7 +90,8 @@ function deleteImage($json_file, $image_id) {
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['image'])) {
     $image = $_FILES['image'];
     $custom_name = isset($_POST['custom_name']) ? $_POST['custom_name'] : ''; // Captura o nome personalizado
-
+    $description = isset($_POST['description']) ? $_POST['description'] : '';
+    $category = isset($_POST['category']) ? $_POST['category'] : '';
     // Verifica se o arquivo enviado é uma imagem
     $check = getimagesize($image['tmp_name']);
     if ($check !== false) {
@@ -125,6 +126,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['image'])) {
                 'id' => $unique_id, // Gera um ID único para a imagem
                 'name' => $image_name,
                 'custom_name' => $custom_name, // Adiciona o nome personalizado
+                'description' => $description,
+                'category' => $category,
                 'path' => $target_file,
                 'thumb_path' => $thumb_path, // Caminho da miniatura ou da imagem original
                 'type' => $image['type'],
