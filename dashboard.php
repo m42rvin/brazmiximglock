@@ -270,6 +270,16 @@ function renderTable($data, $title = null) {
         .modal-bg.hide {
             display:none;
         }
+        .form-div {
+            width: 50%;
+            float: left;
+            padding: 5px;
+        }
+        .form-div-br {
+            height: 2px;
+            width: 100%;
+            display: inline-block;
+        }
     </style>
     <?php include "header.php"; ?>
 </head>
@@ -281,17 +291,41 @@ function renderTable($data, $title = null) {
 
 <!-- Formulário para upload de imagem -->
 <form action="" method="POST" enctype="multipart/form-data">
-    <label for="image">Escolha uma imagem:</label>
-    <input type="file" name="image" id="image" required><br><br>
-    
+    <div class="form-div">
     <label for="custom_name">Nome personalizado:</label>
-    <input type="text" name="custom_name" id="custom_name" placeholder="Digite um nome para o arquivo"><br><br>
+    <input class="form-control" type="text" name="custom_name" id="custom_name" placeholder="Digite um nome para o arquivo"><br>
     
+    <label for="category">Escolha uma Categoria:</label>
+    <select id="category" name="category" class="form-control" required>
+        <option value="" disabled selected>Selecione uma opção</option>
+        <option value="prodbruto">Produto Bruto</option>
+        <option value="prodedit">Produto Editado</option>
+        <option value="paisagem">Paisagem</option>
+        <option value="pessoas">Pessoas</option>
+        <option value="criacaodigital">Criação Digital Mista</option>
+        <option value="compra">Compra de imagem</option>
+    </select>
+    <br>
+    <label for="image">Escolha uma imagem:</label>
+    <input class="form-control" type="file" name="image" id="image" required><br><br>
+
+    
+    
+</div>
+<div class="form-div">
+<label for="description">Descrição da Imagem:</label>
+<textarea class="form-control" id="description" name="description" rows="4" cols="50" placeholder="Descreva a imagem aqui..."></textarea>
+<br>
+<label for="image">Upload de arquivo adicional (Opicional)</label>
+    <input class="form-control" type="file" name="image-extra" id="image-extra"><br><br>        
+
+</div>
+<div class="form-div-br"></div>
     <button type="submit" class="btn btn-dark">Enviar</button>
 </form>
 </div>
     
-<!-- Exibe as imagens enviadas -->
+
 <div class="image-list">
     <h2>Imagens enviadas:</h2>
     <?php if (!empty($images)) : ?>
