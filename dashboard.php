@@ -88,6 +88,23 @@ function deleteImage($json_file, $image_id) {
 
 // Processa o envio de imagem
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['image'])) {
+
+    $extraImage = '';
+    if(isset($_FILES['image-extra'])){
+        $imageExtra = $_FILES['image-extra'];
+        $extraImageName = basename($imageExtra['name']);
+        $extraunique_id = uniqid();
+        $extratarget_file = $upload_dir . $extraunique_id . '_' . $extraImageName; // Gera um ID único
+        $extrathumb_file = $thumb_dir . $extraunique_id . '_thumb_' . $extraImageName; // Caminho para a miniatura
+
+        // Move a imagem para a pasta _img/
+        if (move_uploaded_file($imageExtra['tmp_name'], $extratarget_file)) {
+            $extraImage =  $extratarget_file;
+        }
+
+    }
+
+
     $image = $_FILES['image'];
     $custom_name = isset($_POST['custom_name']) ? $_POST['custom_name'] : ''; // Captura o nome personalizado
     $description = isset($_POST['description']) ? $_POST['description'] : '';
@@ -129,6 +146,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['image'])) {
                 'description' => $description,
                 'category' => $category,
                 'path' => $target_file,
+                'extra-image'=> $extraImage,
                 'thumb_path' => $thumb_path, // Caminho da miniatura ou da imagem original
                 'type' => $image['type'],
                 'size' => $image['size'],
