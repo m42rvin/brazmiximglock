@@ -198,6 +198,14 @@ function abreDetalhes(data){
     
     displayImg.innerHTML = `<img class="imgDetalhes" src='${img['path']}'/><br/>`;
     
+    // console.log(img['extra-image'])
+    if(img['extra-image'] ){
+
+        displayImg.innerHTML += `<img class="imgDetalhes" src='${img['extra-image']}'/><br/>`;
+    }
+    
+
+    
     displayImg.append(renderTable(img));
     
     document.querySelector('.modal-bg').classList.remove('hide')
