@@ -108,6 +108,7 @@ $images = loadImages($json_file);
             <th>Miniatura</th>
             <th>Nome</th>
             <th>Nome do Arquivo</th>
+            <th>Descrição</th>
             <th>Detalhes</th>
         </tr>
     </thead>
@@ -129,6 +130,7 @@ $images = loadImages($json_file);
                 </td>
                 <td><?php echo !empty($img['custom_name']) ? $img['custom_name'] : 'N/A'; ?></td>
                 <td><?php echo $img['name']; ?></td>
+                <td><?php echo $img['description']; ?></td>
                 <td><a href="#" onclick="abreDetalhes(this)" data='<?php echo json_encode($img);?>'>Abrir Detalhes</a></td>
             </tr>
         <?php endforeach; ?>

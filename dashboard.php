@@ -141,25 +141,26 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['image'])) {
             
             // Armazena os detalhes da imagem no arquivo JSON, incluindo o caminho da miniatura ou da imagem original
             $image_details = [
-                'id' => $unique_id, // Gera um ID único para a imagem
+                'id' => $unique_id,
                 'name' => $image_name,
-                'custom_name' => $custom_name, // Adiciona o nome personalizado
+                'custom_name' => $custom_name,
                 'description' => $description,
                 'category' => $category,
                 'link_ativo'=> $linkAtivo,
                 'path' => $target_file,
                 'extra-image'=> $extraImage,
-                'width' => $exif_info['COMPUTED']['Width'] + " px",
-                'height' => $exif_info['COMPUTED']['Height'] + " px",
-                'created_at' => $exif_info['DateTimeOriginal'],
-                'make' => $exif_info['Make'],
-                'model' => $exif_info['Model'],
-                'thumb_path' => $thumb_path, // Caminho da miniatura ou da imagem original
+                'width' => isset($exif_info['COMPUTED']['Width']) ? $exif_info['COMPUTED']['Width'] . " px" : null,
+                'height' => isset($exif_info['COMPUTED']['Height']) ? $exif_info['COMPUTED']['Height'] . " px" : null,
+                'created_at' => isset($exif_info['DateTimeOriginal']) ? $exif_info['DateTimeOriginal'] : null,
+                'make' => isset($exif_info['Make']) ? $exif_info['Make'] : null,
+                'model' => isset($exif_info['Model']) ? $exif_info['Model'] : null,
+                'thumb_path' => $thumb_path,
                 'type' => $image['type'],
-                'size' => round((int)$image['size'] / (1024 * 1024), 2) + " Mb",
+                'size' => round((int)$image['size'] / (1024 * 1024), 2) . " Mb",
                 'uploaded_at' => date('Y-m-d H:i:s'),
-                'exif' => $exif_info // Adiciona os dados EXIF
+                'exif' => $exif_info
             ];
+            
             
             saveImageDetails($json_file, $image_details);
             
