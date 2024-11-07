@@ -109,6 +109,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['image'])) {
     $custom_name = isset($_POST['custom_name']) ? $_POST['custom_name'] : ''; // Captura o nome personalizado
     $description = isset($_POST['description']) ? $_POST['description'] : '';
     $category = isset($_POST['category']) ? $_POST['category'] : '';
+    $linkAtivo = $_POST['link_ativo'];
     // Verifica se o arquivo enviado é uma imagem
     $check = getimagesize($image['tmp_name']);
     if ($check !== false) {
@@ -145,11 +146,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['image'])) {
                 'custom_name' => $custom_name, // Adiciona o nome personalizado
                 'description' => $description,
                 'category' => $category,
+                'link_ativo'=> $linkAtivo,
                 'path' => $target_file,
                 'extra-image'=> $extraImage,
+                'width' => $exif_info['COMPUTED']['Width'] + " px",
+                'height' => $exif_info['COMPUTED']['Height'] + " px",
+                'created_at' => $exif_info['DateTimeOriginal'],
+                'make' => $exif_info['Make'],
+                'model' => $exif_info['Model'],
                 'thumb_path' => $thumb_path, // Caminho da miniatura ou da imagem original
                 'type' => $image['type'],
-                'size' => $image['size'],
+                'size' => round((int)$image['size'] / (1024 * 1024), 2) + " Mb",
                 'uploaded_at' => date('Y-m-d H:i:s'),
                 'exif' => $exif_info // Adiciona os dados EXIF
             ];
@@ -314,7 +321,7 @@ function renderTable($data, $title = null) {
 <form action="" method="POST" enctype="multipart/form-data">
     <div class="form-div">
     <label for="custom_name">Nome personalizado:</label>
-    <input class="form-control" type="text" name="custom_name" id="custom_name" placeholder="Digite um nome para o arquivo"><br>
+    <input required class="form-control" type="text" name="custom_name" id="custom_name" placeholder="Digite um nome para o arquivo"><br>
     
     <label for="category">Escolha uma Categoria:</label>
     <select id="category" name="category" class="form-control" required>
@@ -327,6 +334,9 @@ function renderTable($data, $title = null) {
         <option value="compra">Compra de imagem</option>
     </select>
     <br>
+    <label for="link_ativo">Link ativo (opcional):</label>
+    <input class="form-control" type="text" name="link_ativo" id="link_ativo" placeholder="Link ativo da imagem"><br>
+   
     <label for="image">Escolha uma imagem:</label>
     <input class="form-control" type="file" name="image" id="image" required><br><br>
 

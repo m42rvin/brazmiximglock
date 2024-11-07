@@ -113,25 +113,26 @@ $images = loadImages($json_file);
     </thead>
     <tbody>
         <?php if (!empty($images)) : ?>
-            <?php foreach ($images as $img) : ?>
-                <tr imgId="<?php echo $img['id']; ?>" class="image-item">
-                    <td>
-                        <input value="" type="checkbox"/>
-                    </td>
-                    <td>
-                        <img
-                            width="50"
-                            height="50"
-                            imgId="<?php echo $img['id']; ?>"
-                            class="img-thumbnail img-uploaded"
-                            src="<?php echo $img['thumb_path']; ?>"
-                            path="<?php echo $img['path']; ?>">
-                    </td>
-                    <td><?php echo !empty($img['custom_name']) ? $img['custom_name'] : 'N/A'; ?></td>
-                    <td><?php echo $img['name']; ?></td>
-                    <td><a href="#" onclick="abreDetalhes(this)" data='<?php echo json_encode($img);?>'>Abrir Detalhes</a></td>
-                </tr>
-            <?php endforeach; ?>
+            <?php foreach (array_reverse($images) as $img) : ?>
+            <tr imgId="<?php echo $img['id']; ?>" class="image-item">
+                <td>
+                    <input value="" type="checkbox"/>
+                </td>
+                <td>
+                    <img
+                        width="50"
+                        height="50"
+                        imgId="<?php echo $img['id']; ?>"
+                        class="img-thumbnail img-uploaded"
+                        src="<?php echo $img['thumb_path']; ?>"
+                        path="<?php echo $img['path']; ?>">
+                </td>
+                <td><?php echo !empty($img['custom_name']) ? $img['custom_name'] : 'N/A'; ?></td>
+                <td><?php echo $img['name']; ?></td>
+                <td><a href="#" onclick="abreDetalhes(this)" data='<?php echo json_encode($img);?>'>Abrir Detalhes</a></td>
+            </tr>
+        <?php endforeach; ?>
+
         <?php else : ?>
             <tr>
                 <td colspan="3">Nenhuma imagem enviada.</td>
@@ -160,7 +161,7 @@ function renderTable(data, title = null) {
         caption.innerHTML = `<strong>${title}</strong>`;
         table.appendChild(caption);
     }
-
+    
     // Itera sobre o objeto ou array de dados
     for (const key in data) {
         if (data.hasOwnProperty(key)) {
@@ -201,7 +202,7 @@ function abreDetalhes(data){
     // console.log(img['extra-image'])
     if(img['extra-image'] ){
 
-        displayImg.innerHTML += `<img class="imgDetalhes" src='${img['extra-image']}'/><br/>`;
+        displayImg.innerHTML += `<a href='${img['extra-image']}' target="_blank">Arquivo de Licença</a><br/>`;
     }
     
 
