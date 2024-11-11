@@ -123,6 +123,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['image'])) {
             // Gera a miniatura usando Imagick
             try {
                 $imagick = new Imagick($target_file);
+                $dpi = $imagick->getImageResolution();
                 $imagick->resizeImage(150, 150, Imagick::FILTER_LANCZOS, 1);
                 $imagick->writeImage($thumb_file);
                 $imagick->clear();
@@ -154,9 +155,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['image'])) {
                 'created_at' => isset($exif_info['DateTimeOriginal']) ? $exif_info['DateTimeOriginal'] : null,
                 'make' => isset($exif_info['Make']) ? $exif_info['Make'] : null,
                 'model' => isset($exif_info['Model']) ? $exif_info['Model'] : null,
+                'dpi' => $dpi['x'] . "x" . $dpi['y'],
                 'GPSLatitude' => isset($exif_info['GPSLatitude']['1']) ? $exif_info['GPSLatitude']['1'] : null,
                 'GPSLongitude' => isset($exif_info['GPSLongitude']['1']) ? $exif_info['GPSLongitude']['1'] : null,
                 'Software' => isset($exif_info['Software']) ? $exif_info['Software'] : null,
+                'DateTime' => isset($exif_info['DateTime']) ? $exif_info['DateTime'] : null,
                 'thumb_path' => $thumb_path,
                 'type' => $image['type'],
                 'size' => round((int)$image['size'] / (1024 * 1024), 2) . " Mb",
