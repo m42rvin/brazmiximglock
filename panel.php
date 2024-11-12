@@ -102,6 +102,10 @@ $images = loadImages($json_file);
             word-wrap: break-word;
             overflow-wrap: break-word;
         }
+        th:hover {
+            cursor:pointer;
+            opacity:0.9;
+        }
     </style>
     
 </head>
