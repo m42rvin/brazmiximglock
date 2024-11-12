@@ -6,7 +6,7 @@
   <div class="collapse navbar-collapse" id="navbarNavDropdown">
     <ul class="navbar-nav">
       <li class="nav-item active">
-        <a class="nav-link" href="/dashboard.php">Home <span class="sr-only">(current)</span></a>
+        <a class="nav-link" href="home.php">Home <span class="sr-only">(current)</span></a>
       </li>
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -16,7 +16,10 @@
           <?php if ($_SESSION["role"] == "admin") : ?>
           <a class="dropdown-item" href="/create_user.php">Usuários</a>
           <?php endif ?>
+          <hr>
           <a class="dropdown-item" href="/panel.php">Painel</a>
+          <a class="dropdown-item" href="/upload.php">Upload</a>
+          <hr>
           <a class="dropdown-item" href="/logout.php">Sair</a>
         </div>
       </li>

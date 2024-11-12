@@ -65,7 +65,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $_SESSION["id"] = $user_id;
             $_SESSION['active_users'][$user_id] = session_id(); // Registra a sessão ativa do usuário
 
-            header("Location: dashboard.php"); // Redirecionar para a página de dashboard
+            header("Location: home.php"); // Redirecionar para a página de dashboard
             exit;
         } else {
             // Senha incorreta

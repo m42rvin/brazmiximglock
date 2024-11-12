@@ -96,42 +96,55 @@ $images = loadImages($json_file);
         .imgDetalhes {
             max-width: 60vw;
         }
+        .table td.nomearquivo {
+            width: 142px;
+            display: flow;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+        }
     </style>
+    
 </head>
 <body>
     <?php include 'navbar.php';?>
     <div class="container">
-    <table class="table table-striped table-bordered table-hover table-responsive text-center align-middle">
+    <table id="myTable" class="table table-striped table-bordered table-hover table-responsive text-center align-middle">
     <thead class="table-dark">
         <tr>
-            <th>Seleciona</th>
+            <th onclick="sortTable(0)">Nome do Arquivo</th>
+            <th onclick="sortTable(1)">Nome</th>
+            <th onclick="sortTable(2, 'date')">Data upload</th>
+            <th onclick="sortTable(3, 'date')">Data criação</th>
+            <th onclick="sortTable(4)">Categoria</th>
+            <th onclick="sortTable(5)">Licença</th>
             <th>Miniatura</th>
-            <th>Nome</th>
-            <th>Nome do Arquivo</th>
-            <th>Descrição</th>
             <th>Detalhes</th>
+            <th>Seleciona</th>
         </tr>
     </thead>
     <tbody>
         <?php if (!empty($images)) : ?>
             <?php foreach (array_reverse($images) as $img) : ?>
             <tr imgId="<?php echo $img['id']; ?>" class="image-item">
-                <td>
-                    <input value="" type="checkbox"/>
-                </td>
+                <td><?php echo !empty($img['custom_name']) ? $img['custom_name'] : 'N/A'; ?></td>
+                <td class="nomearquivo"><?php echo $img['name']; ?></td>
+                <td><?php echo $img['uploaded_at']; ?></td>
+                <td><?php echo $img['created_at']; ?></td>
+                <td><?php echo !empty($img['category']) ? $img['category'] : 'N/A'; ?></td>
+                <td><?php echo !empty($img['license']) ? $img['license'] : 'N/A'; ?></td>
                 <td>
                     <img
-                        width="50"
-                        height="50"
-                        imgId="<?php echo $img['id']; ?>"
-                        class="img-thumbnail img-uploaded"
-                        src="<?php echo $img['thumb_path']; ?>"
-                        path="<?php echo $img['path']; ?>">
+                    width="50"
+                    height="50"
+                    imgId="<?php echo $img['id']; ?>"
+                    class="img-thumbnail img-uploaded"
+                    src="<?php echo $img['thumb_path']; ?>"
+                    path="<?php echo $img['path']; ?>">
                 </td>
-                <td><?php echo !empty($img['custom_name']) ? $img['custom_name'] : 'N/A'; ?></td>
-                <td><?php echo $img['name']; ?></td>
-                <td><?php echo $img['description']; ?></td>
                 <td><a href="#" onclick="abreDetalhes(this)" data='<?php echo json_encode($img);?>'>Abrir Detalhes</a></td>
+                    <td>
+                        <input value="" type="checkbox"/>
+                    </td>
             </tr>
         <?php endforeach; ?>
 
@@ -224,6 +237,69 @@ document.querySelector('.modal-bg').addEventListener('click', function() {
     divElement.classList.add('hide');  // Remove a classe 'hide'
     divElement.classList.remove('show');  
 })
+</script>
+<script>
+function sortTable(columnIndex, type = 'string') {
+    const table = document.getElementById("myTable");
+    let rows, switching, i, x, y, shouldSwitch, direction, switchcount = 0;
+    switching = true;
+    direction = "asc"; // Definindo direção inicial como ascendente
+
+    while (switching) {
+        switching = false;
+        rows = table.rows;
+
+        // Percorre todas as linhas, exceto o cabeçalho
+        for (i = 1; i < (rows.length - 1); i++) {
+            shouldSwitch = false;
+            x = rows[i].getElementsByTagName("TD")[columnIndex];
+            y = rows[i + 1].getElementsByTagName("TD")[columnIndex];
+
+            // Comparação para strings ou datas
+            if (type === 'string') {
+                if ((direction === "asc" && x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) ||
+                    (direction === "desc" && x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase())) {
+                    shouldSwitch = true;
+                    break;
+                }
+            } else if (type === 'date') {
+                // Função para converter o formato de data
+                function parseCustomDate(dateStr) {
+                    if (!dateStr) return null;
+                    // Substitui ':' por '-' apenas nos primeiros dois pontos para o formato YYYY-MM-DD HH:MM:SS
+                    return new Date(dateStr.replace(/^(\d{4}):(\d{2}):(\d{2})/, '$1-$2-$3'));
+                }
+
+                const dateX = x.innerHTML ? parseCustomDate(x.innerHTML) : (direction === "asc" ? new Date(0) : new Date(9999, 11, 31));
+                const dateY = y.innerHTML ? parseCustomDate(y.innerHTML) : (direction === "asc" ? new Date(0) : new Date(9999, 11, 31));
+
+                // Log para depuração
+                console.log("Comparando datas:");
+                console.log("Data X:", x.innerHTML, "->", dateX);
+                console.log("Data Y:", y.innerHTML, "->", dateY);
+
+                if ((direction === "asc" && dateX > dateY) || (direction === "desc" && dateX < dateY)) {
+                    shouldSwitch = true;
+                    break;
+                }
+            }
+        }
+        
+        if (shouldSwitch) {
+            rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+            switching = true;
+            switchcount++;
+        } else {
+            // Muda a direção se nenhuma troca foi feita
+            if (switchcount === 0 && direction === "asc") {
+                direction = "desc";
+                switching = true;
+            }
+        }
+    }
+}
+
+
 </script>
 <?php include 'footer.php';?>
 </html>
