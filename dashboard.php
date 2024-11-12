@@ -109,6 +109,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['image'])) {
     $custom_name = isset($_POST['custom_name']) ? $_POST['custom_name'] : ''; // Captura o nome personalizado
     $description = isset($_POST['description']) ? $_POST['description'] : '';
     $category = isset($_POST['category']) ? $_POST['category'] : '';
+    $license = isset($_POST['license']) ? $_POST['license'] : '';
     $linkAtivo = $_POST['link_ativo'];
     // Verifica se o arquivo enviado é uma imagem
     $check = getimagesize($image['tmp_name']);
@@ -149,6 +150,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['image'])) {
                 'category' => $category,
                 'link_ativo'=> $linkAtivo,
                 'path' => $target_file,
+                'license'=> $license,
                 'extra-image'=> $extraImage,
                 'width' => isset($exif_info['COMPUTED']['Width']) ? $exif_info['COMPUTED']['Width'] . " px" : null,
                 'height' => isset($exif_info['COMPUTED']['Height']) ? $exif_info['COMPUTED']['Height'] . " px" : null,
@@ -343,7 +345,7 @@ function renderTable($data, $title = null) {
     <br>
     <label for="link_ativo">Link ativo (opcional):</label>
     <input class="form-control" type="text" name="link_ativo" id="link_ativo" placeholder="Link ativo da imagem"><br>
-   
+
     <label for="image">Escolha uma imagem:</label>
     <input class="form-control" type="file" name="image" id="image" required><br><br>
 
@@ -354,6 +356,16 @@ function renderTable($data, $title = null) {
 <label for="description">Descrição da Imagem:</label>
 <textarea class="form-control" id="description" name="description" rows="4" cols="50" placeholder="Descreva a imagem aqui..."></textarea>
 <br>
+<label for="license">Escolha uma licença Creative Commons:</label>
+    <select id="license" name="license" class="form-control">
+        <option value="" disabled selected>Selecione uma licença</option>
+        <option value="CC BY">Atribuição (CC BY)</option>
+        <option value="CC BY-SA">Atribuição - Compartilhamento pela mesma licença (CC BY-SA)</option>
+        <option value="CC BY-ND">Atribuição - Sem Derivações (CC BY-ND)</option>
+        <option value="CC BY-NC">Atribuição - Não Comercial (CC BY-NC)</option>
+        <option value="CC BY-NC-SA">Atribuição - Não Comercial - Compartilhamento pela mesma licença (CC BY-NC-SA)</option>
+        <option value="CC BY-NC-ND">Atribuição - Não Comercial - Sem Derivações (CC BY-NC-ND)</option>
+    </select><br>
 <label for="image">Upload de arquivo adicional (Opicional)</label>
     <input class="form-control" type="file" name="image-extra" id="image-extra"><br><br>        
 
@@ -363,41 +375,6 @@ function renderTable($data, $title = null) {
 </form>
 </div>
     
-
-<div class="image-list">
-    <h2>Imagens enviadas:</h2>
-    <?php if (!empty($images)) : ?>
-        <?php foreach ($images as $img) : ?>
-
-            
-            <div imgId="<?php echo $img['id'];?>" class="image-item">
-                <img imgId="<?php echo $img['id'];?>" class="img-uploaded" src="<?php echo $img['thumb_path']; ?>" alt="<?php echo $img['name']; ?>" path="<?php echo $img['path']; ?>">
-                <p><strong>Nome personalizado:</strong> <?php echo !empty($img['custom_name']) ? $img['custom_name'] : 'N/A'; ?></p>
-                <table>
-                    <tr>
-                        <td class="imgInfo" imgId="<?php echo $img['id'];?>">
-                            <a class="btn btn-danger" href="?delete=<?php echo urlencode($img['id']); ?>" onclick="return confirm('Tem certeza que deseja excluir esta imagem?');"><i class="fa-solid fa-trash"></i> Excluir</a>
-                            <button type="button" class="btn btn-success"><i class="fa-solid fa-share-from-square"></i> Gerar Link</button>
-                            <hr/> 
-                            <?php if (!empty($img['exif'])) : ?>
-                                <?php renderTable($img['exif']); ?>
-                            <?php endif; ?>
-                        </td>
-                    </tr>
-                </table>
-            </div>
-        <?php endforeach; ?>
-    <?php else : ?>
-        <p>Nenhuma imagem enviada.</p>
-    <?php endif; ?>
-</div>
-<div class="modal-bg hide"></div>
-<div class="displayImg hide">
-        <div class="imgShow">
-            <img src="" alt="">
-        </div>
-        <div class="infoShow"></div>
-</div>
 <script>
 // Adiciona um evento de clique a todas as imagens com a classe .img-uploaded
 document.querySelectorAll('.img-uploaded').forEach(function(img) {
