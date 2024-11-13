@@ -112,6 +112,19 @@ $images = loadImages($json_file);
 <body>
     <?php include 'navbar.php';?>
     <div class="container">
+    <div>
+        <br>
+        <button type="button" disabled class="btn-action btn btn-success">Gerar Processo de Auditoria</button>
+        <button type="button" disabled class="btn-action btn btn-success">Gerar Arquivo de Auditoria</button>
+        <button type="button" disabled class="btn-action btn btn-info">Download do Arquivo</button>
+        <button type="button" disabled class="btn-action btn-del btn btn-danger">Deletar Arquivo</button>    
+        <br>
+        <br>
+    </div>
+    
+    
+    
+    
     <table id="myTable" class="table table-striped table-bordered table-hover table-responsive text-center align-middle">
     <thead class="table-dark">
         <tr>
@@ -147,7 +160,7 @@ $images = loadImages($json_file);
                 </td>
                 <td><a href="#" onclick="abreDetalhes(this)" data='<?php echo json_encode($img);?>'>Abrir Detalhes</a></td>
                     <td>
-                        <input value="" type="checkbox"/>
+                        <input class="select-checkbox" value="<?php echo $img['id'];?>" type="checkbox"/>
                     </td>
             </tr>
         <?php endforeach; ?>
@@ -302,6 +315,72 @@ function sortTable(columnIndex, type = 'string') {
         }
     }
 }
+
+document.addEventListener('DOMContentLoaded', function () {
+    const checkboxes = document.querySelectorAll('.select-checkbox');
+    const actionButtons = document.querySelectorAll('.btn-action');
+
+    checkboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', function () {
+            // Verifica se algum checkbox está selecionado
+            const anyChecked = Array.from(checkboxes).some(checkbox => checkbox.checked);
+            
+            // Habilita ou desabilita todos os botões com a classe 'btn-action'
+            actionButtons.forEach(button => {
+                button.disabled = !anyChecked;
+            });
+        });
+    });
+});
+
+
+
+document.addEventListener('DOMContentLoaded', function () {
+    const checkboxes = document.querySelectorAll('.select-checkbox');
+    const actionButtons = document.querySelectorAll('.btn-action');
+    const deleteButton = document.querySelector('.btn-del');
+
+    // Função para atualizar o estado dos botões
+    function updateButtonState() {
+        const anyChecked = Array.from(checkboxes).some(checkbox => checkbox.checked);
+        actionButtons.forEach(button => {
+            button.disabled = !anyChecked;
+        });
+    }
+
+    // Habilita ou desabilita botões ao alterar seleção dos checkboxes
+    checkboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', updateButtonState);
+    });
+
+    // Ao clicar no botão de exclusão, envia os IDs selecionados via POST
+    deleteButton.addEventListener('click', function () {
+        
+        const selectedIds = Array.from(checkboxes)
+            .filter(checkbox => checkbox.checked)
+            .map(checkbox => checkbox.value);
+
+        if (selectedIds.length > 0) {
+            // Cria um formulário temporário para envio via POST
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = 'del.php';
+
+            // Adiciona o array de IDs como um campo hidden
+            const input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = 'delete';
+            input.value = JSON.stringify(selectedIds); // Converte o array em uma string JSON
+
+            form.appendChild(input);
+            document.body.appendChild(form);
+            form.submit();
+        } else {
+            alert('Selecione pelo menos um item para excluir.');
+        }
+    });
+});
+
 
 
 </script>

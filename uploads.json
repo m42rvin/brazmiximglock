@@ -488,29 +488,6 @@
         }
     },
     {
-        "id": "673216e767cba",
-        "name": "banner_diamante_500.png",
-        "custom_name": "BANNER LINHA DIAMANTE 500",
-        "description": "CRIA\u00c7\u00c3O PARA LAN\u00c7AMENTO LINHA DIAMANTE 500",
-        "category": "criacaodigital",
-        "link_ativo": "https:\/\/www.brazmix.com\/bombas-para-irrigacao---agriculturac-agroindustria-e-agronegocios",
-        "path": "_img\/673216e767cba_banner_diamante_500.png",
-        "extra-image": "",
-        "width": null,
-        "height": null,
-        "created_at": null,
-        "make": null,
-        "model": null,
-        "GPSLatitude": null,
-        "GPSLongitude": null,
-        "Software": null,
-        "thumb_path": "_thumb\/673216e767cba_thumb_banner_diamante_500.png",
-        "type": "image\/png",
-        "size": "0.67 Mb",
-        "uploaded_at": "2024-11-11 11:38:31",
-        "exif": []
-    },
-    {
         "id": "673217381b809",
         "name": "IMG_1197-1.JPG",
         "custom_name": "CLARA ",
@@ -698,44 +675,6 @@
             "UndefinedTag:0x0000": null,
             "InterOperabilityIndex": "R98",
             "InterOperabilityVersion": "0100"
-        }
-    },
-    {
-        "id": "673252671fafe",
-        "name": "shutterstock_235777159.jpg",
-        "custom_name": "teste DPI",
-        "description": "teste",
-        "category": "prodedit",
-        "link_ativo": "",
-        "path": "_img\/673252671fafe_shutterstock_235777159.jpg",
-        "extra-image": "",
-        "width": "6016 px",
-        "height": "4016 px",
-        "created_at": null,
-        "make": null,
-        "model": null,
-        "dpi": "300x300",
-        "GPSLatitude": null,
-        "GPSLongitude": null,
-        "Software": null,
-        "DateTime": null,
-        "thumb_path": "_thumb\/673252671fafe_thumb_shutterstock_235777159.jpg",
-        "type": "image\/jpeg",
-        "size": "16.17 Mb",
-        "uploaded_at": "2024-11-11 15:52:24",
-        "exif": {
-            "FileName": "673252671fafe_shutterstock_235777159.jpg",
-            "FileDateTime": 1731351143,
-            "FileSize": 16954334,
-            "FileType": 2,
-            "MimeType": "image\/jpeg",
-            "SectionsFound": "",
-            "COMPUTED": {
-                "html": "width=\"6016\" height=\"4016\"",
-                "Height": 4016,
-                "Width": 6016,
-                "IsColor": 1
-            }
         }
     },
     {
