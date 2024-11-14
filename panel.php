@@ -361,6 +361,12 @@ document.addEventListener('DOMContentLoaded', function () {
             .map(checkbox => checkbox.value);
 
         if (selectedIds.length > 0) {
+            // Exibe uma caixa de confirmação
+            const confirmation = confirm('Tem certeza que deseja excluir os itens selecionados?');
+            if (!confirmation) {
+                return; // Cancela a exclusão se o usuário não confirmar
+            }
+
             // Cria um formulário temporário para envio via POST
             const form = document.createElement('form');
             form.method = 'POST';
@@ -380,6 +386,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 });
+
 
 
 
