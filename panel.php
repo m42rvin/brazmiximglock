@@ -116,7 +116,7 @@ $images = loadImages($json_file);
         <br>
         <button type="button" disabled class="btn-action btn btn-success">Gerar Processo de Auditoria</button>
         <button type="button" disabled class="btn-action btn btn-success">Gerar Arquivo de Auditoria</button>
-        <button type="button" disabled class="btn-action btn btn-info">Download do Arquivo</button>
+        <button type="button" disabled class="btn-action btn-download btn btn-info">Download do Arquivo</button>
         <button type="button" disabled class="btn-action btn-del btn btn-danger">Deletar Arquivo</button>    
         <br>
         <br>
@@ -339,13 +339,53 @@ document.addEventListener('DOMContentLoaded', function () {
     const checkboxes = document.querySelectorAll('.select-checkbox');
     const actionButtons = document.querySelectorAll('.btn-action');
     const deleteButton = document.querySelector('.btn-del');
+    const downloadButton = document.querySelector('.btn-download');
+
+    // Função para coletar IDs selecionados
+    function getSelectedIds() {
+        return Array.from(checkboxes)
+            .filter(checkbox => checkbox.checked)
+            .map(checkbox => checkbox.value);
+    }
 
     // Função para atualizar o estado dos botões
     function updateButtonState() {
-        const anyChecked = Array.from(checkboxes).some(checkbox => checkbox.checked);
+        const anyChecked = getSelectedIds().length > 0;
         actionButtons.forEach(button => {
             button.disabled = !anyChecked;
         });
+    }
+
+    // Função para enviar o formulário com os IDs selecionados
+    function submitForm(action, dataKey) {
+        const selectedIds = getSelectedIds();
+
+        if (selectedIds.length > 0) {
+            // Exibe uma caixa de confirmação se a ação for "excluir"
+            if (action === 'del.php') {
+                const confirmation = confirm('Tem certeza que deseja excluir os itens selecionados?');
+                if (!confirmation) {
+                    return; // Cancela a ação se o usuário não confirmar
+                }
+            }
+
+            // Cria um formulário temporário para envio via POST
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = action;
+
+            // Adiciona o array de IDs como um campo hidden
+            const input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = dataKey;
+            input.value = JSON.stringify(selectedIds); // Converte o array em uma string JSON
+
+            form.appendChild(input);
+            document.body.appendChild(form);
+            form.submit();
+        } else {
+            alert('Selecione pelo menos um item para executar esta ação.');
+        }
     }
 
     // Habilita ou desabilita botões ao alterar seleção dos checkboxes
@@ -353,37 +393,14 @@ document.addEventListener('DOMContentLoaded', function () {
         checkbox.addEventListener('change', updateButtonState);
     });
 
-    // Ao clicar no botão de exclusão, envia os IDs selecionados via POST
+    // Event listener para o botão de exclusão
     deleteButton.addEventListener('click', function () {
-        
-        const selectedIds = Array.from(checkboxes)
-            .filter(checkbox => checkbox.checked)
-            .map(checkbox => checkbox.value);
+        submitForm('del.php', 'delete');
+    });
 
-        if (selectedIds.length > 0) {
-            // Exibe uma caixa de confirmação
-            const confirmation = confirm('Tem certeza que deseja excluir os itens selecionados?');
-            if (!confirmation) {
-                return; // Cancela a exclusão se o usuário não confirmar
-            }
-
-            // Cria um formulário temporário para envio via POST
-            const form = document.createElement('form');
-            form.method = 'POST';
-            form.action = 'del.php';
-
-            // Adiciona o array de IDs como um campo hidden
-            const input = document.createElement('input');
-            input.type = 'hidden';
-            input.name = 'delete';
-            input.value = JSON.stringify(selectedIds); // Converte o array em uma string JSON
-
-            form.appendChild(input);
-            document.body.appendChild(form);
-            form.submit();
-        } else {
-            alert('Selecione pelo menos um item para excluir.');
-        }
+    // Event listener para o botão de download
+    downloadButton.addEventListener('click', function () {
+        submitForm('download.php', 'download');
     });
 });
 

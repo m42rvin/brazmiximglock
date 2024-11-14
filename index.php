@@ -85,7 +85,37 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tela de Login</title>
     <?php include 'header.php'; ?>
-    <link rel="stylesheet" href='./index.css'/>
+    <style>
+    body{
+        background-color: #DFEAFC;
+        background-image: url('./logo imglock.jpeg');
+        background-position: right center; /* Alinha à esquerda e ao topo */
+        background-repeat: no-repeat; /* Evita a repetição da imagem */
+        background-size: 60%;
+        margin: 0;
+        height: 100vh;
+        display: flex;
+        justify-content: center; /* Centraliza horizontalmente */
+        align-items: center;
+    }
+
+.form-login {
+    background-color: white;
+    width: 50%;
+    padding: 20px;
+    border-radius: 10px;
+    
+    
+}
+.form-login img {
+    margin-left: 50%;
+    transform: translateX(-50%);
+}
+.form-login button {
+    margin-left: 100%;
+    transform: translateX(-100px);
+}
+    </style>
 </head>
 <body>
     <div class="container">
