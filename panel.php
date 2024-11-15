@@ -115,7 +115,7 @@ $images = loadImages($json_file);
     <div>
         <br>
         <button type="button" disabled class="btn-action btn btn-success">Gerar Processo de Auditoria</button>
-        <button type="button" disabled class="btn-action btn btn-success">Gerar Arquivo de Auditoria</button>
+        <button type="button" disabled class="btn-action btn-generate btn btn-success">Gerar Arquivo de Auditoria</button>
         <button type="button" disabled class="btn-action btn-download btn btn-info">Download do Arquivo</button>
         <button type="button" disabled class="btn-action btn-del btn btn-danger">Deletar Arquivo</button>    
         <br>
@@ -340,6 +340,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const actionButtons = document.querySelectorAll('.btn-action');
     const deleteButton = document.querySelector('.btn-del');
     const downloadButton = document.querySelector('.btn-download');
+    const generateButton = document.querySelector('.btn-generate'); // Novo botão
 
     // Função para coletar IDs selecionados
     function getSelectedIds() {
@@ -402,8 +403,12 @@ document.addEventListener('DOMContentLoaded', function () {
     downloadButton.addEventListener('click', function () {
         submitForm('download.php', 'download');
     });
-});
 
+    // Event listener para o botão de gerar PDF
+    generateButton.addEventListener('click', function () {
+        submitForm('generate.php', 'generate'); // Envia IDs para o PHP externo que gera o PDF
+    });
+});
 
 
 
