@@ -23,7 +23,7 @@ class PDF extends FPDF
     {
         $this->SetY(-15);
         $this->SetFont('Arial', 'I', 8);
-        $this->Cell(0, 10, 'Página ' . $this->PageNo(), 0, 0, 'C');
+        $this->Cell(0, 10, utf8_decode('Página ') . $this->PageNo(), 0, 0, 'C');
     }
 }
 
@@ -34,8 +34,8 @@ function renderPDFContent($pdf, $data, $x = 10, $y = null) {
     }
     $pdf->SetX($x);
 
-    // Verifica se é necessário adicionar uma nova página antes de começar a renderizar conteúdo
-    if ($pdf->GetY() > 250) {
+    // Verifica se é necessário adicionar uma nova página, mas evita no primeiro caso
+    if ($pdf->PageNo() > 1 && $pdf->GetY() > 250) {
         $pdf->AddPage(); // Adiciona nova página se a altura do conteúdo ultrapassar o limite
     }
 
@@ -54,38 +54,65 @@ function renderPDFContent($pdf, $data, $x = 10, $y = null) {
     $rowColor2 = [255, 255, 255];
     $currentRowColor = $rowColor1;
 
-    // Adicionando título do documento
-    $pdf->SetFont('Arial', 'B', 16);
-    $pdf->Cell(0, 10, utf8_decode('Relatório de Imagens'), 0, 1, 'C');
-    $pdf->Ln(5);
-
     // Exibe o nome do arquivo
-    $pdf->SetFont('Arial', 'B', 12);
-    $pdf->Cell(0, 10, utf8_decode("Nome do Arquivo: " . $data['name']), 0, 1);
+    $pdf->SetFont('Arial', '', 10);
+    $pdf->Cell(0, 10, utf8_decode("Nome do Arquivo: " . ($data['name'] ?? "Informação não informada")), 0, 1);
     $pdf->SetFont('Arial', '', 10);
 
     // Exibe a descrição
-    $pdf->MultiCell(0, 10, utf8_decode("Descrição: " . $data['description']));
+    $pdf->MultiCell(0, 10, utf8_decode("Descrição: " . ($data['description'] ?? "Informação não informada")));
     $pdf->Ln(5);
 
     // Exibe o link ativo
     $pdf->SetFont('Arial', 'I', 10);
-    $pdf->Cell(0, 10, utf8_decode("Link Ativo: " . $data['link_ativo']), 0, 1);
+    $pdf->Cell(0, 10, utf8_decode("Link Ativo: " . ($data['link_ativo'] ?? "Informação não informada")), 0, 1);
+    $pdf->Ln(5);
+
+    // Exibe as outras informações
+    $infoFields = [
+        'Custom Name' => $data['custom_name'] ?? 'Informação não informada',
+        'Categoria' => $data['category'] ?? 'Informação não informada',
+        'Licença' => $data['license'] ?? 'Informação não informada',
+        'Extra Image' => $data['extra-image'] ?? 'Informação não informada',
+        'Largura' => $data['width'] ?? 'Informação não informada',
+        'Altura' => $data['height'] ?? 'Informação não informada',
+        'Criado em' => $data['created_at'] ?? 'Informação não informada',
+        'Câmera' => $data['make'] ?? 'Informação não informada',
+        'Modelo' => $data['model'] ?? 'Informação não informada',
+        'DPI' => $data['dpi'] ?? 'Informação não informada',
+        'GPS Latitude' => $data['GPSLatitude'] ?? 'Informação não informada',
+        'GPS Longitude' => $data['GPSLongitude'] ?? 'Informação não informada',
+        'Software' => $data['Software'] ?? 'Informação não informada',
+        'Data e Hora' => $data['DateTime'] ?? 'Informação não informada',
+        'Tamanho do Arquivo' => $data['size'] ?? 'Informação não informada',
+        'Data de Upload' => $data['uploaded_at'] ?? 'Informação não informada'
+    ];
+
+    $pdf->SetFont('Arial', 'B', 12);
+    $pdf->Cell(0, 10, utf8_decode('Informações Cadastrais'), 0, 1);
+    $pdf->SetFont('Arial', '', 10);
+
+    foreach ($infoFields as $label => $value) {
+        $pdf->Cell(0, 10, utf8_decode("$label: $value"), 0, 1);
+    }
     $pdf->Ln(5);
 
     // Exibe as informações do EXIF
-    $pdf->SetFont('Arial', 'B', 12);
-    $pdf->Cell(0, 10, utf8_decode('Informações EXIF'), 0, 1);
-    $pdf->SetFont('Arial', '', 10);
+    if (!empty($data['exif'])) {
+        $pdf->SetFont('Arial', 'B', 12);
+        $pdf->Cell(0, 10, utf8_decode('Informações EXIF'), 0, 1);
+        $pdf->SetFont('Arial', '', 10);
 
-    // EXIF Subsections
-    foreach ($data['exif'] as $exifKey => $exifValue) {
-        if (is_array($exifValue)) {
-            $pdf->SetFont('Arial', 'I', 10);
-            $pdf->Cell(0, 10, utf8_decode("$exifKey: " . implode(", ", $exifValue)), 0, 1);
-        } else {
-            $pdf->Cell(0, 10, utf8_decode("$exifKey: $exifValue"), 0, 1);
+        foreach ($data['exif'] as $exifKey => $exifValue) {
+            if (is_array($exifValue)) {
+                $pdf->SetFont('Arial', 'I', 10);
+                $pdf->Cell(0, 10, utf8_decode("$exifKey: " . implode(", ", $exifValue)), 0, 1);
+            } else {
+                $pdf->Cell(0, 10, utf8_decode("$exifKey: $exifValue"), 0, 1);
+            }
         }
+    } else {
+        $pdf->Cell(0, 10, "Informações EXIF: Não disponíveis.", 0, 1);
     }
 
     $pdf->Ln(10); // Espaço entre as seções
@@ -134,7 +161,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['generate'])) {
     $pdf = new PDF();
     $pdf->AddPage();
 
+    $firstPage = true;
     foreach ($filteredData as $data) {
+        // Adiciona nova página apenas se não for o primeiro caso
+        if (!$firstPage) {
+            $pdf->AddPage();
+        }
+        $firstPage = false;
+
         // Renderiza conteúdo de cada item
         renderPDFContent($pdf, $data, 10, $pdf->GetY());
     }
