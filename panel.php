@@ -231,7 +231,13 @@ function renderTable(data, title = null) {
                 // Se o valor é um array ou objeto, chama a função recursivamente
                 valueCell.appendChild(renderTable(data[key]));
             } else {
-                valueCell.textContent = data[key];
+                let tc = '';
+                if(data[key].length === 0){
+                    tc = "Informação não disponível"
+                } else {
+                    tc = data[key]
+                }
+                valueCell.textContent = tc;
             }
             row.appendChild(valueCell);
 
