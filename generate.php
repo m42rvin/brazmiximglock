@@ -1,5 +1,12 @@
 <?php
+
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
+
 require './fpdf/fpdf.php';
+
 
 function renderTablePDF($pdf, $data, $x = 10, $y = null) {
     // Define a posição inicial
@@ -85,6 +92,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['generate'])) {
         // Renderiza a tabela abaixo da imagem
         renderTablePDF($pdf, $data, 10, $pdf->GetY() + 100);
     }
+
 
     // Envia o PDF para download
     $pdf->Output('D', 'relatorio.pdf');

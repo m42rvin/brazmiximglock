@@ -65,6 +65,9 @@ $images = loadImages($json_file);
             overflow:auto;
             overflow-x: hidden;
         }
+        .displayImg table {
+            max-width: 680px;
+        }
         .imgShow, .infoShow {
             display: block;
         }
@@ -94,7 +97,7 @@ $images = loadImages($json_file);
             display:none;
         }
         .imgDetalhes {
-            max-width: 60vw;
+            max-width: 40vw;
         }
         .table td.nomearquivo {
             width: 142px;
@@ -105,6 +108,24 @@ $images = loadImages($json_file);
         th:hover {
             cursor:pointer;
             opacity:0.9;
+        }
+        .imgDetalhes {
+            display: inline-block;
+            float: left;
+        }
+        .doc-file {
+            display: inline-block;
+            float: right;
+            text-align: justify;
+            position: absolute;
+            right: 200px;
+            top: 150px;
+        }
+        .doc-file i {
+            font-size: 150px;
+        }
+        .link-image {
+            display: grid;
         }
     </style>
     
@@ -229,17 +250,24 @@ function abreDetalhes(data){
     let displayImg = document.querySelector('.displayImg');
     displayImg.innerHTML="";
     
-    displayImg.innerHTML = `<img class="imgDetalhes" src='${img['path']}'/><br/>`;
+    displayImg.innerHTML = `<a class="link-image" href="${img['path']}" target="_blank"><img class="imgDetalhes" src='${img['path']}'/> Ver Imagem</a><br/>`;
     
     // console.log(img['extra-image'])
     if(img['extra-image'] ){
 
-        displayImg.innerHTML += `<a href='${img['extra-image']}' target="_blank">Arquivo de Licença</a><br/>`;
+        displayImg.innerHTML += `<a class="doc-file" href='${img['extra-image']}' target="_blank"><i class="fa-solid fa-folder-open"></i> <br>Arquivo de Licença</a><br/>`;
     }
     
-
+    displayImg.innerHTML += "<h2>Informações Cadastrais</h2>";
     
-    displayImg.append(renderTable(img));
+    let dadosCadastrais = Object.fromEntries(
+        Object.entries(img).filter(([key, value]) => key !== 'exif')
+    );
+    displayImg.append(renderTable(dadosCadastrais));
+
+    displayImg.innerHTML += "<h2><br>Metadados do Arquivo<br></h2>";
+
+    displayImg.append(renderTable(img["exif"]));
     
     document.querySelector('.modal-bg').classList.remove('hide')
     displayImg.classList.remove('hide');  // Remove a classe 'hide'
