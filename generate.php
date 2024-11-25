@@ -64,16 +64,16 @@ function renderPDFContent($pdf, $data, $x = 10, $y = null) {
 
     // Exibe o nome do arquivo
     $pdf->SetFont('Arial', '', 10);
-    $pdf->Cell(0, 10, utf8_decode("Nome do Arquivo: " . ($data['name'] ?? "Informação não informada")), 0, 1);
+    $pdf->Cell(0, 10, utf8_decode("Nome do Arquivo: " .  utf8_decode($data['name'] ?? "Informação não informada")), 0, 1);
     $pdf->SetFont('Arial', '', 10);
 
     // Exibe a descrição
-    $pdf->MultiCell(0, 10, utf8_decode("Descrição: " . ($data['description'] ?? "Informação não informada")));
+    $pdf->MultiCell(0, 10, utf8_decode("Descrição: " .  utf8_decode($data['description'] ?? "Informação não informada")));
     $pdf->Ln(5);
 
     // Exibe o link ativo
     $pdf->SetFont('Arial', 'I', 10);
-    $pdf->Cell(0, 10, utf8_decode("Link Ativo: " . ($data['link_ativo'] ?? "Informação não informada")), 0, 1);
+    $pdf->Cell(0, 10, utf8_decode("Link Ativo: " .  utf8_decode($data['link_ativo'] ?? "Informação não informada")), 0, 1);
     $pdf->Ln(5);
 
     // Exibe as outras informações
