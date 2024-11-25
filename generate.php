@@ -73,7 +73,7 @@ function renderPDFContent($pdf, $data, $x = 10, $y = null) {
         'Custom Name' => $data['custom_name'] ?? 'Informação não informada',
         'Categoria' => $data['category'] ?? 'Informação não informada',
         'Licença' => $data['license'] ?? 'Informação não informada',
-        'Extra Image' => $data['extra-image'] ?? 'Informação não informada',
+        //'Extra Image' => $data['extra-image'] ?? 'Informação não informada',
         'Largura' => $data['width'] ?? 'Informação não informada',
         'Altura' => $data['height'] ?? 'Informação não informada',
         'Criado em' => $data['created_at'] ?? 'Informação não informada',

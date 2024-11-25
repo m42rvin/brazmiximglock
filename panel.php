@@ -66,7 +66,9 @@ $images = loadImages($json_file);
             overflow-x: hidden;
         }
         .displayImg table {
-            max-width: 680px;
+            width: 100%;
+            border: 2px solid black;
+            margin-top: 20px;
         }
         .imgShow, .infoShow {
             display: block;
@@ -217,25 +219,39 @@ function renderTable(data, title = null) {
     
     // Itera sobre o objeto ou array de dados
     for (const key in data) {
+        if(key === 'path'
+        || key === 'thumb_path'
+        || key === 'height'
+        || key === 'extra-image'){
+            continue;
+        }
+        console.log(key, data[key])
+        if(data[key] === null){
+            data[key] = "Informação não disponível"
+        }
         if (data.hasOwnProperty(key)) {
             const row = document.createElement('tr');
 
             // Cria a célula da chave
             const keyCell = document.createElement('td');
-            keyCell.innerHTML = `<strong>${key}</strong>`;
+            keyCell.innerHTML = `<strong>${key === 'width'? 'Largura e Altura': key}</strong>`;
             row.appendChild(keyCell);
 
             // Cria a célula de valor
             const valueCell = document.createElement('td');
             if (Array.isArray(data[key]) || typeof data[key] === 'object') {
                 // Se o valor é um array ou objeto, chama a função recursivamente
+                
                 valueCell.appendChild(renderTable(data[key]));
             } else {
                 let tc = '';
-                if(data[key].length === 0){
+                if(data[key] == null || data[key].length === 0){
                     tc = "Informação não disponível"
                 } else {
                     tc = data[key]
+                    if(key === 'width'){
+                        tc = data['width'] + ' * ' + data['height'] ;
+                    }
                 }
                 valueCell.textContent = tc;
             }
@@ -264,14 +280,50 @@ function abreDetalhes(data){
         displayImg.innerHTML += `<a class="doc-file" href='${img['extra-image']}' target="_blank"><i class="fa-solid fa-folder-open"></i> <br>Arquivo de Licença</a><br/>`;
     }
     
-    displayImg.innerHTML += "<h2>Informações Cadastrais</h2>";
+    displayImg.innerHTML += "<h2>Informações Cadastrais da Imagem</h2>";
     
+
+
+
+    let ordemDesejada = [
+        'custom_name',
+        'name',
+        'id',
+        'uploaded_at',
+        'created_at',
+        'type',
+        'size',
+        'width',
+        'height',
+        'dpi',
+        'category',
+        'description',
+        'license',
+        'link_ativo',
+        'Software',
+        'DateTime',
+        'make',
+        'model',
+        'GPSLatitude',
+        'GPSLongitude'
+    ];
+
+
+
     let dadosCadastrais = Object.fromEntries(
-        Object.entries(img).filter(([key, value]) => key !== 'exif')
-    );
+    Object.entries(img)
+        .filter(([key, value]) => key !== 'exif') // Filtra os itens
+        .sort(([keyA], [keyB]) => ordemDesejada.indexOf(keyA) - ordemDesejada.indexOf(keyB)) // Ordena pela ordem desejada
+);
+
+
+
+
+
+   
     displayImg.append(renderTable(dadosCadastrais));
 
-    displayImg.innerHTML += "<h2><br>Metadados do Arquivo<br></h2>";
+    displayImg.innerHTML += "<h2><br>Metadados do Arquivo - Exif<br></h2>";
 
     displayImg.append(renderTable(img["exif"]));
     
