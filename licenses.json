@@ -1,0 +1,26 @@
+[
+    {
+        "slug": "CC BY",
+        "name": "Atribuição (CC BY)"
+    },
+    {
+        "slug": "CC BY-SA",
+        "name": "Atribuição - Compartilhamento pela mesma licença (CC BY-SA)"
+    },
+    {
+        "slug": "CC BY-ND",
+        "name": "Atribuição - Sem Derivações (CC BY-ND)"
+    },
+    {
+        "slug": "CC BY-NC",
+        "name": "Atribuição - Não Comercial (CC BY-NC)"
+    },
+    {
+        "slug": "CC BY-NC-SA",
+        "name": "Atribuição - Não Comercial - Compartilhamento pela mesma licença (CC BY-NC-SA)"
+    },
+    {
+        "slug": "CC BY-NC-ND",
+        "name": "Atribuição - Não Comercial - Sem Derivações (CC BY-NC-ND)"
+    }
+]

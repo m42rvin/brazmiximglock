@@ -1,5 +1,7 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-  <a class="navbar-brand" href="#"><img src="https://www.brazmix.com/www/imagens/site/logo.png?1" alt=""></a>
+  <a class="navbar-brand" href="#">
+    <img src="https://www.brazmix.com/www/imagens/site/logo.png?1" alt="Logo">
+  </a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
@@ -8,19 +10,30 @@
       <li class="nav-item active">
         <a class="nav-link" href="home.php">Home <span class="sr-only">(current)</span></a>
       </li>
+      
+      <!-- Primeiro Dropdown -->
+      <?php if ($_SESSION["role"] == "admin") : ?>
       <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          Opções
+        <a class="nav-link dropdown-toggle" href="#" id="config" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Configurações
         </a>
-        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-          <?php if ($_SESSION["role"] == "admin") : ?>
+        <div class="dropdown-menu" aria-labelledby="config">
           <a class="dropdown-item" href="/create_user.php">Usuários</a>
           <a class="dropdown-item" href="/categories.php">Categorias</a>
-          <?php endif ?>
-          <hr>
+          <a class="dropdown-item" href="/licenses.php">Licenças</a>
+        </div>
+      </li>
+      <?php endif; ?>
+
+      <!-- Segundo Dropdown -->
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="paginas" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Páginas
+        </a>
+        <div class="dropdown-menu" aria-labelledby="paginas">
           <a class="dropdown-item" href="/panel.php">Painel</a>
           <a class="dropdown-item" href="/upload.php">Upload</a>
-          <hr>
+          <div class="dropdown-divider"></div>
           <a class="dropdown-item" href="/logout.php">Sair</a>
         </div>
       </li>

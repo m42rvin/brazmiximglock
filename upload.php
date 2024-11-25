@@ -328,6 +328,7 @@ function renderTable($data, $title = null) {
 <?php 
 
 $jsonFile = 'categories.json';
+$licenseFile = 'licenses.json';
 
 // Função para carregar as categorias
 function loadCategories($file) {
@@ -339,15 +340,20 @@ function loadCategories($file) {
 
 // Carrega as categorias existentes
 $categories = loadCategories($jsonFile);
+$licenses = loadCategories($licenseFile);
 
 ?>
 <!-- Formulário para upload de imagem -->
 <form action="" method="POST" enctype="multipart/form-data">
     <div class="form-div">
-    <label for="custom_name">Nome personalizado:</label>
+
+    <label for="image">Escolha uma imagem:</label>
+    <input class="form-control" type="file" name="image" id="image" required><br>
+
+    <label for="custom_name">Nome</label>
     <input required class="form-control" type="text" name="custom_name" id="custom_name" placeholder="Digite um nome para o arquivo"><br>
     
-    <label for="category">Escolha uma Categoria:</label>
+    <label for="category">Categoria</label>
     <select id="category" name="category" class="form-control" required>
         <option value="" disabled selected>Selecione uma opção</option>
         <?php foreach ($categories as $category): ?>
@@ -357,32 +363,28 @@ $categories = loadCategories($jsonFile);
         <?php endforeach; ?>
     </select>
     <br>
-    <label for="link_ativo">Link ativo (opcional):</label>
-    <input class="form-control" type="text" name="link_ativo" id="link_ativo" placeholder="Link ativo da imagem"><br>
+    
 
-    <label for="image">Escolha uma imagem:</label>
-    <input class="form-control" type="file" name="image" id="image" required><br><br>
 
     
     
-</div>
-<div class="form-div">
-<label for="description">Descrição da Imagem:</label>
+<label for="description">Descrição </label>
 <textarea class="form-control" id="description" name="description" rows="4" cols="50" placeholder="Descreva a imagem aqui..."></textarea>
 <br>
-<label for="license">Escolha uma licença Creative Commons:</label>
-    <select id="license" name="license" class="form-control">
-        <option value="" disabled selected>Selecione uma licença</option>
-        <option value="CC BY">Atribuição (CC BY)</option>
-        <option value="CC BY-SA">Atribuição - Compartilhamento pela mesma licença (CC BY-SA)</option>
-        <option value="CC BY-ND">Atribuição - Sem Derivações (CC BY-ND)</option>
-        <option value="CC BY-NC">Atribuição - Não Comercial (CC BY-NC)</option>
-        <option value="CC BY-NC-SA">Atribuição - Não Comercial - Compartilhamento pela mesma licença (CC BY-NC-SA)</option>
-        <option value="CC BY-NC-ND">Atribuição - Não Comercial - Sem Derivações (CC BY-NC-ND)</option>
-    </select><br>
-<label for="image">Upload de arquivo adicional (Opicional)</label>
-    <input class="form-control" type="file" name="image-extra" id="image-extra"><br><br>        
-
+<label for="license">Licença</label>
+    <select id="license" name="license" class="form-control" required>
+        <option value="" disabled selected>Selecione uma opção</option>
+        <?php foreach ($licenses as $license): ?>
+            <option value="<?= htmlspecialchars($license['slug']) ?>">
+                <?= htmlspecialchars($license['name']) ?>
+            </option>
+        <?php endforeach; ?>
+    </select>
+    <br>
+<label for="image">Arquivo de Licença (Opicional)</label>
+    <input class="form-control" type="file" name="image-extra" id="image-extra"><br>   
+    <label for="link_ativo">Link de Uso (opcional):</label>
+    <input class="form-control" type="text" name="link_ativo" id="link_ativo" placeholder="Link ativo da imagem"><br>
 </div>
 <div class="form-div-br"></div>
     <button type="submit" class="btn btn-dark">Enviar</button>
