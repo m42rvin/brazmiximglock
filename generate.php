@@ -1,4 +1,12 @@
 <?php
+// Iniciar sessão
+session_start();
+
+// Verificar se o usuário está logado
+if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
+    header("Location: index.php"); // Redirecionar para o login se não estiver logado
+    exit;
+}
 
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);

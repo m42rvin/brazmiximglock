@@ -325,7 +325,22 @@ function renderTable($data, $title = null) {
 <div class="container">
 <div class="uploadImg jumbotron">
 <h1>Upload de Imagens</h1>
+<?php 
 
+$jsonFile = 'categories.json';
+
+// Função para carregar as categorias
+function loadCategories($file) {
+    if (!file_exists($file)) {
+        file_put_contents($file, json_encode([]));
+    }
+    return json_decode(file_get_contents($file), true);
+}
+
+// Carrega as categorias existentes
+$categories = loadCategories($jsonFile);
+
+?>
 <!-- Formulário para upload de imagem -->
 <form action="" method="POST" enctype="multipart/form-data">
     <div class="form-div">
@@ -335,12 +350,11 @@ function renderTable($data, $title = null) {
     <label for="category">Escolha uma Categoria:</label>
     <select id="category" name="category" class="form-control" required>
         <option value="" disabled selected>Selecione uma opção</option>
-        <option value="prodbruto">Produto Bruto</option>
-        <option value="prodedit">Produto Editado</option>
-        <option value="paisagem">Paisagem</option>
-        <option value="pessoas">Pessoas</option>
-        <option value="criacaodigital">Criação Digital Mista</option>
-        <option value="compra">Compra de imagem</option>
+        <?php foreach ($categories as $category): ?>
+            <option value="<?= htmlspecialchars($category['slug']) ?>">
+                <?= htmlspecialchars($category['name']) ?>
+            </option>
+        <?php endforeach; ?>
     </select>
     <br>
     <label for="link_ativo">Link ativo (opcional):</label>

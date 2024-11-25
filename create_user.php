@@ -8,7 +8,7 @@ if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
     exit;
 }
 if ($_SESSION["role"] !== "admin") {
-    header("Location: dashboard.php"); // Redirecionar para o dashboard se não for admin
+    header("Location: upload.php"); // Redirecionar para o dashboard se não for admin
     exit;
 }
 

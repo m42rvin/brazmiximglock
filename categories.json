@@ -1,0 +1,26 @@
+[
+    {
+        "slug": "prodbruto",
+        "name": "Produto Bruto"
+    },
+    {
+        "slug": "prodedit",
+        "name": "Produto Editado"
+    },
+    {
+        "slug": "paisagem",
+        "name": "Paisagem"
+    },
+    {
+        "slug": "pessoas",
+        "name": "Pessoas"
+    },
+    {
+        "slug": "criacaodigital",
+        "name": "Criação Digital Mista"
+    },
+    {
+        "slug": "compra",
+        "name": "Compra de imagem"
+    }
+]
