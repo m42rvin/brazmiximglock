@@ -84,18 +84,36 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['message'] = "Todos os campos são obrigatórios para edição.";
         }
     } elseif ($action === 'delete') {
-        // Remover uma categoria
-        if (!empty($slug)) {
-            $categories = array_filter($categories, fn($category) => $category['slug'] !== $slug);
-            if (saveCategories($jsonFile, $categories)) {
-                $_SESSION['message'] = "Categoria excluída com sucesso!";
-            } else {
-                $_SESSION['message'] = "Erro ao excluir a categoria.";
-            }
+        // Verificar se o slug está em uso no uploads.json
+        $uploadsFile = 'uploads.json';
+        if (!file_exists($uploadsFile)) {
+            $_SESSION['message'] = "Erro: o arquivo de uploads não foi encontrado.";
+            header('Location: categories.php');
+            exit;
+        }
+    
+        $uploads = json_decode(file_get_contents($uploadsFile), true);
+    
+        // Checar se o slug está em uso
+        $isInUse = array_filter($uploads, fn($upload) => $upload['category'] === $slug);
+    
+        if (!empty($isInUse)) {
+            $_SESSION['message'] = "A categoria não pode ser excluída, pois está em uso por uma ou mais imagens.";
         } else {
-            $_SESSION['message'] = "Slug é obrigatório para excluir.";
+            // Remover a categoria
+            if (!empty($slug)) {
+                $categories = array_filter($categories, fn($category) => $category['slug'] !== $slug);
+                if (saveCategories($jsonFile, $categories)) {
+                    $_SESSION['message'] = "Categoria excluída com sucesso!";
+                } else {
+                    $_SESSION['message'] = "Erro ao excluir a categoria.";
+                }
+            } else {
+                $_SESSION['message'] = "Slug é obrigatório para excluir.";
+            }
         }
     }
+    
 
     header('Location: categories.php');
     exit;
