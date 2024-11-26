@@ -390,39 +390,7 @@ $licenses = loadCategories($licenseFile);
     <button type="submit" class="btn btn-dark">Enviar</button>
 </form>
 </div>
-    
-<script>
-// Adiciona um evento de clique a todas as imagens com a classe .img-uploaded
-document.querySelectorAll('.img-uploaded').forEach(function(img) {
-    img.addEventListener('click', function() {
-        var imgId= this.getAttribute('imgId');
-        var element = document.querySelector('.image-item[imgId="'+imgId+'"] .imgInfo');
-        var innerHTML = element.innerHTML; // Pega o HTML interno do elemento
-        var targetElement = document.querySelector('.infoShow');
-        targetElement.innerHTML = innerHTML;
-        var imageElement = document.querySelector('.imgShow > img');
 
-        imageElement.src = this.getAttribute('path');
-        //window.open(this.src, '_blank'); // Abre a imagem em uma nova aba
-        var divElement = document.querySelector('.displayImg.hide');
-
-// Verifica se o elemento existe
-if (divElement) {
-    document.querySelector('.modal-bg').classList.remove('hide')
-    divElement.classList.remove('hide');  // Remove a classe 'hide'
-    divElement.classList.add('show');     // Adiciona a classe 'show'
-} else {
-    console.log('Elemento não encontrado');
-}
-    });
-});
-document.querySelector('.modal-bg').addEventListener('click', function() {
-    var divElement = document.querySelector('.displayImg');
-    document.querySelector('.modal-bg').classList.add('hide')
-    divElement.classList.add('hide');  // Remove a classe 'hide'
-    divElement.classList.remove('show');  
-})
-</script>
 <script>
 document.addEventListener('DOMContentLoaded', function () {
     const form = document.querySelector('form'); // Seleciona o formulário

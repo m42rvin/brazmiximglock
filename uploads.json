@@ -773,5 +773,47 @@
             "UndefinedTag:0xA434": "24-70mm",
             "UndefinedTag:0xA435": "0000000000"
         }
+    },
+    {
+        "id": "6745e0360fe04",
+        "name": "CAL25-JOHIL-SIZE2 - GIRL.jpg",
+        "custom_name": "CALENDARIO 2025 JOHIL GAROTA",
+        "description": "CRIA\u00c7\u00c3O DIGITAL BRAZMIX JOHIL GUYANA PARA CALEND\u00c1RIO 2025. CRIA\u00c7\u00c3O COM USO DE IMAGEM LICENCIADA SHUTTERSTOCK (VER REGISTROS). DIREITOS RESERVADOS MKT BRAZMIX JOHIL - PROIBIDA REPRODU\u00c7\u00c3O FORA DOS DOM\u00cdNIOS BRAZMIX JOHIL GUYANA.",
+        "category": "criacaodigital",
+        "link_ativo": "",
+        "path": "_img\/6745e0360fe04_CAL25-JOHIL-SIZE2 - GIRL.jpg",
+        "license": "CC BY-ND",
+        "extra-image": "_img\/6745e0360d7c7_licenciamento_imagem_mulher_calend\u00e1rio_johil_2024.jpg",
+        "width": "2480 px",
+        "height": "5315 px",
+        "created_at": null,
+        "make": null,
+        "model": null,
+        "dpi": "0x0",
+        "GPSLatitude": null,
+        "GPSLongitude": null,
+        "Software": null,
+        "DateTime": null,
+        "thumb_path": "_thumb\/6745e0360fe04_thumb_CAL25-JOHIL-SIZE2 - GIRL.jpg",
+        "type": "image\/jpeg",
+        "size": "3.94 Mb",
+        "uploaded_at": "2024-11-26 11:50:30",
+        "exif": {
+            "FileName": "6745e0360fe04_CAL25-JOHIL-SIZE2 - GIRL.jpg",
+            "FileDateTime": 1732632630,
+            "FileSize": 4134801,
+            "FileType": 2,
+            "MimeType": "image\/jpeg",
+            "SectionsFound": "ANY_TAG, IFD0",
+            "COMPUTED": {
+                "html": "width=\"2480\" height=\"5315\"",
+                "Height": 5315,
+                "Width": 2480,
+                "IsColor": 1,
+                "ByteOrderMotorola": 1,
+                "Copyright": "REPRODU\u00c7\u00c3O PROIBIDA FORA DOS DOM\u00cdNIOS BRAZMIX E JOHIL GUYANA"
+            },
+            "Copyright": "REPRODU\u00c7\u00c3O PROIBIDA FORA DOS DOM\u00cdNIOS BRAZMIX E JOHIL GUYANA"
+        }
     }
 ]
