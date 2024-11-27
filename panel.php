@@ -234,7 +234,29 @@ function renderTable(data, title = null) {
 
             // Cria a célula da chave
             const keyCell = document.createElement('td');
-            keyCell.innerHTML = `<strong>${key === 'width'? 'Largura e Altura': key}</strong>`;
+            const keyMap = {
+                'id': 'Código ImgLock',
+                'name': 'Nome da Imagem',
+                'custom_name': 'Nome do Cadastro da Imagem',
+                'description': 'Descrição da Imagem',
+                'category': 'Categoria da Imagem',
+                'link_ativo': 'Link de Publicação',
+                'license': 'Tipo de Licenciamento da Imagem',
+                'width': 'Largura e Altura da Imagem',
+                'created_at': 'Data Criação da Imagem',
+                'make': 'Fabricante da Câmera',
+                'model': 'Modelo da Câmera',
+                'dpi': 'DPI – Resolução da Imagem',
+                'software': 'Software da Edição da Imagem',
+                'dateTime': 'Data da Edição da Imagem',
+                'type': 'Formato da Imagem',
+                'size': 'Tamanho do Arquivo da Imagem',
+                'uploaded_at': 'Data do Cadastro da Imagem Imglock'
+            };
+
+            let newKey = keyMap[key] || key;
+
+            keyCell.innerHTML = `<strong>${newKey}</strong>`;
             row.appendChild(keyCell);
 
             // Cria a célula de valor
