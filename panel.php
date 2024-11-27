@@ -335,6 +335,7 @@ function abreDetalhes(data){
     let dadosCadastrais = Object.fromEntries(
     Object.entries(img)
         .filter(([key, value]) => key !== 'exif') // Filtra os itens
+        .filter(([key, value]) => key !== 'xmp')
         .sort(([keyA], [keyB]) => ordemDesejada.indexOf(keyA) - ordemDesejada.indexOf(keyB)) // Ordena pela ordem desejada
 );
 
@@ -348,6 +349,9 @@ function abreDetalhes(data){
     displayImg.innerHTML += "<h2><br>Metadados do Arquivo - Exif<br></h2>";
 
     displayImg.append(renderTable(img["exif"]));
+    displayImg.innerHTML += "<h2><br>Metadados do Arquivo - XMP<br></h2>";
+
+    displayImg.append(renderTable(img["xmp"]));
     
     document.querySelector('.modal-bg').classList.remove('hide')
     displayImg.classList.remove('hide');  // Remove a classe 'hide'

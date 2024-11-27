@@ -86,24 +86,21 @@ function deleteImage($json_file, $image_id) {
     }
 }
 
-// Processa o envio de imagem
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['image'])) {
 
     $extraImage = '';
-    if(isset($_FILES['image-extra'])){
+    if (isset($_FILES['image-extra'])) {
         $imageExtra = $_FILES['image-extra'];
         $extraImageName = basename($imageExtra['name']);
         $extraunique_id = uniqid();
         $extratarget_file = $upload_dir . $extraunique_id . '_' . $extraImageName; // Gera um ID único
         $extrathumb_file = $thumb_dir . $extraunique_id . '_thumb_' . $extraImageName; // Caminho para a miniatura
 
-        // Move a imagem para a pasta _img/
+        // Move a imagem extra para a pasta de upload
         if (move_uploaded_file($imageExtra['tmp_name'], $extratarget_file)) {
-            $extraImage =  $extratarget_file;
+            $extraImage = $extratarget_file;
         }
-
     }
-
 
     $image = $_FILES['image'];
     $custom_name = isset($_POST['custom_name']) ? $_POST['custom_name'] : ''; // Captura o nome personalizado
@@ -111,6 +108,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['image'])) {
     $category = isset($_POST['category']) ? $_POST['category'] : '';
     $license = isset($_POST['license']) ? $_POST['license'] : '';
     $linkAtivo = $_POST['link_ativo'];
+
     // Verifica se o arquivo enviado é uma imagem
     $check = getimagesize($image['tmp_name']);
     if ($check !== false) {
@@ -119,7 +117,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['image'])) {
         $target_file = $upload_dir . $unique_id . '_' . $image_name; // Gera um ID único
         $thumb_file = $thumb_dir . $unique_id . '_thumb_' . $image_name; // Caminho para a miniatura
 
-        // Move a imagem para a pasta _img/
+        // Move a imagem para a pasta de upload
         if (move_uploaded_file($image['tmp_name'], $target_file)) {
             // Gera a miniatura usando Imagick
             try {
@@ -130,51 +128,60 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['image'])) {
                 $imagick->clear();
                 $imagick->destroy();
 
-                // Miniatura criada corretamente
                 $thumb_path = $thumb_file;
             } catch (ImagickException $e) {
-                // Se a miniatura não puder ser criada, usa o caminho da imagem original como thumb
                 $thumb_path = $target_file;
             }
-            
+
             // Lê os dados EXIF da imagem
             $exif_data = @exif_read_data($target_file);
             $exif_info = !empty($exif_data) ? $exif_data : [];
-            
-            // Armazena os detalhes da imagem no arquivo JSON, incluindo o caminho da miniatura ou da imagem original
+
+            // Extrai dados XMP usando exiftool
+            $xmp_data = [];
+            $output = [];
+            exec("exiftool -b -XMP " . escapeshellarg($target_file), $output, $exec_return);
+            if ($exec_return === 0 && !empty($output)) {
+                $xmp_string = implode("\n", $output);
+                preg_match_all('/(\w+)="([^"]*)"/', $xmp_string, $matches, PREG_SET_ORDER);
+                foreach ($matches as $match) {
+                    $xmp_data[$match[1]] = $match[2];
+                }
+            }
+
+            // Armazena os detalhes da imagem no arquivo JSON, incluindo os metadados XMP
             $image_details = [
                 'id' => $unique_id,
                 'name' => $image_name,
                 'custom_name' => $custom_name,
                 'description' => $description,
                 'category' => $category,
-                'link_ativo'=> $linkAtivo,
+                'link_ativo' => $linkAtivo,
                 'path' => $target_file,
-                'license'=> $license,
-                'extra-image'=> $extraImage,
-                'width' => isset($exif_info['COMPUTED']['Width']) ? $exif_info['COMPUTED']['Width'] . " px" : null,
-                'height' => isset($exif_info['COMPUTED']['Height']) ? $exif_info['COMPUTED']['Height'] . " px" : null,
-                'created_at' => isset($exif_info['DateTimeOriginal']) ? $exif_info['DateTimeOriginal'] : null,
-                'make' => isset($exif_info['Make']) ? $exif_info['Make'] : null,
-                'model' => isset($exif_info['Model']) ? $exif_info['Model'] : null,
+                'license' => $license,
+                'extra-image' => $extraImage,
+                'width' => $exif_info['COMPUTED']['Width'] ?? null,
+                'height' => $exif_info['COMPUTED']['Height'] ?? null,
+                'created_at' => $exif_info['DateTimeOriginal'] ?? null,
+                'make' => $exif_info['Make'] ?? null,
+                'model' => $exif_info['Model'] ?? null,
                 'dpi' => $dpi['x'] . "x" . $dpi['y'],
-                'GPSLatitude' => isset($exif_info['GPSLatitude']['1']) ? $exif_info['GPSLatitude']['1'] : null,
-                'GPSLongitude' => isset($exif_info['GPSLongitude']['1']) ? $exif_info['GPSLongitude']['1'] : null,
-                'Software' => isset($exif_info['Software']) ? $exif_info['Software'] : null,
-                'DateTime' => isset($exif_info['DateTime']) ? $exif_info['DateTime'] : null,
+                'GPSLatitude' => $exif_info['GPSLatitude'][1] ?? null,
+                'GPSLongitude' => $exif_info['GPSLongitude'][1] ?? null,
+                'Software' => $exif_info['Software'] ?? null,
+                'DateTime' => $exif_info['DateTime'] ?? null,
                 'thumb_path' => $thumb_path,
                 'type' => $image['type'],
-                'size' => round((int)$image['size'] / (1024 * 1024), 2) . " Mb",
+                'size' => round($image['size'] / (1024 * 1024), 2) . " Mb",
                 'uploaded_at' => date('Y-m-d H:i:s'),
-                'exif' => $exif_info
+                'exif' => $exif_info,
+                'xmp' => $xmp_data
             ];
-            
-            
+
             saveImageDetails($json_file, $image_details);
-            
-            header('Location: ' . $_SERVER['PHP_SELF'] . '?success=1'); // Redireciona para a mesma página (PRG)
-            exit(); // Encerra o script para evitar o reenvio do formulário
-            
+
+            header('Location: ' . $_SERVER['PHP_SELF'] . '?success=1');
+            exit();
         } else {
             echo "Erro ao fazer o upload da imagem.";
         }
@@ -182,6 +189,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['image'])) {
         echo "O arquivo enviado não é uma imagem válida.";
     }
 }
+
 
 // Processa a exclusão de imagem
 if (isset($_GET['delete'])) {
