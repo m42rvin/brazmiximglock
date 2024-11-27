@@ -1,3 +1,7 @@
+sudo apt-get install libimage-exiftool-perl
+sudo apt install imagemagick
+
+
 Adicionar no `/etc/php/8.1/apache2/php.ini`
 ```
 file_uploads = On
