@@ -99,7 +99,7 @@ $images = loadImages($json_file);
             display:none;
         }
         .imgDetalhes {
-            max-width: 40vw;
+            width: 20vw;
         }
         .table td.nomearquivo {
             width: 142px;
@@ -120,8 +120,8 @@ $images = loadImages($json_file);
             float: right;
             text-align: justify;
             position: absolute;
-            right: 200px;
-            top: 150px;
+            right: 500px;
+            top: 130px;
         }
         .doc-file i {
             font-size: 150px;
@@ -163,6 +163,31 @@ $images = loadImages($json_file);
         </tr>
     </thead>
     <tbody>
+        <?php
+        
+                // Carrega e decodifica o JSON
+        $categories = json_decode(file_get_contents('categories.json'), true);
+        $_categories = file_get_contents('categories.json');
+
+        ?>
+        <script>
+        let _categories = <?php echo $_categories; ?>
+        </script>
+        <?php
+
+
+        // Função para buscar o nome da categoria pelo slug
+        function getCategoryName($slug, $categories) {
+            foreach ($categories as $category) {
+                if ($category['slug'] === $slug) {
+                    return $category['name'];
+                }
+            }
+            return 'Categoria não encontrada'; // Retorno padrão caso o slug não exista
+        }
+        
+        
+        ?>
         <?php if (!empty($images)) : ?>
             <?php foreach (array_reverse($images) as $img) : ?>
             <tr imgId="<?php echo $img['id']; ?>" class="image-item">
@@ -170,7 +195,17 @@ $images = loadImages($json_file);
                 <td class="nomearquivo"><?php echo $img['name']; ?></td>
                 <td><?php echo $img['uploaded_at']; ?></td>
                 <td><?php echo $img['created_at']; ?></td>
-                <td><?php echo !empty($img['category']) ? $img['category'] : 'N/A'; ?></td>
+
+                <td>
+                <?php 
+                
+                echo !empty($img['category']) 
+                ? getCategoryName($img['category'], $categories) 
+                : 'N/A';
+                
+                ?>
+                
+                </td>
                 <td><?php echo !empty($img['license']) ? $img['license'] : 'N/A'; ?></td>
                 <td>
                     <img
@@ -247,8 +282,8 @@ function renderTable(data, title = null) {
                 'make': 'Fabricante da Câmera',
                 'model': 'Modelo da Câmera',
                 'dpi': 'DPI – Resolução da Imagem',
-                'software': 'Software da Edição da Imagem',
-                'dateTime': 'Data da Edição da Imagem',
+                'Software': 'Software da Edição da Imagem',
+                'DateTime': 'Data da Edição da Imagem',
                 'type': 'Formato da Imagem',
                 'size': 'Tamanho do Arquivo da Imagem',
                 'uploaded_at': 'Data do Cadastro da Imagem Imglock'
@@ -256,7 +291,16 @@ function renderTable(data, title = null) {
 
             let newKey = keyMap[key] || key;
 
+            
             keyCell.innerHTML = `<strong>${newKey}</strong>`;
+            if(key === 'category'){
+                let tmpcat = _categories.filter(e => {
+                    if(e.slug == [data[key]]){
+                        return true;
+                    } 
+                })
+                data[key] = tmpcat[0].name;
+            }
             row.appendChild(keyCell);
 
             // Cria a célula de valor
@@ -294,7 +338,7 @@ function abreDetalhes(data){
     let displayImg = document.querySelector('.displayImg');
     displayImg.innerHTML="";
     
-    displayImg.innerHTML = `<a class="link-image" href="${img['path']}" target="_blank"><img class="imgDetalhes" src='${img['path']}'/> Ver Imagem</a><br/>`;
+    displayImg.innerHTML = `<a class="link-image" href="${img['path']}" target="_blank"><img class="imgDetalhes" src='${img['thumb_path']}'/> Ver Imagem</a><br/>`;
     
     // console.log(img['extra-image'])
     if(img['extra-image'] ){
