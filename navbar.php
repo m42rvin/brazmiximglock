@@ -24,13 +24,14 @@
         </div>
       </li>
       <?php endif; ?>
-
+      
       <!-- Segundo Dropdown -->
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="paginas" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           Páginas
         </a>
         <div class="dropdown-menu" aria-labelledby="paginas">
+          <a class="dropdown-item" href="/processos_auditoria.php">Processos Auditoria</a>
           <a class="dropdown-item" href="/panel.php">Painel</a>
           <a class="dropdown-item" href="/upload.php">Upload</a>
           <div class="dropdown-divider"></div>
