@@ -21,6 +21,11 @@ if (empty($_SERVER['QUERY_STRING'])) {
     header("Location: $new_url");
     exit();
 }
+
+$uploads_json = file_get_contents('uploads.json');
+$images = json_decode($uploads_json, true); // Decodifica para array associativo
+
+
 ?>
 
 
@@ -47,6 +52,17 @@ if (empty($_SERVER['QUERY_STRING'])) {
             text-align: center;
             margin-top: 20px;   
         }
+        .image-label {
+            display: block;
+            width: 150px; /* Largura máxima do texto */
+            white-space: nowrap; /* Impede a quebra de linha */
+            overflow: hidden; /* Oculta o texto excedente */
+            text-overflow: ellipsis; /* Adiciona "..." ao final do texto */
+            text-align: center; /* Centraliza o texto */
+            margin-top: 5px; /* Espaçamento entre imagem e texto */
+            font-size: 12px; /* Ajusta o tamanho da fonte */
+        }
+
     </style>
     <?php include 'header.php'; ?>
     
@@ -85,7 +101,23 @@ if (empty($_SERVER['QUERY_STRING'])) {
     
     <label for="observation">Observações sobre a contestação: </label>
     <textarea class="form-control" id="observation" name="observation" rows="4" cols="50" placeholder="Observações sobre a contestação"></textarea>
-<div class="form-div-br"></div>
+
+    <label for="refer_image">Selecione a imagem original:</label>
+    <div style="display: flex; flex-wrap: wrap; gap: 10px;">
+        <?php foreach ($images as $image): ?>
+            <label style="cursor: pointer;">
+                <input type="radio" name="original_image" value="<?php echo $image['id']; ?>" required>
+                <img src="<?php echo $image['thumb_path']; ?>" 
+                     alt="<?php echo $image['custom_name'] ?: $image['name']; ?>" 
+                     title="<?php echo $image['custom_name'] ?: $image['name']; ?>"
+                     style="width: 150px; height: auto; border: 1px solid #ccc; padding: 5px;">
+                <div class="image-label" style="text-align: center; font-size: 12px;">
+                    <?php echo $image['custom_name'] ?: $image['name']; ?>
+                </div>
+            </label>
+        <?php endforeach; ?>
+    </div>
+
     <button type="submit" class="btn btn-dark">Enviar</button>
 </form>
 </div>

@@ -4,8 +4,8 @@ session_start();
 
 // Verificar se o usuário está logado
 if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
-    header("Location: index.php"); // Redirecionar para o login se não estiver logado
-    exit;
+    //header("Location: index.php"); // Redirecionar para o login se não estiver logado
+    //exit;
 }
 
 // Caminho para o arquivo JSON
@@ -89,25 +89,64 @@ if ($processo === null || $processo['pa_key'] !== $pa_key) {
     <?php include 'header.php'; ?>
 </head>
 <body>
-    <?php include 'navbar.php'; ?>
-    
+<?php (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) ? include 'navbar.php' : ''; ?>
+
+
+    <?php if ($processo['etapa'] == '1'){ ?>
     <div class="processo-visualizacao">
-        <h5><strong>Processo de Auditoria: </strong><?php echo htmlspecialchars($processo['id']); ?></h5>
-        <p><strong>Etapa: </strong><?php echo htmlspecialchars($processo['etapa']); ?></p>
-        <p><strong>Nome ou Referência: </strong><?php echo htmlspecialchars($processo['refer_name']); ?></p>
-        <p><strong>Link contestado: </strong><a href="<?php echo htmlspecialchars($processo['refer_link']); ?>" target="_blank"><?php echo htmlspecialchars($processo['refer_link']); ?></a></p>
-        
-        <h5>Imagem contestada:</h5>
-        <img src="<?php echo htmlspecialchars($processo['image']); ?>" alt="Imagem do processo" />
-        
-        <p><strong>Contatos conhecidos: </strong><br><?php echo nl2br(htmlspecialchars($processo['known_contacts'])); ?></p>
-        
-        <p><strong>Observações sobre a contestação: </strong><br><?php echo nl2br(htmlspecialchars($processo['observation'])); ?></p>
-        
-        <p><strong>Data de criação: </strong><?php echo htmlspecialchars($processo['timestamp']); ?></p>
-        
+        <!-- Processo de Auditoria -->
+        <h5 class="text-secondary mb-3">
+                    <strong>Processo de Auditoria:</strong> 
+                    <span class="text-dark"><?php echo htmlspecialchars($processo['id']); ?></span>
+                </h5>
+
+                <!-- Informações Gerais -->
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item"><strong>Etapa:</strong> <?php echo htmlspecialchars($processo['etapa']); ?></li>
+                    <li class="list-group-item"><strong>Nome ou Referência:</strong> <?php echo htmlspecialchars($processo['refer_name']); ?></li>
+                    <li class="list-group-item">
+                        <strong>Link contestado:</strong> 
+                        <a href="<?php echo htmlspecialchars($processo['refer_link']); ?>" target="_blank" class="text-decoration-none">
+                            <?php echo htmlspecialchars($processo['refer_link']); ?>
+                        </a>
+                    </li>
+                </ul>
+
+                <!-- Imagem Contestada -->
+                <div class="mt-4 text-center">
+                    <h5>Imagem Contestada</h5>
+                    <img src="<?php echo htmlspecialchars($processo['image']); ?>" 
+                         alt="Imagem do processo" class="img-thumbnail" style="max-width: 300px;">
+                </div>
+
+                <!-- Contatos Conhecidos -->
+                <div class="mt-4">
+                    <h5><strong>Contatos Conhecidos</strong></h5>
+                    <p class="text-muted"><?php echo nl2br(htmlspecialchars($processo['known_contacts'])); ?></p>
+                </div>
+
+                <!-- Observações -->
+                <div class="mt-4">
+                    <h5><strong>Observações sobre a Contestação</strong></h5>
+                    <p class="text-muted"><?php echo nl2br(htmlspecialchars($processo['observation'])); ?></p>
+                </div>
+
+                <!-- Data de Criação -->
+                <div class="mt-4">
+                    <p><strong>Data de Criação:</strong> 
+                        <span style="color:white" class="badge bg-secondary"><?php echo htmlspecialchars($processo['timestamp']); ?></span>
+                    </p>
+                </div>
+        <?php 
+        if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
+        ?>
         <a href="processos_auditoria.php" class="btn-voltar">Voltar para a lista de processos</a>
+        <?php } else { ?>
+            <a href="pa2.php?aprov=true&pa_id=<?php echo $processo['id']?>&pa_key=<?php echo $processo['pa_key']?>" class="btn btn-success">Aprovar processo</a>
+            <a href="pa2.php?aprov=false&pa_id=<?php echo $processo['id']?>&pa_key=<?php echo $processo['pa_key']?>" class="btn btn-danger">Reprovar processo e Arquivar</a>
+        <?php } ?>
     </div>
+    <?php } ?>
 
     <?php include 'footer.php'; ?>
 </body>
