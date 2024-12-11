@@ -2,11 +2,7 @@
 // Iniciar sessão
 session_start();
 
-// Verificar se o usuário está logado
-if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
-    //header("Location: index.php"); // Redirecionar para o login se não estiver logado
-    //exit;
-}
+
 
 // Caminho para o arquivo JSON
 $json_file = 'processos_auditoria.json';
@@ -37,7 +33,13 @@ foreach ($processos as $p) {
         break;
     }
 }
-
+if($processo['etapa'] !== '1'){
+    // Verificar se o usuário está logado
+if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
+    header("Location: index.php"); // Redirecionar para o login se não estiver logado
+    exit;
+}
+}
 // Verificar se o processo foi encontrado e se a chave corresponde
 if ($processo === null || $processo['pa_key'] !== $pa_key) {
     header("Location: processos_auditoria.php");
@@ -135,6 +137,7 @@ foreach ($uploads as $upload) {
 <body>
     <?php (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) ? include 'navbar.php' : ''; ?>
 
+    <?php if($processo['etapa'] == '1'){ ?>
     <div class="processo-visualizacao">
         <!-- Processo de Auditoria -->
         <h5 class="text-secondary mb-3">
@@ -195,19 +198,95 @@ foreach ($uploads as $upload) {
                 <span style="color:white" class="badge bg-secondary"><?php echo htmlspecialchars($processo['timestamp']); ?></span>
             </p>
         </div>
+        <?php if($processo['archived'] == true){ ?>
+            <h3>Processo Arquivado</h3>
+        <?php } ?>
 
         <!-- Botões -->
         <?php if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true): ?>
             <a href="processos_auditoria.php" class="btn-voltar">Voltar para a lista de processos</a>
         <?php endif; ?>
+        <?php if($processo['archived'] === false){ ?>
             <a href="pa2.php?aprov=true&pa_id=<?php echo $processo['id']; ?>&pa_key=<?php echo $processo['pa_key']; ?>" class="btn btn-success">Aprovar processo</a>
             <a href="pa2.php?aprov=false&pa_id=<?php echo $processo['id']; ?>&pa_key=<?php echo $processo['pa_key']; ?>" class="btn btn-danger">Reprovar processo e Arquivar</a>
+        <?php } ?>
     </div>
+    <?php } elseif($processo['etapa'] == '2') { ?>
+        <div class="processo-visualizacao">
+        <div class="d-flex align-items-start">
+        <h1>Comunicação Extra-Oficial</h1>
+        </div>
+        <div class="d-flex align-items-start">
+            <table class="table table-bordered text-center">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>#</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Exemplo de uma linha com dados -->
+                <tr>
+                    <td>ID</td>
+                    <td><?php echo $processo['id'];?></td>
+                </tr>
+                <tr>
+                    <td>Abertura Processo</td>
+                    <td><?php echo $processo['timestamp'];?></td>
+                </tr>
+                <tr>
+                    <td>Aprovação Gestor</td>
+                    <td><?php echo $processo['aprove_date'];?></td>
 
+                </tr>
+                <tr>
+                    <td>Status</td>
+                    <td>Comunicação Pendente</td>
+                </tr>
+            </tbody>
+        </table>
+        </div>
+        <div class="d-flex align-items-start ">
+            <div class="mb-3">
+                <h5>Link para responder contestação:</h5>
+                <input readonly class="resposta-link form-control" placeholder="Digite algo..." />
+            </div>
+            <div>
+                <h5>Chave de acesso:</h5>
+                <?php 
+                function gerarChaveAleatoria($tamanho = 5) {
+                    // Gera uma sequência de letras maiúsculas
+                    $caracteres = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+                
+                    // Embaralha os caracteres e retorna os primeiros $tamanho caracteres
+                    return substr(str_shuffle($caracteres), 0, $tamanho);
+                }
+                
+                $chave = gerarChaveAleatoria();
+                
+                
+                ?>
+                <input readonly class="outra-input form-control" value="<?php echo $chave;?>" placeholder="Digite aqui..." />
+            </div>
+        </div>
+        <div class="d-flex align-items-start">
+            <button class="btn btn-primary gera-processo" id_processo="<?php echo $processo['id'];?>">Gerar PDF com Comunicado</button>
+
+        </div>
+        </div>
+    <?php } ?>        
     <?php include 'footer.php'; ?>
 
     <script>
      document.addEventListener("DOMContentLoaded", function () {
+        const urlParams = new URLSearchParams(window.location.search); // Pega a string de consulta
+        const paId = urlParams.get('pa_id');
+        // Pega a URL base do navegador
+        const urlBase = window.location.origin + '/processo.php?pa_id=' + paId; 
+
+        // Seleciona o input e seta o valor com a URL base
+        document.querySelector('.resposta-link').value = urlBase;
+
         // Seleciona todos os elementos com a classe .text-center
         const containers = document.querySelectorAll('.text-center');
 
@@ -221,6 +300,53 @@ foreach ($uploads as $upload) {
                 }
             });
         });
+
+        const botoes = document.querySelectorAll('.gera-processo');
+
+    botoes.forEach(botao => {
+        botao.addEventListener('click', function() {
+            // Obtém o ID do processo do atributo 'id_processo'
+            const processoId = this.getAttribute('id_processo');
+            
+            if (!processoId) {
+                alert('ID do processo não encontrado!');
+                return;
+            }
+
+            // Configura os parâmetros GET
+            const url = `/gera_pdf_extra_oficial.php?pa_id=${processoId}&chave=<?php echo $chave;?>`;
+
+            // Realiza a requisição AJAX
+            fetch(url, {
+                method: 'GET',
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Erro ao gerar PDF');
+                }
+                return response.blob(); // Converte a resposta em um blob (PDF)
+            })
+            .then(blob => {
+                // Cria um link temporário para download do PDF
+                const urlBlob = window.URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.href = urlBlob;
+                link.download = `comunicado_processo_${processoId}.pdf`;
+
+                // Simula o clique no link para fazer o download
+                link.click();
+
+                // Libera o objeto URL
+                window.URL.revokeObjectURL(urlBlob);
+
+            })
+            .catch(error => {
+                console.error('Erro:', error);
+                alert('Houve um problema ao gerar o PDF.');
+            });
+        });
+    });
+
     });
 </script>
 </body>

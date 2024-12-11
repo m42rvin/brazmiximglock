@@ -26,12 +26,14 @@ foreach ($data as &$processo) {
         if ($aprov === 'true') {
             $processo['etapa'] = '2'; // Passa para etapa 2
             $processo['archived'] = false;
+            $processo['aprove_date'] = date('Y-m-d H:i:s');
             $status = 'APROVADO';
             $bgColor = 'green';
             $fontColor = 'white';
             $icon = '<i class="fas fa-check-circle"></i>'; // Ícone de check
         } elseif ($aprov === 'false') {
             $processo['archived'] = true; // Arquiva o processo
+            $processo['aprove_date'] = date('Y-m-d H:i:s');
             $status = 'DESAPROVADO';
             $bgColor = 'red';
             $fontColor = 'white';

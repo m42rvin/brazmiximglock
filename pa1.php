@@ -29,7 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!empty($_FILES['image']['name'])) {
         $image_name = basename($_FILES['image']['name']);
         $image_ext = pathinfo($image_name, PATHINFO_EXTENSION); // Extensão do arquivo
-        $new_image_name = $id . '_' . $image_ext; // Novo nome da imagem com o ID
+        $new_image_name = $id . '.' . $image_ext; // Novo nome da imagem com o ID
         $image_path = $upload_dir . $new_image_name;
 
         // Mover o arquivo para o diretório especificado
@@ -52,6 +52,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         'observation' => $observation,
         'timestamp' => date('Y-m-d H:i:s'), // Timestamp da submissão
         'original_image' => $original_image,
+        'aprove_date' => null,
+        'archived' => false,
     ];
 
     // Carregar o conteúdo existente do JSON
