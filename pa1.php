@@ -20,6 +20,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $refer_link = $_POST['refer_link'] ?? '';
     $known_contacts = $_POST['known_contacts'] ?? '';
     $observation = $_POST['observation'] ?? '';
+    $original_image = $_POST['original_image'] ?? '';
 
     // Gerar a chave única (pa_key) para acesso ao processo
     $pa_key = uniqid('pa_', true); // Geração de chave única para o processo
@@ -50,6 +51,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         'known_contacts' => $known_contacts,
         'observation' => $observation,
         'timestamp' => date('Y-m-d H:i:s'), // Timestamp da submissão
+        'original_image' => $original_image,
     ];
 
     // Carregar o conteúdo existente do JSON

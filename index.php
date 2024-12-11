@@ -76,6 +76,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $error = "Usuário não encontrado.";
     }
 }
+
+if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
+    header("Location: home.php");
+}
 ?>
 
 <!DOCTYPE html>
