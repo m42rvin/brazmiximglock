@@ -182,14 +182,7 @@ $pdf->Ln(6); // Reduz o espaçamento entre os blocos de texto
 
 // Adiciona o texto explicativo sobre o uso inadequado de imagens
 $pdf->SetFont('Arial', '', 10); // Reduz o tamanho da fonte para caber mais texto
-
-// Texto explicativo
-$textoExplicativo = utf8_decode("Este comunicado tem como objetivo informar que o uso não autorizado de imagens e recursos digitais pertencentes à empresa Brazmix está estritamente proibido. Ressaltamos que todas as imagens, vídeos, gráficos e qualquer outro conteúdo visual disponibilizado ou produzido pela Brazmix são protegidos por direitos autorais e, portanto, sua utilização sem a devida autorização constitui uma violação legal.\n\n");
-$textoExplicativo .= utf8_decode("A Brazmix está atualmente buscando a retirada dessas imagens de sites e plataformas digitais onde estejam sendo utilizadas sem a devida autorização. A utilização indevida poderá resultar em ações legais, que podem incluir a solicitação de indenização por danos materiais e morais, além de outras sanções conforme a gravidade da infração.\n\n");
-$textoExplicativo .= utf8_decode("É fundamental que todos compreendam que, ao utilizar qualquer conteúdo da Brazmix, seja em campanhas publicitárias, materiais de marketing ou publicações em redes sociais, devem garantir que a autorização adequada tenha sido obtida previamente.\n\n");
-$textoExplicativo .= utf8_decode("A violação dos direitos autorais não só compromete a relação de confiança entre as partes envolvidas, mas também pode resultar em danos significativos à reputação e à credibilidade da empresa infratora. Portanto, reforçamos a importância do respeito aos direitos de propriedade intelectual, com o devido cuidado ao utilizar imagens e recursos digitais.\n\n");
-$textoExplicativo .= utf8_decode("Para evitar qualquer mal-entendido, pedimos que todas as partes interessadas se atentem às normas estabelecidas e garantam a conformidade com as políticas de uso de imagens e conteúdos digitais da Brazmix.\n\n");
-$textoExplicativo .= utf8_decode("Este aviso é dado para assegurar que todos estejam cientes das implicações legais e éticas do uso não autorizado, e para prevenir futuros conflitos. Em caso de dúvidas ou para solicitar permissão para o uso de qualquer material, entre em contato com o setor responsável da Brazmix.");
+$textoExplicativo = utf8_decode("O uso não autorizado de imagens e recursos digitais da Brazmix é proibido, pois são protegidos por direitos autorais. Sua utilização sem autorização resulta em violação legal e pode acarretar ações legais, incluindo indenizações por danos materiais e morais. A Brazmix busca retirar essas imagens de sites e plataformas digitais. Para utilizar qualquer conteúdo, é necessário obter autorização prévia. A violação compromete a confiança e pode prejudicar a reputação da empresa infratora. Pedimos que todos respeitem as políticas de uso para evitar mal-entendidos. Em caso de dúvidas ou para solicitar permissão, entre em contato com a Brazmix.");
 
 // Adiciona o texto explicativo no PDF
 $pdf->MultiCell(0, 4, $textoExplicativo); // Usando altura menor para as linhas
@@ -215,10 +208,40 @@ $pdf->Ln(10); // Espaço antes do link
 $pdf->SetTextColor(0, 0, 255); // Cor do texto para o link: azul
 
 $link = $processoEncontrado['refer_link']; // Obtém o link contestado
-$pdf->SetFont('Arial', 'B', 11); // Fonte sublinhada (para o link)
+$pdf->SetFont('Arial', 'B', 14); // Fonte sublinhada (para o link)
+$pdf->SetTextColor(0, 0, 0);
 $pdf->Cell(0, 10, utf8_decode("Link com imagem contestada: "), 0, 1, 'L'); // Texto do link
+$pdf->SetTextColor(0, 0, 255);
 $pdf->SetFont('Arial', 'U', 11); // Fonte sublinhada
 $pdf->Write(5, utf8_decode($link), $link); // Define o link clicável
+$pdf->SetTextColor(0, 0, 0);
+
+$pdf->Ln(15); // Espaço entre o texto e o subtítulo
+$link_ = $_GET['pa_url']; // Obtém o link contestado
+$códigoAcesso = $_GET['chave']; // Obtém o código de acesso
+
+// Definindo o layout da tabela
+$pdf->SetFont('Arial', 'B', 11); // Fonte para os cabeçalhos
+$pdf->SetTextColor(0, 0, 0);
+
+// Cabeçalhos da tabela
+$pdf->Cell(95, 10, utf8_decode("Link para responder contestação:"), 1, 0, 'L'); 
+$pdf->Cell(95, 10, utf8_decode("Código de Acesso"), 1, 1, 'L'); 
+
+// Dados da tabela
+$pdf->SetTextColor(0, 0, 255);
+$pdf->SetFont('Arial', 'U', 11); // Fonte normal para os dados
+$pdf->Cell(95, 10, utf8_decode($link_), 1, 0, 'L'); 
+$pdf->SetTextColor(0, 0, 0);
+$pdf->SetFont('Arial', '', 11); // Fonte normal para os dados
+$pdf->Cell(95, 10, utf8_decode($códigoAcesso), 1, 1, 'L'); 
+
+$pdf->Ln(10); // Espaço após a tabela
+
+// Link clicável (após a tabela)
+$pdf->SetFont('Arial', 'U', 11); // Fonte sublinhada
+$pdf->Write(5, utf8_decode("Clique aqui para responder à contestação"), $link_); // Define o link clicável
+
 
 // Salva o PDF na pasta "pdf"
 $outputPath = 'pdf/comunicado_processo_'.$processoEncontrado['id'].'.pdf';

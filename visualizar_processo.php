@@ -314,7 +314,7 @@ foreach ($uploads as $upload) {
             }
 
             // Configura os parâmetros GET
-            const url = `/gera_pdf_extra_oficial.php?pa_id=${processoId}&chave=<?php echo $chave;?>`;
+            const url = `/gera_pdf_extra_oficial.php?pa_url=` + document.querySelector('.resposta-link').value +`&pa_id=${processoId}&chave=<?php echo $chave;?>`;
 
             // Realiza a requisição AJAX
             fetch(url, {
