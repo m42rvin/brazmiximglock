@@ -240,8 +240,14 @@ foreach ($uploads as $upload) {
 
                 </tr>
                 <tr>
-                    <td>Status</td>
-                    <td>Comunicação Pendente</td>
+                    <td>Status Notificação</td>
+                    <td>
+                        <?php 
+                            echo isset($processo['sinalizar_envio_data']) && !empty($processo['sinalizar_envio_data']) 
+                                ? $processo['sinalizar_envio_data'] 
+                                : 'Envio Pendente'; 
+                        ?>
+                    </td>
                 </tr>
             </tbody>
         </table>
@@ -269,10 +275,67 @@ foreach ($uploads as $upload) {
                 <input readonly class="outra-input form-control" value="<?php echo $chave;?>" placeholder="Digite aqui..." />
             </div>
         </div>
-        <div class="d-flex align-items-start">
-            <button class="btn btn-primary gera-processo" id_processo="<?php echo $processo['id'];?>">Gerar PDF com Comunicado</button>
+        <form method="POST" action="salva_processo.php">
+    <div class="d-flex align-items-center">
+        <!-- Botão -->
+        <button type="button" class="btn btn-primary gera-processo" id_processo="<?php echo $processo['id']; ?>">
+            <i class="fa-solid fa-file-export"></i> Gerar PDF com Comunicado
+        </button>
 
+        <!-- Checkbox: Sinalizar Notificação -->
+        <div class="form-check ms-3">
+            <input 
+                class="form-check-input" 
+                type="checkbox" 
+                id="sinalizar_notificacao" 
+                name="sinalizar_notificacao"
+                <?php echo isset($processo['sinalizar_notificacao']) && $processo['sinalizar_notificacao'] ? 'checked' : ''; ?>
+            >
+            <label class="form-check-label" for="sinalizar_notificacao">
+                Sinalizar envio de notificação
+            </label>
         </div>
+    </div>
+
+    <div class="d-flex align-items-center">
+        <!-- Checkbox: Seguir Próxima Etapa -->
+        <div class="form-check ms-3">
+            <input 
+                class="form-check-input" 
+                type="checkbox" 
+                id="seguir_proxima_etapa" 
+                name="seguir_proxima_etapa"
+                <?php echo isset($processo['seguir_proxima_etapa']) && $processo['seguir_proxima_etapa'] ? 'checked' : ''; ?>
+            >
+            <label class="form-check-label" for="seguir_proxima_etapa">
+                Seguir para próxima etapa
+            </label>
+        </div>
+
+        <!-- Checkbox: Finalizar e Arquivar -->
+        <div class="form-check ms-3">
+            <input 
+                class="form-check-input" 
+                type="checkbox" 
+                id="finalizar_arquivar" 
+                name="finalizar_arquivar"
+                <?php echo isset($processo['finalizar_arquivar']) && $processo['finalizar_arquivar'] ? 'checked' : ''; ?>
+            >
+            <label class="form-check-label" for="finalizar_arquivar">
+                Finalizar e Arquivar
+            </label>
+        </div>
+    </div>
+
+    <div class="d-flex align-items-center">
+        <!-- Botão Salvar -->
+        <button type="submit" class="btn btn-success" name="id_processo" value="<?php echo $processo['id']; ?>">
+            <i class="fa-solid fa-floppy-disk"></i> Salvar
+        </button>
+    </div>
+</form>
+
+
         </div>
     <?php } ?>        
     <?php include 'footer.php'; ?>

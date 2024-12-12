@@ -48,6 +48,10 @@
         "timestamp": "2024-12-11 15:00:56",
         "original_image": "6732164805ed8",
         "aprove_date": "2024-12-11 15:01:12",
-        "archived": false
+        "archived": false,
+        "sinalizar_notificacao": true,
+        "seguir_proxima_etapa": false,
+        "finalizar_arquivar": false,
+        "sinalizar_envio_data": "2024-12-12 14:48:15"
     }
 ]
