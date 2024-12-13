@@ -81,34 +81,57 @@ if (isset($_SESSION['acesso_autorizado_' . $pa_id])) {
             <?php if ($processo): ?>
                 <!-- Detalhes do Processo -->
                 <h5><strong>Espaço para o Contestante</strong></h5>
-    <form>
-        <div class="form-check">
-            <input class="form-check-input" type="radio" name="contestacao" id="concorda_remocao" value="concorda_remocao">
-            <label class="form-check-label" for="concorda_remocao">
-                Confirmo que irei interromper o uso das imagens envolvidas nesse processo com o prazo de 7 dias.
-            </label>
-        </div>
+                <?php
+// Verifique se existe uma resposta para o processo
+$respostaEnviada = isset($processo['resposta_processo']) && $processo['resposta_processo'] === true;
 
-        <div class="form-check">
-            <input class="form-check-input" type="radio" name="contestacao" id="mais_informacoes" value="mais_informacoes">
-            <label class="form-check-label" for="mais_informacoes">
-                Preciso de mais informações sobre o processo, solicito contato direto para melhor entendimento.
-            </label>
-        </div>
+// Caso não exista resposta, exibe o formulário
+if (!$respostaEnviada):
+?>
+<form method="POST" action="salva_resposta.php">
+    <!-- Opções de Resposta -->
+    <div class="form-check">
+        <input class="form-check-input" type="radio" name="contestacao" id="concorda_remocao" value="concorda_remocao">
+        <label class="form-check-label" for="concorda_remocao">
+            Confirmo que irei interromper o uso das imagens envolvidas nesse processo com o prazo de 7 dias.
+        </label>
+    </div>
 
-        <div class="form-check">
-            <input class="form-check-input" type="radio" name="contestacao" id="nao_concordo" value="nao_concordo">
-            <label class="form-check-label" for="nao_concordo">
-                Não concordo com os apontamentos realizados e manterei o uso das imagens mesmo assim.
-            </label>
-        </div>
-    </form>
+    <div class="form-check">
+        <input class="form-check-input" type="radio" name="contestacao" id="mais_informacoes" value="mais_informacoes">
+        <label class="form-check-label" for="mais_informacoes">
+            Preciso de mais informações sobre o processo, solicito contato direto para melhor entendimento.
+        </label>
+    </div>
+
+    <div class="form-check">
+        <input class="form-check-input" type="radio" name="contestacao" id="nao_concordo" value="nao_concordo">
+        <label class="form-check-label" for="nao_concordo">
+            Não concordo com os apontamentos realizados e manterei o uso das imagens mesmo assim.
+        </label>
+    </div>
+
+    <!-- Campo de Texto -->
+    <div class="mt-4">
+        <h5><strong>Responder Contestação</strong></h5>
+        <textarea name="texto_resposta" rows="10" cols="50" class="form-control"></textarea><br />
+    </div>
+
+    <!-- Campo Oculto com o ID do Processo -->
+    <input type="hidden" name="id_processo" value="<?php echo $processo['id']; ?>">
+
+    <!-- Botão de Envio -->
+    <button type="submit" class="btn btn-success">Enviar Resposta</button>
+</form>
+<?php
+// Caso contrário, exibe uma mensagem informando que a resposta já foi enviada
+else:
+?>
+<p class="alert alert-info">Resposta já enviada para este processo.</p>
+<?php endif; ?>
+
+
         <!-- Responder Contestação -->
-        <div class="mt-4">
-            <h5><strong>Responder Contestação</strong></h5>
-            <textarea rows="10" cols="50" class="form-control"></textarea><br />
-            <button class="btn btn-success">Enviar Resposta</button>
-        </div>
                 </div>
 
             <?php else: ?>

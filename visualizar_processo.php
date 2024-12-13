@@ -249,10 +249,65 @@ foreach ($uploads as $upload) {
                         ?>
                     </td>
                 </tr>
+                <tr>
+                    <td>Status da Resposta</td>
+                    <td>
+                        <?php 
+                            echo isset($processo['resposta_processo']) && $processo['resposta_processo'] === true 
+                                ? 'Respondido' 
+                                : 'Aguardando Resposta';
+                        ?>
+                    </td>
+                </tr>
+                <?php
+// Carregar o conteúdo do arquivo JSON de respostas
+$respostasJson = 'resposta_processo.json';
+$respostas = file_exists($respostasJson) ? json_decode(file_get_contents($respostasJson), true) : [];
+
+// Inicializar variáveis de resposta
+$respostaEncontrada = null;
+foreach ($respostas as $resposta) {
+    if ($resposta['id_processo'] === $processo['id']) {
+        $respostaEncontrada = $resposta;
+        break;
+    }
+}
+
+// Mapear os textos de contestação
+$contestacaoMensagens = [
+    'concorda_remocao' => 'Confirmo que irei interromper o uso das imagens envolvidas nesse processo com o prazo de 7 dias.',
+    'mais_informacoes' => 'Preciso de mais informações sobre o processo, solicito contato direto para melhor entendimento.',
+    'nao_concordo' => 'Não concordo com os apontamentos realizados e manterei o uso das imagens mesmo assim.'
+];
+?>
+
+<!-- Exibir a linha da tabela se a resposta existir -->
+<?php if ($respostaEncontrada) : ?>
+    <tr>
+        <td>Data Resposta</td>
+        <td><?php echo $respostaEncontrada['data_resposta']; ?></td>
+    </tr>
+    <tr>
+        <td>Contestação</td>
+        <td style="max-width: 200px; word-wrap: break-word;">
+            <?php
+                $contestacao = $respostaEncontrada['contestacao'];
+                echo isset($contestacaoMensagens[$contestacao]) 
+                    ? $contestacaoMensagens[$contestacao] 
+                    : 'Resposta não reconhecida';
+            ?>
+        </td>
+    </tr>
+    <tr>
+        <td>Texto Resposta</td>
+        <td style="max-width: 200px; word-wrap: break-word;"><?php echo htmlspecialchars($respostaEncontrada['texto_resposta']); ?></td>
+    </tr>
+    <?php endif; ?>
             </tbody>
         </table>
         </div>
         <div class="d-flex align-items-start ">
+        <?php if (!isset($processo['resposta_processo']) || !$processo['resposta_processo']) : ?>
             <div class="mb-3">
                 <h5>Link para responder contestação:</h5>
                 <input readonly class="resposta-link form-control" placeholder="Digite algo..." />
@@ -274,26 +329,62 @@ foreach ($uploads as $upload) {
                 ?>
                 <input readonly class="outra-input form-control" value="<?php echo $chave;?>" placeholder="Digite aqui..." />
             </div>
+            <?php endif; ?>
         </div>
         <form method="POST" action="salva_processo.php">
     <div class="d-flex align-items-center">
+    <?php if (!isset($processo['resposta_processo']) || !$processo['resposta_processo']) : ?>
         <!-- Botão -->
         <button type="button" class="btn btn-primary gera-processo" id_processo="<?php echo $processo['id']; ?>">
             <i class="fa-solid fa-file-export"></i> Gerar PDF com Comunicado
         </button>
+    <?php endif; ?>
+
 
         <!-- Checkbox: Sinalizar Notificação -->
         <div class="form-check ms-3">
-            <input 
-                class="form-check-input" 
-                type="checkbox" 
-                id="sinalizar_notificacao" 
-                name="sinalizar_notificacao"
-                <?php echo isset($processo['sinalizar_notificacao']) && $processo['sinalizar_notificacao'] ? 'checked' : ''; ?>
-            >
-            <label class="form-check-label" for="sinalizar_notificacao">
-                Sinalizar envio de notificação
-            </label>
+        <?php if (!isset($processo['resposta_processo']) || !$processo['resposta_processo']) : ?>
+        <input 
+            class="form-check-input" 
+            type="checkbox" 
+            id="sinalizar_notificacao" 
+            name="sinalizar_notificacao"
+            <?php 
+                echo isset($processo['sinalizar_notificacao']) && $processo['sinalizar_notificacao'] ? 'checked disabled' : ''; 
+            ?>
+        >
+        <label class="form-check-label" for="sinalizar_notificacao">
+            Sinalizar envio de notificação
+        </label>
+        <?php endif; ?>
+
+        <?php
+        if(isset($processo['sinalizar_notificacao']) && $processo['sinalizar_notificacao']){
+        // Mapear mensagens para cada situação
+        $titulosSituacao = [
+            'concorda_remocao' => 'Sugerido: Finalizar o Processo',
+            'mais_informacoes' => 'Sugerido: Entrar em Contato Pessoal',
+            'nao_concordo'     => 'Recomendado: Prosseguir para a Próxima Etapa'
+        ];
+
+        // Verifica se a contestação existe e gera o título correspondente
+        if (isset($respostaEncontrada['contestacao'])) {
+            $contestacao = $respostaEncontrada['contestacao'];
+            $tituloSituacao = isset($titulosSituacao[$contestacao]) 
+                ? $titulosSituacao[$contestacao] 
+                : 'Situação Desconhecida';
+        } else {
+            $tituloSituacao = '';
+        }
+        ?>
+
+        <!-- Exibir o título -->
+        <h3 class="titulo-situacao">
+            <?php echo $tituloSituacao; ?>
+        </h3>
+        <?php } ?>
+
+
         </div>
     </div>
 

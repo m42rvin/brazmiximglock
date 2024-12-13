@@ -52,6 +52,45 @@
         "sinalizar_notificacao": true,
         "seguir_proxima_etapa": false,
         "finalizar_arquivar": false,
-        "sinalizar_envio_data": "2024-12-12 14:48:15"
+        "sinalizar_envio_data": "2024-12-12 14:48:15",
+        "resposta_processo": true
+    },
+    {
+        "id": "675c1ec09329e",
+        "pa_key": "pa_675c262e234d31.61411627",
+        "etapa": "2",
+        "refer_name": "DEN\u00daNCIA ANONIMA - TESTE JUNIOR",
+        "refer_link": "https:\/\/produto.mercadolivre.com.br\/MLB-1623819519-cavalete-draga-3-e-4-_JM#polycard_client=search-nordic&position=10&search_layout=stack&type=item&tracking_id=7adc5b31-4e67-4059-b3d1-7954a92e6714",
+        "image": "img_auditoria\/675c1ec09329e.jpg",
+        "known_contacts": "USU\u00c1RIO MERCADO LIVRE; AGROBOMBASCOMEINDLTDAAGR",
+        "observation": "VERIFICADO USO INDEVIDO SOBRE IMAGEM .",
+        "timestamp": "2024-12-13 09:18:54",
+        "original_image": "67472dd791ff0",
+        "aprove_date": "2024-12-13 09:22:32",
+        "archived": false,
+        "resposta_processo": true,
+        "sinalizar_notificacao": false,
+        "sinalizar_envio_data": "2024-12-13 10:08:46",
+        "seguir_proxima_etapa": true,
+        "finalizar_arquivar": false
+    },
+    {
+        "id": "675c34af6a4f1",
+        "pa_key": "pa_675c34e4122c93.79722883",
+        "etapa": "2",
+        "refer_name": "TESTE EM REUNI\u00c3O",
+        "refer_link": "HTTPS:\/\/WWW.BRAZMIX.COM\/CONTATO",
+        "image": "img_auditoria\/675c34af6a4f1.jpg",
+        "known_contacts": "USU\u00c1RIO MERCADOLIVRE:    XXXXXWW",
+        "observation": "ESTE USU\u00c1RIO EST\u00c1 UTILIZANDO NOSSAS IMAGENS.",
+        "timestamp": "2024-12-13 10:21:40",
+        "original_image": "673215e505ec6",
+        "aprove_date": "2024-12-13 10:26:37",
+        "archived": false,
+        "sinalizar_notificacao": false,
+        "sinalizar_envio_data": "2024-12-13 10:33:18",
+        "seguir_proxima_etapa": true,
+        "finalizar_arquivar": false,
+        "resposta_processo": true
     }
 ]
