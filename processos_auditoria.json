@@ -92,5 +92,19 @@
         "seguir_proxima_etapa": true,
         "finalizar_arquivar": false,
         "resposta_processo": true
+    },
+    {
+        "id": "6769a133f0f39",
+        "pa_key": "pa_6769a1fc7a8164.07352726",
+        "etapa": "2",
+        "refer_name": "M\u00e9rito Comercial",
+        "refer_link": "https:\/\/www.meritocomercial.com.br\/bomba-draga-fal-fgh-150-6-20870230002-p1019520",
+        "image": "img_auditoria\/6769a133f0f39.png",
+        "known_contacts": "https:\/\/www.meritocomercial.com.br\/",
+        "observation": "Est\u00e3o usando imagem de autoria nossa",
+        "timestamp": "2024-12-23 14:46:36",
+        "original_image": "673215e505ec6",
+        "aprove_date": "2024-12-23 15:01:04",
+        "archived": false
     }
 ]

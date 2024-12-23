@@ -162,18 +162,22 @@ foreach ($uploads as $upload) {
             <!-- Imagem Contestada -->
             <div class="text-center">
                 <h5>Imagem Contestada</h5>
+                <a href="<?php echo htmlspecialchars($processo['image']); ?>" target="_blank">
                 <img src="<?php echo htmlspecialchars($processo['image']); ?>" 
                      alt="Imagem contestada" class="img-thumbnail">
                      <i class="fa-solid fa-magnifying-glass-plus"></i>
+                </a>
             </div>
 
             <!-- Imagem Original -->
             <div class="text-center">
                 <h5>Imagem Original</h5>
                 <?php if ($original_image_path): ?>
+                    <a target="_blank" href="<?php echo htmlspecialchars($original_image_path); ?>">
                     <img src="<?php echo htmlspecialchars($original_image_path); ?>" 
                          alt="Imagem original" class="img-thumbnail">
                          <i class="fa-solid fa-magnifying-glass-plus"></i>
+                    </a>
                 <?php else: ?>
                     <p class="text-danger">Imagem original não encontrada.</p>
                 <?php endif; ?>
@@ -204,7 +208,50 @@ foreach ($uploads as $upload) {
 
         <!-- Botões -->
         <?php if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true): ?>
+            <!-- Botão para copiar a URL -->
+        <button id="copy-url-btn" class="btn btn-primary" data-clipboard-text="">
+            Copiar URL Atual
+        </button>
+
+        <!-- Mensagem de confirmação -->
+        <div id="copy-message" style="display: none; color: green; margin-top: 10px;">
+            URL copiada com sucesso!
+        </div>
+        <br>
+            
             <a href="processos_auditoria.php" class="btn-voltar">Voltar para a lista de processos</a>
+        <!-- Botao de copiar url -->
+
+        
+
+<!-- Script para funcionalidade -->
+<script>
+    // Configura o botão para copiar a URL atual
+    document.addEventListener("DOMContentLoaded", function () {
+        const button = document.getElementById('copy-url-btn');
+        button.setAttribute('data-clipboard-text', window.location.href);
+
+        const clipboard = new ClipboardJS('#copy-url-btn');
+
+        clipboard.on('success', function () {
+            // Exibe mensagem de confirmação
+            const message = document.getElementById('copy-message');
+            message.style.display = 'block';
+            setTimeout(() => {
+                message.style.display = 'none';
+            }, 2000); // Oculta a mensagem após 2 segundos
+        });
+
+        clipboard.on('error', function () {
+            alert("Falha ao copiar a URL. Tente novamente.");
+        });
+    });
+</script>
+
+
+
+
+
         <?php endif; ?>
         <?php if($processo['archived'] === false){ ?>
             <a href="pa2.php?aprov=true&pa_id=<?php echo $processo['id']; ?>&pa_key=<?php echo $processo['pa_key']; ?>" class="btn btn-success">Aprovar processo</a>
@@ -318,13 +365,53 @@ $contestacaoMensagens = [
                 function gerarChaveAleatoria($tamanho = 5) {
                     // Gera uma sequência de letras maiúsculas
                     $caracteres = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-                
                     // Embaralha os caracteres e retorna os primeiros $tamanho caracteres
                     return substr(str_shuffle($caracteres), 0, $tamanho);
                 }
                 
-                $chave = gerarChaveAleatoria();
+                function obterOuGerarChave($processoId, $arquivo = 'keys.json') {
+                    // Lê o arquivo keys.json
+                    $conteudo = file_get_contents($arquivo);
+                    $dados = json_decode($conteudo, true);
                 
+                    // Procura se o processo já tem uma chave associada
+                    foreach ($dados as &$registro) {
+                        if ($registro['id'] === $processoId) {
+                            // Retorna a última chave associada a este ID, se existir
+                            if (!empty($registro['keys'])) {
+                                return end($registro['keys']); // Pega a última chave do array
+                            }
+                        }
+                    }
+                
+                    // Se não encontrou o ID ou não há chave, cria uma nova
+                    $novaChave = gerarChaveAleatoria();
+                
+                    // Adiciona a chave ao registro ou cria um novo registro para este ID
+                    $chaveEncontrada = false;
+                    foreach ($dados as &$registro) {
+                        if ($registro['id'] === $processoId) {
+                            $registro['keys'][] = $novaChave;
+                            $chaveEncontrada = true;
+                            break;
+                        }
+                    }
+                    if (!$chaveEncontrada) {
+                        $dados[] = [
+                            'id' => $processoId,
+                            'keys' => [$novaChave]
+                        ];
+                    }
+                
+                    // Salva as alterações no arquivo
+                    file_put_contents($arquivo, json_encode($dados, JSON_PRETTY_PRINT));
+                
+                    return $novaChave;
+                }
+                
+                // Exemplo de uso
+                $processoId = $processo['id']; // ID do processo atual
+                $chave = obterOuGerarChave($processoId);
                 
                 ?>
                 <input readonly class="outra-input form-control" value="<?php echo $chave;?>" placeholder="Digite aqui..." />

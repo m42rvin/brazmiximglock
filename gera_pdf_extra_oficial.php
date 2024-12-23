@@ -234,14 +234,33 @@ $pdf->SetTextColor(0, 0, 0);
 // Cabeçalhos da tabela
 $pdf->Cell(95, 10, utf8_decode("Link para responder contestação:"), 1, 0, 'L'); 
 $pdf->Cell(95, 10, utf8_decode("Código de Acesso"), 1, 1, 'L'); 
+// Configurações do FPDF
+$pdf->SetFont('Arial', '', 11);
+
+// Largura das colunas
+$larguraLink = 95; // Largura para o link
+$larguraCodigo = 95; // Largura para o código de acesso
+$alturaLinha = 6; // Altura da célula
 
 // Dados da tabela
 $pdf->SetTextColor(0, 0, 255);
-$pdf->SetFont('Arial', 'U', 11); // Fonte normal para os dados
-$pdf->Cell(95, 10, utf8_decode($link_), 1, 0, 'L'); 
+$pdf->SetFont('Arial', 'U', 10); // Fonte para o link
+
+// Salva a posição inicial
+$x = $pdf->GetX();
+$y = $pdf->GetY();
+
+// Exibe o link com quebra automática
+$pdf->MultiCell($larguraLink, $alturaLinha, utf8_decode($link_), 1, 'L');
+
+// Restaura a posição para o início da linha e ajusta para a próxima célula
+$pdf->SetXY($x + $larguraLink, $y);
+
+// Exibe o código de acesso com quebra automática
 $pdf->SetTextColor(0, 0, 0);
-$pdf->SetFont('Arial', '', 11); // Fonte normal para os dados
-$pdf->Cell(95, 10, utf8_decode($códigoAcesso), 1, 1, 'L'); 
+$pdf->SetFont('Arial', '', 11); // Fonte para o código de acesso
+$pdf->MultiCell($larguraCodigo, $alturaLinha, utf8_decode($códigoAcesso), 1, 'L');
+
 
 $pdf->Ln(10); // Espaço após a tabela
 
