@@ -139,6 +139,50 @@ if (!$respostaEnviada):
 // Caso contrário, exibe uma mensagem informando que a resposta já foi enviada
 else:
 ?>
+<div class="alert alert-danger" role="alert">
+<h5>Resposta Constentação:</h5>
+<p>
+<?php
+// Carregar o conteúdo do arquivo resposta_processo.json
+$respostas = json_decode(file_get_contents('resposta_processo.json'), true);
+
+// ID do processo a ser pesquisado
+$idProcesso = $processo['id'];
+
+// Inicializar a variável para armazenar a contestação
+$contestacao = null;
+
+// Percorrer as respostas para encontrar o processo correspondente
+foreach ($respostas as $resposta) {
+    if ($resposta['id_processo'] === $idProcesso) {
+        $contestacao = $resposta['contestacao'];
+        break;
+    }
+}
+
+// Formatar o texto baseado na contestação
+if ($contestacao !== null) {
+    switch ($contestacao) {
+        case 'concorda_remocao':
+            echo "O contestado confirmou que irá interromper o uso das imagens envolvidas no processo dentro do prazo estipulado. É recomendado proceder com a finalização do processo.";
+            break;
+        case 'mais_informacoes':
+            echo "O contestado solicitou mais informações para um melhor entendimento do processo. É recomendado entrar em contato pessoalmente para fornecer os esclarecimentos necessários.";
+            break;
+        case 'nao_concordo':
+            echo "O contestado declarou que não concorda com os apontamentos realizados e manterá o uso das imagens. É recomendado seguir para a próxima etapa do processo.";
+            break;
+        default:
+            echo "O tipo de contestação não é reconhecido.";
+            break;
+    }
+} else {
+    echo "Nenhuma contestação encontrada para o processo ID: " . $idProcesso;
+}
+
+?>
+</p>
+</div>
 <p class="alert alert-info">Resposta já enviada para este processo.</p>
 <?php endif; ?>
 
