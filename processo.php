@@ -50,6 +50,9 @@ if (isset($_SESSION['acesso_autorizado_' . $pa_id])) {
         body{
             padding-bottom:100px;
         }
+        .campos-contatos {
+            margin-left:20px
+        }
     </style>
 </head>
 <body>
@@ -112,9 +115,18 @@ if (!$respostaEnviada):
     </div>
 
     <!-- Campo de Texto -->
+    <div class="d-flex ">
     <div class="mt-4">
         <h5><strong>Responder Contestação</strong></h5>
         <textarea name="texto_resposta" rows="10" cols="50" class="form-control"></textarea><br />
+    </div>
+    <div class="mt-4 campos-contatos">
+        <h5><strong>Email</strong></h5>
+        <input class="form-control" name="email" type="email" placeholder="Digite seu E-mail"/>
+        <br/>
+        <h5><strong>Telefone</strong></h5>
+        <input class="form-control" name="telefone" type="text" placeholder="Digite seu telefone"/>
+    </div>
     </div>
 
     <!-- Campo Oculto com o ID do Processo -->

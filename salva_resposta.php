@@ -11,6 +11,8 @@ $processosData = file_exists($processosFile) ? json_decode(file_get_contents($pr
 $processoId = $_POST['id_processo'] ?? null;
 $contestacao = $_POST['contestacao'] ?? null;
 $textoResposta = $_POST['texto_resposta'] ?? null;
+$emailResposta = $_POST['email'] ?? null;
+$telefoneResposta = $_POST['telefone'] ?? null;
 
 // Validar dados
 if ($processoId && $contestacao && $textoResposta) {
@@ -19,7 +21,9 @@ if ($processoId && $contestacao && $textoResposta) {
         'id_processo' => $processoId,
         'contestacao' => $contestacao,
         'texto_resposta' => $textoResposta,
-        'data_resposta' => date('Y-m-d H:i:s')
+        'data_resposta' => date('Y-m-d H:i:s'),
+        'email_resposta' => $emailResposta,
+        'telefone_resposta'=> $telefoneResposta
     ];
 
     $respostasData[] = $novaResposta;

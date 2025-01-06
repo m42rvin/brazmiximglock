@@ -306,6 +306,8 @@ foreach ($uploads as $upload) {
                         ?>
                     </td>
                 </tr>
+            </tbody>
+            </table>
                 <?php
 // Carregar o conteúdo do arquivo JSON de respostas
 $respostasJson = 'resposta_processo.json';
@@ -327,9 +329,14 @@ $contestacaoMensagens = [
     'nao_concordo' => 'Não concordo com os apontamentos realizados e manterei o uso das imagens mesmo assim.'
 ];
 ?>
-
-<!-- Exibir a linha da tabela se a resposta existir -->
-<?php if ($respostaEncontrada) : ?>
+</tbody>
+</table>
+        </div>
+        <!-- Exibir a linha da tabela se a resposta existir -->
+        <?php if ($respostaEncontrada) : ?>
+    <div class="container">
+    <table class="table table-bordered text-center">
+    <tbody>
     <tr>
         <td>Data Resposta</td>
         <td><?php echo $respostaEncontrada['data_resposta']; ?></td>
@@ -349,10 +356,18 @@ $contestacaoMensagens = [
         <td>Texto Resposta</td>
         <td style="max-width: 200px; word-wrap: break-word;"><?php echo htmlspecialchars($respostaEncontrada['texto_resposta']); ?></td>
     </tr>
+    <tr>
+        <td>Email Contato</td>
+        <td><?php echo $respostaEncontrada['email_resposta'];?></td>
+    </tr>
+    <tr>
+        <td>Telefone Contato</td>
+        <td><?php echo $respostaEncontrada['telefone_resposta'];?></td>
+    </tr>
+    </tbody>
+    <table>
+</div>
     <?php endif; ?>
-            </tbody>
-        </table>
-        </div>
         <div class="d-flex align-items-start ">
         <?php if (!isset($processo['resposta_processo']) || !$processo['resposta_processo']) : ?>
             <div class="mb-3">
@@ -419,7 +434,7 @@ $contestacaoMensagens = [
             <?php endif; ?>
         </div>
         <form method="POST" action="salva_processo.php">
-    <div class="d-flex align-items-center">
+    <div class="align-items-center">
     <?php if (!isset($processo['resposta_processo']) || !$processo['resposta_processo']) : ?>
         <!-- Botão -->
         <button type="button" class="btn btn-primary gera-processo" id_processo="<?php echo $processo['id']; ?>">
@@ -475,7 +490,7 @@ $contestacaoMensagens = [
         </div>
     </div>
 
-    <div class="d-flex align-items-center">
+    <div class="check-items ">
         <!-- Checkbox: Seguir Próxima Etapa -->
         <div class="form-check ms-3">
             <input 
