@@ -164,13 +164,13 @@ foreach ($respostas as $resposta) {
 if ($contestacao !== null) {
     switch ($contestacao) {
         case 'concorda_remocao':
-            echo "O contestado confirmou que irá interromper o uso das imagens envolvidas no processo dentro do prazo estipulado. É recomendado proceder com a finalização do processo.";
+            echo "A Brazmix agradece por sua resposta e colaboração nesse processo. A partir do momento que você interromper o uso da(s) imagem(ns), no prazo acordado, nossa equipe irá conferir a remoção e finalizar este processo em nosso sistema de auditoria. Nesse momento, você poderá considerar o processo finalizado sem que nenhuma interação suplementar de sua parte seja necessária. ";
             break;
         case 'mais_informacoes':
-            echo "O contestado solicitou mais informações para um melhor entendimento do processo. É recomendado entrar em contato pessoalmente para fornecer os esclarecimentos necessários.";
+            echo "Entendido! \nVocê poderá contatar nosso time através dos contatos abaixo. Note que ao selecionar essa opção o tempo de resposta para o processo continua a ser contabilizado e sua pronta resposta/contato é fundamental para esclarecermos tudo rapidamente e evitar desdobramentos mais complexos no futuro.\n marketing@brazmix.com  ou +55 54 3229 93 65  ";
             break;
         case 'nao_concordo':
-            echo "O contestado declarou que não concorda com os apontamentos realizados e manterá o uso das imagens. É recomendado seguir para a próxima etapa do processo.";
+            echo "Agradecemos por sua resposta. \nA opção que você selecionou faz com que nosso sistema de auditoria de sequência ao processo de forma interna e nossa equipe tomará as ações necessárias para contatar você e/ou seus representantes no momento oportuno. É importante que tenha informado os dados de contato corretos para podermos seguir com as tratativas desse assunto. \nCaso mude de opinião e queira alterar seu posicionamento sobre esse processo, contate nosso time pelo endereço abaixo;\nmarketing@brazmix.com";
             break;
         default:
             echo "O tipo de contestação não é reconhecido.";

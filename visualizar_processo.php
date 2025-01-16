@@ -296,6 +296,53 @@ foreach ($uploads as $upload) {
                         ?>
                     </td>
                 </tr>
+                <?php
+                    if(isset($processo['sinalizar_envio_data'])){
+                        ?>
+                            <tr>
+                                <td>Prazo Resposta</td>
+                                <td>
+                        <?php
+                        if(isset($processo['resposta_processo']) && $processo['resposta_processo'] === true ){
+                           echo 'Respondido dentro do prazo.';
+                        } else {
+                            
+                        // Data de sinalização de envio (formato: YYYY-MM-DD)
+                        $sinalizarEnvioData = $processo['sinalizar_envio_data'];
+
+                        // Converter a data para um objeto DateTime
+                        $dataInicial = new DateTime($sinalizarEnvioData);
+
+                        // Adicionar 15 dias à data inicial
+                        $dataFinal = clone $dataInicial;
+                        $dataFinal->modify('+15 days');
+
+                        // Obter a data atual
+                        $dataAtual = new DateTime();
+
+                        // Calcular a diferença entre a data final e a data atual
+                        $diferenca = $dataAtual->diff($dataFinal);
+
+                        // Verificar se o prazo já expirou
+                        if ($dataAtual > $dataFinal) {
+                            echo "O prazo de 15 dias já expirou.";
+                        } else {
+                            // Exibir o contador regressivo
+                            echo "Faltam " . $diferenca->days . " dias para esgotar o prazo de resposta deste processo.";
+                        }
+                    }
+
+                        
+                        
+                        ?>
+
+                                </td>
+                            </tr>
+
+                        <?php
+                    }
+                
+                ?>
                 <tr>
                     <td>Status da Resposta</td>
                     <td>
@@ -530,7 +577,149 @@ $contestacaoMensagens = [
 
 
         </div>
-    <?php } ?>        
+    <?php } elseif ($processo['etapa'] === "3") { ?>
+        <?php
+// Carregar o conteúdo do arquivo JSON
+$processos = json_decode(file_get_contents('processos_auditoria.json'), true);
+
+// Obter o ID do processo da URL
+$processo_id = $_GET['pa_id'] ?? null;
+$processo = null;
+
+// Encontrar o processo correspondente no JSON
+if ($processo_id) {
+    foreach ($processos as $p) {
+        if ($p['id'] === $processo_id) {
+            $processo = $p;
+            break;
+        }
+    }
+}
+
+// Valores padrão para os campos
+$analise_juridica = $processo['descricao_analise_juridica'] ?? '';
+$comunicacao_extra = $processo['descricao_comunicacao_extra'] ?? '';
+$processo_juridico = $processo['descricao_processo_juridico'] ?? '';
+
+$json_file = 'processos_auditoria.json';
+$processos = [];
+
+if (file_exists($json_file) && filesize($json_file) > 0) {
+    $processos = json_decode(file_get_contents($json_file), true);
+}
+
+// Função para exibir os arquivos de uma etapa específica
+function listarArquivos($processos, $etapa)
+{
+    echo "<ul class='list-group'>";
+    foreach ($processos as $processo) {
+        if (isset($processo["arquivo_{$etapa}"])) {
+            $arquivo = $processo["arquivo_{$etapa}"];
+            $nome_arquivo = basename($arquivo);
+            echo "<li class='list-group-item'>";
+            echo "<a href='{$arquivo}' target='_blank'>{$nome_arquivo}</a>";
+            echo "</li>";
+        }
+    }
+    echo "</ul>";
+}
+
+
+?>
+
+<div class="card mb-4">
+    <div class="card-header bg-primary text-white">
+        Análise Jurídica e Administrativa
+    </div>
+    <div class="card-body">
+        <form action="salvar_formulario.php" method="POST" enctype="multipart/form-data">
+            <input type="hidden" name="processo_id" value="<?php echo $processo['id']; ?>">
+            <input type="hidden" name="etapa" value="analise_juridica">
+            <div class="mb-3">
+                <label for="descricao_analise" class="form-label">Descrição da Análise</label>
+                <textarea 
+                    class="form-control" 
+                    id="descricao_analise" 
+                    name="descricao" 
+                    rows="4" 
+                    placeholder="Descreva o andamento do processo nesta etapa..."
+                    required><?php echo htmlspecialchars($analise_juridica); ?></textarea>
+            </div>
+            <div class="mb-3">
+                <label for="arquivo_analise" class="form-label">Anexar Arquivo</label>
+                <input type="file" class="form-control" id="arquivo_analise" name="arquivo">
+            </div>
+            <div class="mb-3">
+                <?php listarArquivos($processos, 'analise_juridica'); ?>
+            </div>
+            <button type="submit" class="btn btn-primary">Salvar</button>
+        </form>
+    </div>
+</div>
+
+
+<div class="card mb-4">
+    <div class="card-header bg-warning text-dark">
+        Comunicação Extra Judicial
+    </div>
+    <div class="card-body">
+        <form action="salvar_formulario.php" method="POST" enctype="multipart/form-data">
+            <input type="hidden" name="processo_id" value="<?php echo $processo['id']; ?>">
+            <input type="hidden" name="etapa" value="comunicacao_extra">
+            <div class="mb-3">
+                <label for="descricao_comunicacao" class="form-label">Descrição da Comunicação</label>
+                <textarea 
+                    class="form-control" 
+                    id="descricao_comunicacao" 
+                    name="descricao" 
+                    rows="4" 
+                    placeholder="Descreva o andamento do processo nesta etapa..."
+                    required><?php echo htmlspecialchars($comunicacao_extra); ?></textarea>
+            </div>
+            <div class="mb-3">
+                <label for="arquivo_comunicacao" class="form-label">Anexar Arquivo</label>
+                <input type="file" class="form-control" id="arquivo_comunicacao" name="arquivo">
+            </div>
+            <div class="mb-3">
+                <?php listarArquivos($processos, 'comunicacao_extra'); ?>
+            </div>
+            <button type="submit" class="btn btn-warning">Salvar</button>
+        </form>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header bg-danger text-white">
+        Processo Jurídico
+    </div>
+    <div class="card-body">
+        <form action="salvar_formulario.php" method="POST" enctype="multipart/form-data">
+            <input type="hidden" name="processo_id" value="<?php echo $processo['id']; ?>">
+            <input type="hidden" name="etapa" value="processo_juridico">
+            <div class="mb-3">
+                <label for="descricao_processo" class="form-label">Descrição do Processo</label>
+                <textarea 
+                    class="form-control" 
+                    id="descricao_processo" 
+                    name="descricao" 
+                    rows="4" 
+                    placeholder="Descreva o andamento do processo nesta etapa..."
+                    required><?php echo htmlspecialchars($processo_juridico); ?></textarea>
+            </div>
+
+            <div class="mb-3">
+                <label for="arquivo_processo" class="form-label">Anexar Arquivo</label>
+                <input type="file" class="form-control" id="arquivo_processo" name="arquivo">
+            </div>
+            <div class="mb-3">
+                <!-- Lista de Arquivos para Análise Jurídica -->
+                <?php listarArquivos($processos, 'processo_juridico'); ?>
+            </div>
+            <button type="submit" class="btn btn-danger">Salvar</button>
+        </form>
+    </div>
+</div>
+<?php } ?>
     <?php include 'footer.php'; ?>
 
     <script>

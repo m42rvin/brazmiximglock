@@ -20,6 +20,9 @@ foreach ($data as &$processo) {
         }
 
         $processo['seguir_proxima_etapa'] = $proximaEtapa;
+        if($proximaEtapa) {
+            $processo['etapa'] = '3';
+        }
         $processo['finalizar_arquivar'] = $finalizarArquivar;
         break;
     }
