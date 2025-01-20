@@ -131,6 +131,12 @@ foreach ($uploads as $upload) {
         .text-center:hover i {
             opacity: 100;
         }
+        .ver-resumo {
+            position: fixed;
+            top: 100px;
+            right: 100px;
+            cursor:pointer;
+        }
     </style>
     <?php include 'header.php'; ?>
 </head>
@@ -719,6 +725,7 @@ function listarArquivos($processos, $etapa)
         </form>
     </div>
 </div>
+<a target="_blank" href="resumo_processo.php?pa_id=<?php echo $processo['id'];?>" class="btn btn-success ver-resumo">Ver Resumo do Processo</a>
 <?php } ?>
     <?php include 'footer.php'; ?>
 
