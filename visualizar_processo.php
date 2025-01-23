@@ -379,7 +379,8 @@ foreach ($respostas as $resposta) {
 $contestacaoMensagens = [
     'concorda_remocao' => 'Confirmo que irei interromper o uso das imagens envolvidas nesse processo com o prazo de 7 dias.',
     'mais_informacoes' => 'Preciso de mais informações sobre o processo, solicito contato direto para melhor entendimento.',
-    'nao_concordo' => 'Não concordo com os apontamentos realizados e manterei o uso das imagens mesmo assim.'
+    'nao_concordo' => 'Não concordo com os apontamentos realizados e manterei o uso das imagens mesmo assim.',
+    'quero_vender' => 'Quero re-vender com autorização do uso de imagens da Brazmix.'
 ];
 ?>
 </tbody>
@@ -615,11 +616,11 @@ if (file_exists($json_file) && filesize($json_file) > 0) {
 }
 
 // Função para exibir os arquivos de uma etapa específica
-function listarArquivos($processos, $etapa)
+function listarArquivos($processos, $processo_id, $etapa)
 {
     echo "<ul class='list-group'>";
     foreach ($processos as $processo) {
-        if (isset($processo["arquivo_{$etapa}"])) {
+        if (isset($processo["arquivo_{$etapa}"]) && $processo['id'] == $processo_id) {
             $arquivo = $processo["arquivo_{$etapa}"];
             $nome_arquivo = basename($arquivo);
             echo "<li class='list-group-item'>";
@@ -656,9 +657,10 @@ function listarArquivos($processos, $etapa)
                 <input type="file" class="form-control" id="arquivo_analise" name="arquivo">
             </div>
             <div class="mb-3">
-                <?php listarArquivos($processos, 'analise_juridica'); ?>
+                <?php listarArquivos($processos, $processo['id'], 'analise_juridica'); ?>
             </div>
             <button type="submit" class="btn btn-primary">Salvar</button>
+            <button onclick="enviarRequisicao('<?php echo $processo['id']; ?>')" type="button" class="btn btn-success">Finalizar Processo</button>
         </form>
     </div>
 </div>
@@ -687,9 +689,10 @@ function listarArquivos($processos, $etapa)
                 <input type="file" class="form-control" id="arquivo_comunicacao" name="arquivo">
             </div>
             <div class="mb-3">
-                <?php listarArquivos($processos, 'comunicacao_extra'); ?>
+                <?php listarArquivos($processos, $processo['id'], 'comunicacao_extra'); ?>
             </div>
             <button type="submit" class="btn btn-warning">Salvar</button>
+            <button onclick="enviarRequisicao('<?php echo $processo['id']; ?>')" type="button" class="btn btn-success">Finalizar Processo</button>
         </form>
     </div>
 </div>
@@ -719,13 +722,323 @@ function listarArquivos($processos, $etapa)
             </div>
             <div class="mb-3">
                 <!-- Lista de Arquivos para Análise Jurídica -->
-                <?php listarArquivos($processos, 'processo_juridico'); ?>
+                <?php listarArquivos($processos, $processo['id'], 'processo_juridico'); ?>
             </div>
             <button type="submit" class="btn btn-danger">Salvar</button>
+            <button onclick="enviarRequisicao('<?php echo $processo['id']; ?>')" type="button" class="btn btn-success">Finalizar Processo</button>
         </form>
     </div>
 </div>
+<script>
+    function enviarRequisicao(idProcesso) {
+    // Previne o comportamento padrão do clique no botão
+    if (event) {
+        event.preventDefault();
+    }
+
+
+    // Configura os dados do POST
+    const dados = new URLSearchParams({
+        id_processo: idProcesso,
+        finalizar_arquivar: true
+    });
+
+    // Envia a requisição usando fetch
+    fetch('salva_processo.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: dados.toString(),
+    })
+    .then(response => response.text()) // Processa a resposta como texto
+    .then(resultado => {
+        // Exibe o resultado no console ou faça outra ação
+        console.log(resultado);
+        location.reload();
+    })
+    .catch(erro => {
+        console.error('Erro ao enviar requisição:', erro);
+        alert('Ocorreu um erro ao enviar a requisição.');
+    });
+}
+
+</script>
 <a target="_blank" href="resumo_processo.php?pa_id=<?php echo $processo['id'];?>" class="btn btn-success ver-resumo">Ver Resumo do Processo</a>
+<?php } elseif($processo['etapa'] == '7') {?>
+<!-- Página Final -->
+<div class="processo-visualizacao">
+        <div class="d-flex align-items-start">
+        <h1>Processo Finalizado</h1>
+        </div>
+        <div class="d-flex align-items-start">
+            <table class="table table-bordered text-center">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>#</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Exemplo de uma linha com dados -->
+                <tr>
+                    <td>ID</td>
+                    <td><?php echo $processo['id'];?></td>
+                </tr>
+                <tr>
+                    <td>Abertura Processo</td>
+                    <td><?php echo $processo['timestamp'];?></td>
+                </tr>
+                <tr>
+                    <td>Aprovação Gestor</td>
+                    <td><?php echo $processo['aprove_date'];?></td>
+
+                </tr>
+                <tr>
+                    <td>Status Notificação</td>
+                    <td>
+                        <?php 
+                            echo isset($processo['sinalizar_envio_data']) && !empty($processo['sinalizar_envio_data']) 
+                                ? $processo['sinalizar_envio_data'] 
+                                : 'Envio Pendente'; 
+                        ?>
+                    </td>
+                </tr>
+                <?php
+                    if(isset($processo['sinalizar_envio_data'])){
+                        ?>
+                            <tr>
+                                <td>Prazo Resposta</td>
+                                <td>
+                        <?php
+                        if(isset($processo['resposta_processo']) && $processo['resposta_processo'] === true ){
+                           echo 'Respondido dentro do prazo.';
+                        } else {
+                            
+                        // Data de sinalização de envio (formato: YYYY-MM-DD)
+                        $sinalizarEnvioData = $processo['sinalizar_envio_data'];
+
+                        // Converter a data para um objeto DateTime
+                        $dataInicial = new DateTime($sinalizarEnvioData);
+
+                        // Adicionar 15 dias à data inicial
+                        $dataFinal = clone $dataInicial;
+                        $dataFinal->modify('+15 days');
+
+                        // Obter a data atual
+                        $dataAtual = new DateTime();
+
+                        // Calcular a diferença entre a data final e a data atual
+                        $diferenca = $dataAtual->diff($dataFinal);
+
+                        // Verificar se o prazo já expirou
+                        if ($dataAtual > $dataFinal) {
+                            echo "O prazo de 15 dias já expirou.";
+                        } else {
+                            // Exibir o contador regressivo
+                            echo "Faltam " . $diferenca->days . " dias para esgotar o prazo de resposta deste processo.";
+                        }
+                    }
+
+                        
+                        
+                        ?>
+
+                                </td>
+                            </tr>
+
+                        <?php
+                    }
+                
+                ?>
+                <tr>
+                    <td>Status da Resposta</td>
+                    <td>
+                        <?php 
+                            echo isset($processo['resposta_processo']) && $processo['resposta_processo'] === true 
+                                ? 'Respondido' 
+                                : 'Aguardando Resposta';
+                        ?>
+                    </td>
+                </tr>
+            </tbody>
+            </table>
+                <?php
+// Carregar o conteúdo do arquivo JSON de respostas
+$respostasJson = 'resposta_processo.json';
+$respostas = file_exists($respostasJson) ? json_decode(file_get_contents($respostasJson), true) : [];
+
+// Inicializar variáveis de resposta
+$respostaEncontrada = null;
+foreach ($respostas as $resposta) {
+    if ($resposta['id_processo'] === $processo['id']) {
+        $respostaEncontrada = $resposta;
+        break;
+    }
+}
+
+// Mapear os textos de contestação
+$contestacaoMensagens = [
+    'concorda_remocao' => 'Confirmo que irei interromper o uso das imagens envolvidas nesse processo com o prazo de 7 dias.',
+    'mais_informacoes' => 'Preciso de mais informações sobre o processo, solicito contato direto para melhor entendimento.',
+    'nao_concordo' => 'Não concordo com os apontamentos realizados e manterei o uso das imagens mesmo assim.',
+    'quero_vender' => 'Quero re-vender com autorização do uso de imagens da Brazmix.'
+];
+?>
+</tbody>
+</table>
+        </div>
+        <!-- Exibir a linha da tabela se a resposta existir -->
+        <?php if ($respostaEncontrada) : ?>
+    <div class="container">
+    <table class="table table-bordered text-center">
+    <tbody>
+    <tr>
+        <td>Data Resposta</td>
+        <td><?php echo $respostaEncontrada['data_resposta']; ?></td>
+    </tr>
+    <tr>
+        <td>Contestação</td>
+        <td style="max-width: 200px; word-wrap: break-word;">
+            <?php
+                $contestacao = $respostaEncontrada['contestacao'];
+                echo isset($contestacaoMensagens[$contestacao]) 
+                    ? $contestacaoMensagens[$contestacao] 
+                    : 'Resposta não reconhecida';
+            ?>
+        </td>
+    </tr>
+    <tr>
+        <td>Texto Resposta</td>
+        <td style="max-width: 200px; word-wrap: break-word;"><?php echo htmlspecialchars($respostaEncontrada['texto_resposta']); ?></td>
+    </tr>
+    <tr>
+        <td>Email Contato</td>
+        <td><?php echo $respostaEncontrada['email_resposta'];?></td>
+    </tr>
+    <tr>
+        <td>Telefone Contato</td>
+        <td><?php echo $respostaEncontrada['telefone_resposta'];?></td>
+    </tr>
+    </tbody>
+    <table>
+</div>
+    <?php endif; ?>
+        <div class="d-flex align-items-start ">
+        <?php if (!isset($processo['resposta_processo']) || !$processo['resposta_processo']) : ?>
+            <div class="mb-3">
+                <h5>Link para responder contestação:</h5>
+                <input readonly class="resposta-link form-control" placeholder="Digite algo..." />
+            </div>
+            <div>
+                <h5>Chave de acesso:</h5>
+                <?php 
+                function gerarChaveAleatoria($tamanho = 5) {
+                    // Gera uma sequência de letras maiúsculas
+                    $caracteres = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+                    // Embaralha os caracteres e retorna os primeiros $tamanho caracteres
+                    return substr(str_shuffle($caracteres), 0, $tamanho);
+                }
+                
+                function obterOuGerarChave($processoId, $arquivo = 'keys.json') {
+                    // Lê o arquivo keys.json
+                    $conteudo = file_get_contents($arquivo);
+                    $dados = json_decode($conteudo, true);
+                
+                    // Procura se o processo já tem uma chave associada
+                    foreach ($dados as &$registro) {
+                        if ($registro['id'] === $processoId) {
+                            // Retorna a última chave associada a este ID, se existir
+                            if (!empty($registro['keys'])) {
+                                return end($registro['keys']); // Pega a última chave do array
+                            }
+                        }
+                    }
+                
+                    // Se não encontrou o ID ou não há chave, cria uma nova
+                    $novaChave = gerarChaveAleatoria();
+                
+                    // Adiciona a chave ao registro ou cria um novo registro para este ID
+                    $chaveEncontrada = false;
+                    foreach ($dados as &$registro) {
+                        if ($registro['id'] === $processoId) {
+                            $registro['keys'][] = $novaChave;
+                            $chaveEncontrada = true;
+                            break;
+                        }
+                    }
+                    if (!$chaveEncontrada) {
+                        $dados[] = [
+                            'id' => $processoId,
+                            'keys' => [$novaChave]
+                        ];
+                    }
+                
+                    // Salva as alterações no arquivo
+                    file_put_contents($arquivo, json_encode($dados, JSON_PRETTY_PRINT));
+                
+                    return $novaChave;
+                }
+                
+                // Exemplo de uso
+                $processoId = $processo['id']; // ID do processo atual
+                $chave = obterOuGerarChave($processoId);
+                
+                ?>
+                <input readonly class="outra-input form-control" value="<?php echo $chave;?>" placeholder="Digite aqui..." />
+            </div>
+            <?php endif; ?>
+        </div>
+        <form method="POST" action="salva_processo.php">
+    <div class="align-items-center">
+    <?php if (!isset($processo['resposta_processo']) || !$processo['resposta_processo']) : ?>
+        <!-- Botão -->
+        <button type="button" class="btn btn-primary gera-processo" id_processo="<?php echo $processo['id']; ?>">
+            <i class="fa-solid fa-file-export"></i> Ver PDF com Comunicado
+        </button>
+    <?php endif; ?>
+
+
+        <!-- Checkbox: Sinalizar Notificação -->
+        <div class="form-check ms-3">
+
+        <?php
+        if(isset($processo['sinalizar_notificacao']) && $processo['sinalizar_notificacao']){
+        // Mapear mensagens para cada situação
+        $titulosSituacao = [
+            'concorda_remocao' => 'Sugerido: Finalizar o Processo',
+            'mais_informacoes' => 'Sugerido: Entrar em Contato Pessoal',
+            'nao_concordo'     => 'Recomendado: Prosseguir para a Próxima Etapa'
+        ];
+
+        // Verifica se a contestação existe e gera o título correspondente
+        if (isset($respostaEncontrada['contestacao'])) {
+            $contestacao = $respostaEncontrada['contestacao'];
+            $tituloSituacao = isset($titulosSituacao[$contestacao]) 
+                ? $titulosSituacao[$contestacao] 
+                : 'Situação Desconhecida';
+        } else {
+            $tituloSituacao = '';
+        }
+        ?>
+
+        <!-- Exibir o título -->
+        <h3 class="titulo-situacao">
+            <?php echo $tituloSituacao; ?>
+        </h3>
+        <?php } ?>
+
+
+        </div>
+    </div>
+
+   
+</form>
+
+
+        </div>
+
+<!-- Página Final -->
 <?php } ?>
     <?php include 'footer.php'; ?>
 

@@ -83,6 +83,36 @@ if (isset($_SESSION['acesso_autorizado_' . $pa_id])) {
 
             <?php if ($processo): ?>
                 <!-- Detalhes do Processo -->
+                <div class="alert alert-warning" role="alert">
+                 <?php
+                 
+                  // Data de sinalização de envio (formato: YYYY-MM-DD)
+                  $sinalizarEnvioData = $processo['sinalizar_envio_data'];
+
+                  // Converter a data para um objeto DateTime
+                  $dataInicial = new DateTime($sinalizarEnvioData);
+
+                  // Adicionar 15 dias à data inicial
+                  $dataFinal = clone $dataInicial;
+                  $dataFinal->modify('+15 days');
+
+                  // Obter a data atual
+                  $dataAtual = new DateTime();
+
+                  // Calcular a diferença entre a data final e a data atual
+                  $diferenca = $dataAtual->diff($dataFinal);
+
+                  // Verificar se o prazo já expirou
+                  if ($dataAtual > $dataFinal) {
+                      echo "O prazo de 15 dias já expirou.";
+                  } else {
+                      // Exibir o contador regressivo
+                      echo "Faltam " . $diferenca->days . " dias para esgotar o prazo de resposta deste processo.";
+                  }
+                 
+                 
+                 ?>
+                 </div>
                 <h5><strong>Espaço para o Contestante</strong></h5>
                 <?php
 // Verifique se existe uma resposta para o processo
@@ -114,18 +144,25 @@ if (!$respostaEnviada):
         </label>
     </div>
 
+    <div class="form-check">
+        <input class="form-check-input" type="radio" name="contestacao" id="quero_vender" value="quero_vender">
+        <label class="form-check-label" for="quero_vender">
+            Quero me tornar revendedor e adquirir autorização para usar as imagens.
+        </label>
+    </div>
+
     <!-- Campo de Texto -->
     <div class="d-flex ">
     <div class="mt-4">
         <h5><strong>Responder Contestação</strong></h5>
-        <textarea name="texto_resposta" rows="10" cols="50" class="form-control"></textarea><br />
+        <textarea required name="texto_resposta" rows="10" cols="50" class="form-control"></textarea><br />
     </div>
     <div class="mt-4 campos-contatos">
         <h5><strong>Email</strong></h5>
-        <input class="form-control" name="email" type="email" placeholder="Digite seu E-mail"/>
+        <input required class="form-control" name="email" type="email" placeholder="Digite seu E-mail"/>
         <br/>
         <h5><strong>Telefone</strong></h5>
-        <input class="form-control" name="telefone" type="text" placeholder="Digite seu telefone"/>
+        <input required class="form-control" name="telefone" type="text" placeholder="Digite seu telefone"/>
     </div>
     </div>
 
@@ -171,6 +208,9 @@ if ($contestacao !== null) {
             break;
         case 'nao_concordo':
             echo "Agradecemos por sua resposta. \nA opção que você selecionou faz com que nosso sistema de auditoria de sequência ao processo de forma interna e nossa equipe tomará as ações necessárias para contatar você e/ou seus representantes no momento oportuno. É importante que tenha informado os dados de contato corretos para podermos seguir com as tratativas desse assunto. \nCaso mude de opinião e queira alterar seu posicionamento sobre esse processo, contate nosso time pelo endereço abaixo;\nmarketing@brazmix.com";
+            break;
+        case 'quero_vender':
+            echo "Agradecemos sua resposta. Em breve entraremos em contato para apresentar os planos de uso de nossas imagens.";
             break;
         default:
             echo "O tipo de contestação não é reconhecido.";

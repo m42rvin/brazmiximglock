@@ -74,6 +74,7 @@ if (!empty($processo_encontrado['original_image'])) {
         }
     }
 }
+
 ?>
 
 <!DOCTYPE html>
@@ -82,6 +83,25 @@ if (!empty($processo_encontrado['original_image'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Resumo do Processo</title>
+    <style>
+          @media print {
+            .page-break {
+                page-break-before: always; /* Força uma quebra antes deste elemento */
+            }
+            .no-break {
+                page-break-inside: avoid; /* Evita que o conteúdo seja dividido */
+            }
+            body {
+                margin: 0; /* Remove margens do corpo do conteúdo */
+                padding: 0;
+            }
+        }
+        iframe {
+            width: 100%;
+            height: 190vh; /* O iframe ocupará toda a altura visível */
+            border: none; /* Remove a borda do iframe */
+        }
+    </style>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css">
 </head>
 <body>
@@ -108,7 +128,7 @@ if (!empty($processo_encontrado['original_image'])) {
                     <strong>Imagem do Processo:</strong><br>
                     <img src="<?php echo htmlspecialchars($processo_encontrado['image']); ?>" alt="Imagem do Processo" style="max-width: 100%; height: auto;">
                 </p>
-                
+                <div class="page-break"></div>
                 <?php if ($original_image): ?>
                     <hr>
                     <h3>Informações da Imagem Original</h3>
@@ -126,7 +146,21 @@ if (!empty($processo_encontrado['original_image'])) {
                 <?php else: ?>
                     <p><strong>Imagem Original:</strong> Não disponível.</p>
                 <?php endif; ?>
-
+                <div class="page-break"></div>
+                <h5>Comunicado Gerado</h5>
+                <?php
+                    // Substitua com o ID real do processo encontrado
+                    $processo_id = $processo_encontrado['id'];
+                    $pdf_path = "pdf/comunicado_processo_" . $processo_id . ".pdf";
+                ?>
+                <iframe 
+                    src="<?php echo $pdf_path; ?>#toolbar=0&navpanes=0&scrollbar=0" 
+                    title="Visualizar PDF" 
+                    width="100%" 
+                    style="border: none;">
+                </iframe>
+                <div class="no-break"></div>
+                <br/>
                 <?php if ($resposta_encontrada): ?>
                     <hr>
                     <h3>Resposta ao Processo</h3>

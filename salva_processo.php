@@ -23,6 +23,9 @@ foreach ($data as &$processo) {
         if($proximaEtapa) {
             $processo['etapa'] = '3';
         }
+        if($finalizarArquivar) {
+            $processo['etapa'] = '7';
+        }
         $processo['finalizar_arquivar'] = $finalizarArquivar;
         break;
     }
