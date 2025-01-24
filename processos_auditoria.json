@@ -189,7 +189,7 @@
     {
         "id": "6787aed60be91",
         "pa_key": "pa_6787aef1276657.50348163",
-        "etapa": "3",
+        "etapa": "7",
         "refer_name": "teste_15_01",
         "refer_link": "http:\/\/www.brazmix.com",
         "image": "img_auditoria\/6787aed60be91.jpg",
@@ -201,8 +201,8 @@
         "archived": false,
         "sinalizar_notificacao": false,
         "sinalizar_envio_data": "2025-01-15 10:31:36",
-        "seguir_proxima_etapa": true,
-        "finalizar_arquivar": false,
+        "seguir_proxima_etapa": false,
+        "finalizar_arquivar": true,
         "resposta_processo": true
     },
     {
