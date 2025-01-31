@@ -1,4 +1,16 @@
 <?php
+
+// Iniciar sessão
+session_start();
+
+// Verificar se o usuário está logado
+if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
+    header("Location: index.php"); // Redirecionar para o login se não estiver logado
+    exit;
+}
+
+
+
 // Verifica se o parâmetro 'pa_id' foi passado
 if (!isset($_GET['pa_id'])) {
     die("Erro: ID do processo não fornecido.");

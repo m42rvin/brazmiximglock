@@ -936,6 +936,7 @@ $contestacaoMensagens = [
         }
             ?>
 </div>
+<a target="_blank" href="resumo_processo.php?pa_id=<?php echo $processo['id'];?>" class="btn btn-success ver-resumo">Ver Resumo do Processo</a>
     <?php endif; ?>
         <div class="d-flex align-items-start ">
         <?php if (!isset($processo['resposta_processo']) || !$processo['resposta_processo']) : ?>
