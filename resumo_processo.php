@@ -156,7 +156,8 @@ if (!empty($processo_encontrado['original_image'])) {
                 <iframe 
                     src="<?php echo $pdf_path; ?>#toolbar=0&navpanes=0&scrollbar=0" 
                     title="Visualizar PDF" 
-                    width="100%" 
+                    width="100%"
+                    class="no-break"
                     style="border: none;">
                 </iframe>
                 <div class="no-break"></div>

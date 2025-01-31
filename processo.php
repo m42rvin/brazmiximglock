@@ -113,14 +113,14 @@ if (isset($_SESSION['acesso_autorizado_' . $pa_id])) {
                  
                  ?>
                  </div>
-                <h5><strong>Espaço para o Contestante</strong></h5>
-                <?php
+                 <?php
 // Verifique se existe uma resposta para o processo
 $respostaEnviada = isset($processo['resposta_processo']) && $processo['resposta_processo'] === true;
 
 // Caso não exista resposta, exibe o formulário
 if (!$respostaEnviada):
 ?>
+<h5><strong>Espaço para o Contestante</strong></h5>
 <form method="POST" action="salva_resposta.php">
     <!-- Opções de Resposta -->
     <div class="form-check">
@@ -223,7 +223,7 @@ if ($contestacao !== null) {
 ?>
 </p>
 </div>
-<p class="alert alert-info">Resposta já enviada para este processo.</p>
+<button class="btn btn-danger" onclick="window.location.href='/'" >Fechar</button>
 <?php endif; ?>
 
 

@@ -513,34 +513,6 @@ $contestacaoMensagens = [
             Sinalizar envio de notificação
         </label>
         <?php endif; ?>
-
-        <?php
-        if(isset($processo['sinalizar_notificacao']) && $processo['sinalizar_notificacao']){
-        // Mapear mensagens para cada situação
-        $titulosSituacao = [
-            'concorda_remocao' => 'Sugerido: Finalizar o Processo',
-            'mais_informacoes' => 'Sugerido: Entrar em Contato Pessoal',
-            'nao_concordo'     => 'Recomendado: Prosseguir para a Próxima Etapa'
-        ];
-
-        // Verifica se a contestação existe e gera o título correspondente
-        if (isset($respostaEncontrada['contestacao'])) {
-            $contestacao = $respostaEncontrada['contestacao'];
-            $tituloSituacao = isset($titulosSituacao[$contestacao]) 
-                ? $titulosSituacao[$contestacao] 
-                : 'Situação Desconhecida';
-        } else {
-            $tituloSituacao = '';
-        }
-        ?>
-
-        <!-- Exibir o título -->
-        <h3 class="titulo-situacao">
-            <?php echo $tituloSituacao; ?>
-        </h3>
-        <?php } ?>
-
-
         </div>
     </div>
 
@@ -863,6 +835,8 @@ function listarArquivos($processos, $processo_id, $etapa)
                 </tr>
             </tbody>
             </table>
+            
+
                 <?php
 // Carregar o conteúdo do arquivo JSON de respostas
 $respostasJson = 'resposta_processo.json';
@@ -922,6 +896,27 @@ $contestacaoMensagens = [
     </tr>
     </tbody>
     <table>
+    <?php
+            $itens = [
+                "Análise Jurídica" => $processo["descricao_analise_juridica"] ?? '',
+                "Comunicação Extra" => $processo["descricao_comunicacao_extra"] ?? '',
+                "Processo Jurídico" => $processo["descricao_processo_juridico"] ?? '',
+            ];
+            
+            // Filtrando os itens vazios
+            $itens = array_filter($itens, fn($descricao) => !empty(trim($descricao)));
+            
+            if (!empty($itens)) {
+                echo "<table class='table table-bordered text-center' border='1'>";
+                echo "<tr><th>Tipo</th><th>Descrição</th></tr>";
+                
+                foreach ($itens as $tipo => $descricao) {
+                    echo "<tr><td>{$tipo}</td><td>" . nl2br(htmlspecialchars($descricao)) . "</td></tr>";
+                }
+            
+                echo "</table>";
+            } 
+            ?>
 </div>
     <?php endif; ?>
         <div class="d-flex align-items-start ">
