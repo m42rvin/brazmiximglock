@@ -10,6 +10,51 @@ if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
 ?>
 
 <?php
+// Verifica se o ID do processo foi passado via GET
+if (!isset($_GET['pa_id'])) {
+    die("Erro: ID do processo não fornecido.");
+}
+
+// Obtém o ID do processo
+$pa_id = $_GET['pa_id'];
+
+// Caminho do arquivo PDF
+$pdf_path = 'pdf/comunicado_processo_' . $pa_id . '.pdf';
+
+// Verifica se o arquivo PDF existe
+if (!file_exists($pdf_path)) {
+    die("Erro: O arquivo PDF não foi encontrado.");
+}
+
+// Caminho de destino para o arquivo JPG
+$jpg_path = 'jpg/comunicado_processo_' . $pa_id . '.jpg';
+
+// Converte o PDF em JPG usando ImageMagick
+$imagick = new Imagick();
+
+
+// Define o número de páginas a serem convertidas (aqui, convertendo a primeira página)
+$imagick->readImage($pdf_path . '[0]'); // '[0]' para a primeira página, caso queira mais, altere o número
+$imagick->setImageAlphaChannel(Imagick::ALPHACHANNEL_REMOVE);
+// Define a resolução (opcional, mas pode ajudar a melhorar a qualidade)
+$imagick->setResolution(600, 600); // 300 DPI é um bom valor para qualidade
+
+// Define o formato da imagem para JPG
+$imagick->setImageFormat('jpg');
+
+// Salva a imagem na pasta "jpg"
+if ($imagick->writeImage($jpg_path)) {
+    // echo "PDF convertido com sucesso para JPG.";
+} else {
+    die("Erro: Falha ao salvar o arquivo JPG.");
+}
+
+// Limpeza de memória
+$imagick->clear();
+$imagick->destroy();
+
+
+
 // Caminhos para os arquivos JSON
 $json_file_processos = 'processos_auditoria.json';
 $json_file_uploads = 'uploads.json';
@@ -151,15 +196,14 @@ if (!empty($processo_encontrado['original_image'])) {
                 <?php
                     // Substitua com o ID real do processo encontrado
                     $processo_id = $processo_encontrado['id'];
-                    $pdf_path = "pdf/comunicado_processo_" . $processo_id . ".pdf";
+                    $pdf_path = "jpg/comunicado_processo_" . $processo_id . ".jpg";
                 ?>
-                <iframe 
-                    src="<?php echo $pdf_path; ?>#toolbar=0&navpanes=0&scrollbar=0" 
+                <img 
+                    src="<?php echo $pdf_path; ?>" 
                     title="Visualizar PDF" 
                     width="100%"
                     class="no-break"
-                    style="border: none;">
-                </iframe>
+                    style="border: none;"/>
                 <div class="no-break"></div>
                 <br/>
                 <?php if ($resposta_encontrada): ?>
