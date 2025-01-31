@@ -187,25 +187,6 @@
         "resposta_processo": true
     },
     {
-        "id": "6787aed60be91",
-        "pa_key": "pa_6787aef1276657.50348163",
-        "etapa": "7",
-        "refer_name": "teste_15_01",
-        "refer_link": "http:\/\/www.brazmix.com",
-        "image": "img_auditoria\/6787aed60be91.jpg",
-        "known_contacts": "sssss",
-        "observation": "ssss",
-        "timestamp": "2025-01-15 09:49:53",
-        "original_image": "6731d9d6e48e9",
-        "aprove_date": "2025-01-15 09:50:05",
-        "archived": false,
-        "sinalizar_notificacao": false,
-        "sinalizar_envio_data": "2025-01-15 10:31:36",
-        "seguir_proxima_etapa": false,
-        "finalizar_arquivar": true,
-        "resposta_processo": true
-    },
-    {
         "id": "678e5790349f2",
         "pa_key": "pa_678e57c1426828.91362740",
         "etapa": "3",
@@ -374,26 +355,5 @@
         "original_image": "673215e505ec6",
         "aprove_date": null,
         "archived": false
-    },
-    {
-        "id": "679b9aaa44ae9",
-        "pa_key": "pa_679b9ab96c76b6.64811080",
-        "etapa": "7",
-        "refer_name": "SSSS",
-        "refer_link": "SSSSSS",
-        "image": "img_auditoria\/679b9aaa44ae9.jpg",
-        "known_contacts": "SSSSS",
-        "observation": "SSSSS",
-        "timestamp": "2025-01-30 12:28:57",
-        "original_image": "673215e505ec6",
-        "aprove_date": "2025-01-30 12:29:06",
-        "archived": false,
-        "sinalizar_notificacao": false,
-        "sinalizar_envio_data": "2025-01-30 12:29:13",
-        "seguir_proxima_etapa": false,
-        "finalizar_arquivar": true,
-        "resposta_processo": true,
-        "descricao_analise_juridica": "DAREMOS SEQUENCIA AO PROCESSO\r\n",
-        "last_update": "2025-01-30 12:35:32"
     }
 ]

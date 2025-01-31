@@ -897,25 +897,43 @@ $contestacaoMensagens = [
     </tbody>
     <table>
     <?php
-            $itens = [
-                "Análise Jurídica" => $processo["descricao_analise_juridica"] ?? '',
-                "Comunicação Extra" => $processo["descricao_comunicacao_extra"] ?? '',
-                "Processo Jurídico" => $processo["descricao_processo_juridico"] ?? '',
-            ];
+         $itens = [
+            "Análise Jurídica" => [
+                "descricao" => $processo["descricao_analise_juridica"] ?? '',
+                "arquivo" => $processo["arquivo_analise_juridica"] ?? ''
+            ],
+            "Comunicação Extra" => [
+                "descricao" => $processo["descricao_comunicacao_extra"] ?? '',
+                "arquivo" => $processo["arquivo_comunicacao_extra"] ?? ''
+            ],
+            "Processo Jurídico" => [
+                "descricao" => $processo["descricao_processo_juridico"] ?? '',
+                "arquivo" => $processo["arquivo_processo_juridico"] ?? ''
+            ]
+        ];
+        
+        // Filtrando os itens vazios
+        $itens = array_filter($itens, fn($item) => !empty(trim($item["descricao"])));
+        
+        if (!empty($itens)) {
+            echo "<table class='table table-bordered text-center' border='1'>";
+            echo "<tr><th>Tipo</th><th>Descrição</th></tr>";
             
-            // Filtrando os itens vazios
-            $itens = array_filter($itens, fn($descricao) => !empty(trim($descricao)));
-            
-            if (!empty($itens)) {
-                echo "<table class='table table-bordered text-center' border='1'>";
-                echo "<tr><th>Tipo</th><th>Descrição</th></tr>";
-                
-                foreach ($itens as $tipo => $descricao) {
-                    echo "<tr><td>{$tipo}</td><td>" . nl2br(htmlspecialchars($descricao)) . "</td></tr>";
+            foreach ($itens as $tipo => $dados) {
+                echo "<tr><td>{$tipo}</td><td>" . nl2br(htmlspecialchars($dados["descricao"]));
+        
+                // Se o arquivo existir e não for vazio, exibir link de download
+                if (!empty(trim($dados["arquivo"]))) {
+                    echo "<br><a href='{$dados["arquivo"]}' download>Baixar Arquivo</a>";
                 }
-            
-                echo "</table>";
-            } 
+        
+                echo "</td></tr>";
+            }
+        
+            echo "</table>";
+        } else {
+            echo "Nenhuma informação disponível.";
+        }
             ?>
 </div>
     <?php endif; ?>
