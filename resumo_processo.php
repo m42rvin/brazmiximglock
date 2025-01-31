@@ -53,7 +53,15 @@ if ($imagick->writeImage($jpg_path)) {
 $imagick->clear();
 $imagick->destroy();
 
+?>
+<style>
+    img {
+        width: 60%;
+        margin-left: 20%;
+    }
+</style>
 
+<?php
 
 // Caminhos para os arquivos JSON
 $json_file_processos = 'processos_auditoria.json';
