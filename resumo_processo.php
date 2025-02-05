@@ -149,58 +149,46 @@ if (!empty($processo_encontrado['original_image'])) {
                 padding: 0;
             }
         }
-        iframe {
-            width: 100%;
-            height: 190vh; /* O iframe ocupará toda a altura visível */
-            border: none; /* Remove a borda do iframe */
+        .logo-brazmix {
+            width: 400px;
+            text-align: left;
+            margin-left: 0px;
+        }
+        .sysdesc {
+            display: inline-block;
+            border: 1px solid black;
+            padding: 10px;
+            text-align: center;
+            margin-left: 200px;
+            transform: translateY(18px);
         }
     </style>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css">
 </head>
 <body>
     <div class="container mt-5">
-        <h1>Resumo do Processo</h1>
+        <img class="logo-brazmix" src="logo-black.png"/>
+        <span class="sysdesc">Sistema de auditoria para segurança e <br/> licenciamento de imagens</span>
+        <br/><br/>
+        <h3>Resumo do Processo ID: <?php echo htmlspecialchars($processo_encontrado['id']); ?> - Status <?php echo date('d/m/Y'); ?> <?php echo ($processo_encontrado['etapa'] == 4) ? 'Finalizado' : 'Aberto'; ?></h3>
         <div class="card">
-            <div class="card-header">
-                <h2><?php echo htmlspecialchars($processo_encontrado['refer_name']); ?></h2>
-            </div>
             <div class="card-body">
-                <p><strong>ID:</strong> <?php echo htmlspecialchars($processo_encontrado['id']); ?></p>
-                <p><strong>Chave:</strong> <?php echo htmlspecialchars($processo_encontrado['pa_key']); ?></p>
+                <p><strong>Nome da Contestação:</strong> <?php echo htmlspecialchars($processo_encontrado['refer_name']); ?></p>
+                <p><strong>Data e hora da abertura:</strong> <?php echo htmlspecialchars($processo_encontrado['timestamp']); ?></p>
+                <p><strong>Usuário Responsável:</strong> nome_usuario</p>
                 <p><strong>Etapa:</strong> <?php echo htmlspecialchars($processo_encontrado['etapa']); ?></p>
-                <p><strong>Link de Referência:</strong> 
+                <p><strong>Contatos Conhecidos Sobre a Contestação:</strong> <?php echo htmlspecialchars($processo_encontrado['known_contacts']); ?></p>
+                <p><strong>Observações Sobre a Contestação:</strong> <?php echo nl2br(htmlspecialchars($processo_encontrado['observation'])); ?></p>
+                <p>
+                    <strong>Imagem Capturada para Contestação:</strong><br>
+                    <img src="<?php echo htmlspecialchars($processo_encontrado['image']); ?>" alt="Imagem do Processo" style="max-width: 100%; height: auto;">
+                </p>
+                <p><strong>Endereço de website capturado para contestação:</strong> 
                     <a href="<?php echo htmlspecialchars($processo_encontrado['refer_link']); ?>" target="_blank">
                         <?php echo htmlspecialchars($processo_encontrado['refer_link']); ?>
                     </a>
                 </p>
-                <p><strong>Contatos Conhecidos:</strong> <?php echo htmlspecialchars($processo_encontrado['known_contacts']); ?></p>
-                <p><strong>Observações:</strong> <?php echo nl2br(htmlspecialchars($processo_encontrado['observation'])); ?></p>
-                <p><strong>Data e Hora:</strong> <?php echo htmlspecialchars($processo_encontrado['timestamp']); ?></p>
-                <p><strong>Arquivado:</strong> <?php echo $processo_encontrado['archived'] ? 'Sim' : 'Não'; ?></p>
-                <p>
-                    <strong>Imagem do Processo:</strong><br>
-                    <img src="<?php echo htmlspecialchars($processo_encontrado['image']); ?>" alt="Imagem do Processo" style="max-width: 100%; height: auto;">
-                </p>
-                <div class="page-break"></div>
-                <?php if ($original_image): ?>
-                    <hr>
-                    <h3>Informações da Imagem Original</h3>
-                    <p><strong>Nome:</strong> <?php echo htmlspecialchars($original_image['name']); ?></p>
-                    <p><strong>Descrição:</strong> <?php echo htmlspecialchars($original_image['description']); ?></p>
-                    <p><strong>Categoria:</strong> <?php echo htmlspecialchars($original_image['category']); ?></p>
-                    <p><strong>Dimensões:</strong> <?php echo htmlspecialchars($original_image['width']) . " x " . htmlspecialchars($original_image['height']); ?></p>
-                    <p><strong>Data de Criação:</strong> <?php echo htmlspecialchars($original_image['created_at']); ?></p>
-                    <p><strong>Fabricante:</strong> <?php echo htmlspecialchars($original_image['make']); ?></p>
-                    <p><strong>Modelo:</strong> <?php echo htmlspecialchars($original_image['model']); ?></p>
-                    <p><strong>Software:</strong> <?php echo htmlspecialchars($original_image['Software']); ?></p>
-                    <p><strong>Imagem:</strong><br>
-                        <img src="<?php echo htmlspecialchars($original_image['path']); ?>" alt="Imagem Original" style="max-width: 100%; height: auto;">
-                    </p>
-                <?php else: ?>
-                    <p><strong>Imagem Original:</strong> Não disponível.</p>
-                <?php endif; ?>
-                <div class="page-break"></div>
-                <h5>Comunicado Gerado</h5>
+                <h3>Comunicação gerada sobre a contestação:</h3>
                 <?php
                     // Substitua com o ID real do processo encontrado
                     $processo_id = $processo_encontrado['id'];
@@ -214,11 +202,25 @@ if (!empty($processo_encontrado['original_image'])) {
                     style="border: none;"/>
                 <div class="no-break"></div>
                 <br/>
+                <div class="page-break"></div>
                 <?php if ($resposta_encontrada): ?>
                     <hr>
                     <h3>Resposta ao Processo</h3>
-                    <p><strong>Contestação:</strong> <?php echo htmlspecialchars($resposta_encontrada['contestacao']); ?></p>
-                    <p><strong>Texto da Resposta:</strong> <?php echo nl2br(htmlspecialchars($resposta_encontrada['texto_resposta'])); ?></p>
+                    <p><strong>Contestação:</strong> 
+                    <?php
+                        $contestacaoMensagens = [
+                            'concorda_remocao' => 'Confirmo que irei interromper o uso das imagens envolvidas nesse processo com o prazo de 7 dias.',
+                            'mais_informacoes' => 'Preciso de mais informações sobre o processo, solicito contato direto para melhor entendimento.',
+                            'nao_concordo' => 'Não concordo com os apontamentos realizados e manterei o uso das imagens mesmo assim.',
+                            'quero_vender' => 'Quero re-vender com autorização do uso de imagens da Brazmix.'
+                        ];
+                        
+                        echo isset($contestacaoMensagens[$resposta_encontrada['contestacao']]) 
+                            ? htmlspecialchars($contestacaoMensagens[$resposta_encontrada['contestacao']]) 
+                            : 'Contestação não encontrada';
+                    ?>
+                </p>
+            <p><strong>Texto da Resposta:</strong> <?php echo nl2br(htmlspecialchars($resposta_encontrada['texto_resposta'])); ?></p>
                     <p><strong>Data da Resposta:</strong> <?php echo htmlspecialchars($resposta_encontrada['data_resposta']); ?></p>
                     <?php if (!empty($resposta_encontrada['email_resposta'])): ?>
                         <p><strong>Email de Resposta:</strong> <?php echo htmlspecialchars($resposta_encontrada['email_resposta']); ?></p>
@@ -228,6 +230,24 @@ if (!empty($processo_encontrado['original_image'])) {
                     <?php endif; ?>
                 <?php else: ?>
                     <p><strong>Resposta:</strong> Não disponível.</p>
+                <?php endif; ?>
+                <br/>
+                <?php if ($original_image): ?>
+                    <hr>
+                    <h3>Dados EXIF da imagem original:	</h3>
+                    <p><strong>Nome:</strong> <?php echo htmlspecialchars($original_image['name']); ?></p>
+                    <p><strong>Descrição:</strong> <?php echo htmlspecialchars($original_image['description']); ?></p>
+                    <p><strong>Categoria:</strong> <?php echo htmlspecialchars($original_image['category']); ?></p>
+                    <p><strong>Dimensões:</strong> <?php echo htmlspecialchars($original_image['width']) . " x " . htmlspecialchars($original_image['height']); ?></p>
+                    <p><strong>Data de Criação:</strong> <?php echo htmlspecialchars($original_image['created_at']); ?></p>
+                    <p><strong>Fabricante:</strong> <?php echo htmlspecialchars($original_image['make']); ?></p>
+                    <p><strong>Modelo:</strong> <?php echo htmlspecialchars($original_image['model']); ?></p>
+                    <p><strong>Software:</strong> <?php echo htmlspecialchars($original_image['Software']); ?></p>
+                    <p><strong>Imagem:</strong><br>
+                        <img src="<?php echo htmlspecialchars($original_image['path']); ?>" alt="Imagem Original" style="max-width: 100%; height: auto;">
+                    </p>
+                <?php else: ?>
+                    <p><strong>Imagem Original:</strong> Não disponível.</p>
                 <?php endif; ?>
             </div>
         </div>

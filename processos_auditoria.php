@@ -98,7 +98,7 @@ if (file_exists($json_file)) {
                             <td style="display:grid">
                                 <a href="visualizar_processo.php?pa_id=<?php echo urlencode($processo['id']); ?>&pa_key=<?php echo urlencode($processo['pa_key']); ?>" class="btn btn-info">Ver Processo</a>
                                 
-                                <?php if ($processo['etapa'] == 7): ?>
+                                <?php if ($processo['etapa'] == 4): ?>
                                     <a href="excluir_processo.php?pa_id=<?php echo urlencode($processo['id']); ?>" 
                                         class="btn btn-danger"
                                         onclick="return confirm('Tem certeza que deseja excluir este processo?')">

@@ -159,7 +159,7 @@ if (!$respostaEnviada):
     </div>
     <div class="mt-4 campos-contatos">
         <h5><strong>Email</strong></h5>
-        <input required class="form-control" name="email" type="email" placeholder="Digite seu E-mail"/>
+        <input required class="form-control" name="email" type="text" placeholder="Digite seu E-mail"/>
         <br/>
         <h5><strong>Telefone</strong></h5>
         <input required class="form-control" name="telefone" type="text" placeholder="Digite seu telefone"/>

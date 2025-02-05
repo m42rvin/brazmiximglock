@@ -48,7 +48,7 @@ $images = json_decode($uploads_json, true); // Decodifica para array associativo
             margin-left: 50%;
             transform: translateX(-50%);
         }
-        .title {
+        .title, h1 {
             text-align: center;
             margin-top: 20px;   
         }
@@ -71,7 +71,7 @@ $images = json_decode($uploads_json, true); // Decodifica para array associativo
     <?php include 'navbar.php';?>
     <div class="container">
     <div class="jumbotron">
-
+    <h1>ETAPA 0 – NOVO PROCESSO</h1>
     <div class="pa_disclaimer">
         <h5>Processo de Auditoria</h5>
         <p>Código: <?php echo $_GET['pa_id'];?></p>
@@ -79,14 +79,14 @@ $images = json_decode($uploads_json, true); // Decodifica para array associativo
     </div>
         
     <div class="title">
-        <h5>DADOS DA PARTE CONTESTADA SOBRE O USO INDEVIDO DAS IMAGENS REGISTRADAS:</h5>
+        <h5>CADASTRO DE INFORMAÇÕES PARA O PROCESSO DE AUDITORIA</h5>
     </div>
 <!-- Formulário para upload de imagem -->
     <form action="pa1.php" method="POST" enctype="multipart/form-data">
     <input type="hidden" name="id" value="<?php echo $_GET['pa_id'];?>"/>
     <input type="hidden" name="etapa" value="1"/>
     <div class="form-div">
-    <label for="refer_name">Nome ou referência conhecidos</label>
+    <label for="refer_name">NOME DA CONTESTAÇÃO</label>
     <input required class="form-control" type="text" name="refer_name" id="refer_name" placeholder="Nome ou referência"><br>
     
     <label for="refer_link">Link objeto de contestação</label>
@@ -96,13 +96,13 @@ $images = json_decode($uploads_json, true); // Decodifica para array associativo
     <label for="image">Imagem objeto de contestação:</label>
     <input class="form-control" type="file" name="image" id="image" required><br>
 
-    <label for="known_contacts">Contatos conhecidos: </label>
+    <label for="known_contacts">INFORMAÇÕES DE CONTATO CONHECIDAS </label>
     <textarea class="form-control" id="known_contacts" name="known_contacts" rows="4" cols="50" placeholder="Coloque as formas de contato conhecidas aqui"></textarea>
     
     <label for="observation">Observações sobre a contestação: </label>
     <textarea class="form-control" id="observation" name="observation" rows="4" cols="50" placeholder="Observações sobre a contestação"></textarea>
 
-    <label for="refer_image">Selecione a imagem original:</label>
+    <label for="refer_image">INDIQUE A IMAGEM PROTEGIDA DESSA CONTESTAÇÃO</label>
     <div style="display: flex; flex-wrap: wrap; gap: 10px;">
         <?php foreach ($images as $image): ?>
             <label style="cursor: pointer;">

@@ -24,7 +24,7 @@ foreach ($data as &$processo) {
             $processo['etapa'] = '3';
         }
         if($finalizarArquivar) {
-            $processo['etapa'] = '7';
+            $processo['etapa'] = '4';
         }
         $processo['finalizar_arquivar'] = $finalizarArquivar;
         break;

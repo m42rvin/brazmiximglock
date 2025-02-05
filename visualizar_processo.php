@@ -137,6 +137,11 @@ foreach ($uploads as $upload) {
             right: 100px;
             cursor:pointer;
         }
+        h1 {
+            text-align: center;
+            margin-top: 20px;
+            margin-bottom: 20px;   
+        }
     </style>
     <?php include 'header.php'; ?>
 </head>
@@ -144,6 +149,7 @@ foreach ($uploads as $upload) {
     <?php (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) ? include 'navbar.php' : ''; ?>
 
     <?php if($processo['etapa'] == '1'){ ?>
+        <h1>ETAPA 1 – APROVAÇÃO INTERNA</h1>
     <div class="processo-visualizacao">
         <!-- Processo de Auditoria -->
         <h5 class="text-secondary mb-3">
@@ -265,9 +271,10 @@ foreach ($uploads as $upload) {
         <?php } ?>
     </div>
     <?php } elseif($processo['etapa'] == '2') { ?>
+        <h1>ETAPA 2 – COMUNICAÇÃO EXTERNA</h1>
         <div class="processo-visualizacao">
         <div class="d-flex align-items-start">
-        <h1>Comunicação Extra-Oficial</h1>
+        <h1>ETAPA 2 – ENVIO DE COMUNICAÇÃO DO PROCESSO/CONTESTAÇÃO</h1>
         </div>
         <div class="d-flex align-items-start">
             <table class="table table-bordered text-center">
@@ -557,6 +564,9 @@ $contestacaoMensagens = [
 
         </div>
     <?php } elseif ($processo['etapa'] === "3") { ?>
+
+<h1>ETAPA 3 – ENCAMINHAMENTO JURÍDICO</h1>
+
         <?php
 // Carregar o conteúdo do arquivo JSON
 $processos = json_decode(file_get_contents('processos_auditoria.json'), true);
@@ -737,8 +747,9 @@ function listarArquivos($processos, $processo_id, $etapa)
 
 </script>
 <a target="_blank" href="resumo_processo.php?pa_id=<?php echo $processo['id'];?>" class="btn btn-success ver-resumo">Ver Resumo do Processo</a>
-<?php } elseif($processo['etapa'] == '7') {?>
+<?php } elseif($processo['etapa'] == '4') {?>
 <!-- Página Final -->
+ <h1>ETAPA 4 – FINALIZAÇÃO DO PROCESSO</h1>
 <div class="processo-visualizacao">
         <div class="d-flex align-items-start">
         <h1>Processo Finalizado</h1>

@@ -28,12 +28,12 @@
       <!-- Segundo Dropdown -->
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="paginas" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          Páginas
+          Menus
         </a>
         <div class="dropdown-menu" aria-labelledby="paginas">
           <a class="dropdown-item" href="/processos_auditoria.php">Processos Auditoria</a>
-          <a class="dropdown-item" href="/panel.php">Painel</a>
-          <a class="dropdown-item" href="/upload.php">Upload</a>
+          <a class="dropdown-item" href="/panel.php">Banco de Imagens</a>
+          <a class="dropdown-item" href="/upload.php">Cadastro de Imagens</a>
           <div class="dropdown-divider"></div>
           <a class="dropdown-item" href="/logout.php">Sair</a>
         </div>
