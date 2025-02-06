@@ -23,29 +23,45 @@ function loadImages($json_file) {
 function deleteImage($json_file, $image_id) {
     $current_images = loadImages($json_file);
     $updated_images = [];
-    $image_found = false; // Para rastrear se a imagem foi encontrada e excluída
+    $image_found = false;
 
+    // Carrega o arquivo processos_auditoria.json
+    $auditoria_file = 'processos_auditoria.json';
+    if (!file_exists($auditoria_file)) {
+        return "Erro: O arquivo de auditoria não foi encontrado.";
+    }
+
+    $auditoria_data = json_decode(file_get_contents($auditoria_file), true);
+    if (!is_array($auditoria_data)) {
+        return "Erro: Falha ao ler os dados do arquivo de auditoria.";
+    }
+
+    // Verifica se a imagem está em uso
+    foreach ($auditoria_data as $processo) {
+        if (!empty($processo['original_image']) && $processo['original_image'] == $image_id) {
+            return "Erro: A imagem está em uso e não pode ser deletada.";
+        }
+    }
+
+    // Loop para excluir a imagem se não estiver em uso
     foreach ($current_images as $img) {
         if ($img['id'] !== $image_id) {
             $updated_images[] = $img;
         } else {
             $image_found = true;
-            // Remove o arquivo da pasta _img/ e da pasta _thumb/
-            if (isset($img['path']) && file_exists($img['path'])) {
+            if (!empty($img['path']) && file_exists($img['path'])) {
                 unlink($img['path']);
             }
-            if (isset($img['thumb_path']) && file_exists($img['thumb_path'])) {
+            if (!empty($img['thumb_path']) && file_exists($img['thumb_path'])) {
                 unlink($img['thumb_path']);
             }
         }
     }
 
-    // Atualiza o arquivo JSON apenas se a imagem foi encontrada
-    if ($image_found) {
-        if (file_put_contents($json_file, json_encode($updated_images, JSON_PRETTY_PRINT), LOCK_EX) === false) {
-            die("Erro ao salvar o JSON atualizado.");
-        }
-    }
+    // Atualiza o JSON de imagens
+    file_put_contents($json_file, json_encode($updated_images, JSON_PRETTY_PRINT));
+
+    return $image_found ? "Imagem deletada com sucesso." : "Erro: Imagem não encontrada.";
 }
 
 // Verifica se o POST contém dados

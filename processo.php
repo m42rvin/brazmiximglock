@@ -44,18 +44,57 @@ if (isset($_SESSION['acesso_autorizado_' . $pa_id])) {
     <?php include('header.php');?>
     <style>
         .processo {
-            background-color: #fff;
+            background-color: #DBEBFB;
             padding: 20px;
+            width: 70%;
+            margin-left: 15%;
+            text-align: center;
         }
         body{
             padding-bottom:100px;
         }
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('parque-industrial.jpg') no-repeat center center;
+            background-size: cover;
+            opacity: 0.3; /* Ajuste a opacidade aqui */
+            z-index: -1;
+        }
         .campos-contatos {
             margin-left:20px
+        }
+        .logo {
+            width: 30%;
+            margin-left: 35%;
+            margin-top: 40px;
+        }
+        .desclogo {
+            display: block;
+            width: 30%;
+            margin-left: 35%;
+            text-align: center;
+            margin-top: 15px;
+        }
+        #chave_acesso {
+            width: 60%;
+            margin-left: 20%;
+        }
+        .form-check {
+            text-align: left;
+        }
+        .indico {
+            font-weight: bold;
         }
     </style>
 </head>
 <body>
+<img class="logo" src="logo-black.png" />
+<span class="desclogo">SISTEMA DE AUDITORIA PARA SEGURANÇA E LICENCIAMENTO DE IMAGENS</span>
 <div class="container mt-5 processo">
     <h2 class="mb-4">Acesso ao Processo</h2>
 
@@ -121,7 +160,8 @@ $respostaEnviada = isset($processo['resposta_processo']) && $processo['resposta_
 if (!$respostaEnviada):
 ?>
 <h5><strong>Espaço para o Contestante</strong></h5>
-<form method="POST" action="salva_resposta.php">
+<form class="form-check" method="POST" action="salva_resposta.php">
+    <span class="indico">Como resposta da comunicação recebida sobre esse processo, indico que:</span>
     <!-- Opções de Resposta -->
     <div class="form-check">
         <input class="form-check-input" type="radio" name="contestacao" id="concorda_remocao" value="concorda_remocao">
@@ -136,18 +176,18 @@ if (!$respostaEnviada):
             Preciso de mais informações sobre o processo, solicito contato direto para melhor entendimento.
         </label>
     </div>
+    
+        <div class="form-check">
+            <input class="form-check-input" type="radio" name="contestacao" id="quero_vender" value="quero_vender">
+            <label class="form-check-label" for="quero_vender">
+                Quero me tornar revendedor e adquirir autorização para usar as imagens.
+            </label>
+        </div>
 
     <div class="form-check">
         <input class="form-check-input" type="radio" name="contestacao" id="nao_concordo" value="nao_concordo">
         <label class="form-check-label" for="nao_concordo">
             Não concordo com os apontamentos realizados e manterei o uso das imagens mesmo assim.
-        </label>
-    </div>
-
-    <div class="form-check">
-        <input class="form-check-input" type="radio" name="contestacao" id="quero_vender" value="quero_vender">
-        <label class="form-check-label" for="quero_vender">
-            Quero me tornar revendedor e adquirir autorização para usar as imagens.
         </label>
     </div>
 
@@ -238,7 +278,7 @@ if ($contestacao !== null) {
             <!-- Formulário de chave de acesso -->
             <form method="POST">
                 <div class="mb-3">
-                    <label for="chave_acesso" class="form-label">Digite a chave de acesso:</label>
+                    <label for="chave_acesso" class="form-label">Digite a chave de acesso que foi fornecida:</label>
                     <input type="text" class="form-control" id="chave_acesso" name="chave_acesso" maxlength="5" required>
                 </div>
                 <button type="submit" class="btn btn-primary">Acessar</button>

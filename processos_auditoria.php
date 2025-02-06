@@ -74,16 +74,16 @@ if (file_exists($json_file)) {
     <a href="/pa.php" class="btn-pa btn btn-warning"><i class="fa-solid fa-pen-to-square"></i> Novo Processo</a>
     <div class="table-container">
         <?php if (!empty($processos)): ?>
-            <table>
+            <table id="myTable">
                 <thead>
                     <tr>
-                        <th>Código</th>
-                        <th>Etapa</th>
-                        <th>Nome ou Referência</th>
-                        <th>Link Contestado</th>
-                        <th>Imagem Contestada</th>
-                        <th>Data de Criação</th>
-                        <th>Ações</th>
+                        <th>CÓDIGO</th>
+                        <th onclick="sortTable(1)">ETAPA</th>
+                        <th onclick="sortTable(2)">NOME OU REFERÊNCIA</th>
+                        <th>LINK CONTESTADO</th>
+                        <th>IMAGEM CONTESTADA</th>
+                        <th onclick="sortTable(5, 'date')">DATA DE CRIAÇÃO</th>
+                        <th>AÇÕES</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -116,6 +116,67 @@ if (file_exists($json_file)) {
             <p>Nenhum processo encontrado.</p>
         <?php endif; ?>
     </div>
+    <script>
+        function sortTable(columnIndex, type = 'string') {
+    const table = document.getElementById("myTable");
+    let rows, switching, i, x, y, shouldSwitch, direction, switchcount = 0;
+    switching = true;
+    direction = "asc"; // Definindo direção inicial como ascendente
+
+    while (switching) {
+        switching = false;
+        rows = table.rows;
+
+        // Percorre todas as linhas, exceto o cabeçalho
+        for (i = 1; i < (rows.length - 1); i++) {
+            shouldSwitch = false;
+            x = rows[i].getElementsByTagName("TD")[columnIndex];
+            y = rows[i + 1].getElementsByTagName("TD")[columnIndex];
+
+            // Comparação para strings ou datas
+            if (type === 'string') {
+                if ((direction === "asc" && x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) ||
+                    (direction === "desc" && x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase())) {
+                    shouldSwitch = true;
+                    break;
+                }
+            } else if (type === 'date') {
+                // Função para converter o formato de data
+                function parseCustomDate(dateStr) {
+                    if (!dateStr) return null;
+                    // Substitui ':' por '-' apenas nos primeiros dois pontos para o formato YYYY-MM-DD HH:MM:SS
+                    return new Date(dateStr.replace(/^(\d{4}):(\d{2}):(\d{2})/, '$1-$2-$3'));
+                }
+
+                const dateX = x.innerHTML ? parseCustomDate(x.innerHTML) : (direction === "asc" ? new Date(0) : new Date(9999, 11, 31));
+                const dateY = y.innerHTML ? parseCustomDate(y.innerHTML) : (direction === "asc" ? new Date(0) : new Date(9999, 11, 31));
+
+                // Log para depuração
+                console.log("Comparando datas:");
+                console.log("Data X:", x.innerHTML, "->", dateX);
+                console.log("Data Y:", y.innerHTML, "->", dateY);
+
+                if ((direction === "asc" && dateX > dateY) || (direction === "desc" && dateX < dateY)) {
+                    shouldSwitch = true;
+                    break;
+                }
+            }
+        }
+        
+        if (shouldSwitch) {
+            rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+            switching = true;
+            switchcount++;
+        } else {
+            // Muda a direção se nenhuma troca foi feita
+            if (switchcount === 0 && direction === "asc") {
+                direction = "desc";
+                switching = true;
+            }
+        }
+    }
+}
+    </script>
     <?php include 'footer.php'; ?>
 </body>
 </html>

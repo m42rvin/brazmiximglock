@@ -274,9 +274,61 @@ foreach ($uploads as $upload) {
         <h1>ETAPA 2 – COMUNICAÇÃO EXTERNA</h1>
         <div class="processo-visualizacao">
         <div class="d-flex align-items-start">
-        <h1>ETAPA 2 – ENVIO DE COMUNICAÇÃO DO PROCESSO/CONTESTAÇÃO</h1>
         </div>
         <div class="d-flex align-items-start">
+        <?php
+// Carrega o arquivo JSON
+$json_file = 'processos_auditoria.json';
+$auditoria_data = json_decode(file_get_contents($json_file), true);
+
+// Obtém o ID atual
+$processo_id = $processo['id'] ?? '';
+
+// Busca os dados correspondentes ao ID
+$processo_encontrado = null;
+foreach ($auditoria_data as $processo) {
+    if ($processo['id'] === $processo_id) {
+        $processo_encontrado = $processo;
+        break;
+    }
+}
+
+// Se encontrou os dados, exibe a tabela
+if ($processo_encontrado): ?>
+    <table class="table table-bordered text-center" style="width:100%" border="1">
+        <tr>
+            <th>Nome Referência</th>
+            <td><?php echo htmlspecialchars($processo_encontrado['refer_name']); ?></td>
+        </tr>
+        <tr>
+            <th>Link Referência</th>
+            <td><a href="<?php echo htmlspecialchars($processo_encontrado['refer_link']); ?>" target="_blank"><?php echo $processo_encontrado['refer_link'];?></a></td>
+        </tr>
+        <tr>
+            <th>Imagem</th>
+            <td><img src="<?php echo htmlspecialchars($processo_encontrado['image']); ?>" alt="Imagem" width="150"></td>
+        </tr>
+        <tr>
+            <th>Contatos Conhecidos</th>
+            <td><?php echo htmlspecialchars($processo_encontrado['known_contacts']); ?></td>
+        </tr>
+        <tr>
+            <th>Observação</th>
+            <td><?php echo htmlspecialchars($processo_encontrado['observation']); ?></td>
+        </tr>
+        <tr>
+            <th>Data e Hora</th>
+            <td><?php echo htmlspecialchars($processo_encontrado['timestamp']); ?></td>
+        </tr>
+    </table>
+</div>
+<div class="d-flex align-items-start">
+        
+    <br />
+<?php else: ?>
+    <p>Erro: Processo não encontrado.</p>
+<?php endif; ?>
+
             <table class="table table-bordered text-center">
             <thead>
                 <tr>

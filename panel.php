@@ -129,6 +129,9 @@ $images = loadImages($json_file);
         .link-image {
             display: grid;
         }
+        #myTable {
+            background: #fff;
+        }
     </style>
     
 </head>
@@ -151,15 +154,15 @@ $images = loadImages($json_file);
     <table id="myTable" class="table table-striped table-bordered table-hover table-responsive text-center align-middle">
     <thead class="table-dark">
         <tr>
-            <th onclick="sortTable(0)">Nome do Arquivo</th>
-            <th onclick="sortTable(1)">Nome</th>
-            <th onclick="sortTable(2, 'date')">Data upload</th>
-            <th onclick="sortTable(3, 'date')">Data criação</th>
-            <th onclick="sortTable(4)">Categoria</th>
-            <th onclick="sortTable(5)">Licença</th>
-            <th>Miniatura</th>
-            <th>Detalhes</th>
-            <th>Seleciona</th>
+            <th onclick="sortTable(0)">NOME DO ARQUIVO</th>
+            <th onclick="sortTable(1)">NOME</th>
+            <th onclick="sortTable(2, 'date')">DATA UPLOAD</th>
+            <th onclick="sortTable(3, 'date')">DATA CRIAÇÃO</th>
+            <th onclick="sortTable(4)">CATEGORIA</th>
+            <th onclick="sortTable(5)">LICENÇA</th>
+            <th>MINIATURA</th>
+            <th>DETALHES</th>
+            <th>SELECIONA</th>
         </tr>
     </thead>
     <tbody>

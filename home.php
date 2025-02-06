@@ -18,8 +18,8 @@ if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
     <title>Home</title>
     <style>
         html,body{
-            background-image: url('./logo\ imglock.jpeg');
-            background-size: cover;
+            background-image: url('./logo\ imglock.jpeg') !important;
+            background-size: cover !important;
         }
     </style>
     <?php include 'header.php'; ?>
