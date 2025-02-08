@@ -52,6 +52,7 @@ if (isset($_SESSION['acesso_autorizado_' . $pa_id])) {
         }
         body{
             padding-bottom:100px;
+            background: none !important;
         }
         body::before {
             content: "";
@@ -157,7 +158,7 @@ if (isset($_SESSION['acesso_autorizado_' . $pa_id])) {
 $respostaEnviada = isset($processo['resposta_processo']) && $processo['resposta_processo'] === true;
 
 // Caso não exista resposta, exibe o formulário
-if (!$respostaEnviada):
+if (!$respostaEnviada && $dataAtual < $dataFinal):
 ?>
 <h5><strong>Espaço para o Contestante</strong></h5>
 <form class="form-check" method="POST" action="salva_resposta.php">
@@ -257,7 +258,7 @@ if ($contestacao !== null) {
             break;
     }
 } else {
-    echo "Nenhuma contestação encontrada para o processo ID: " . $idProcesso;
+    echo "Nenhuma contestação encontrada para o processo ID: " . $idProcesso . "<br> Entrar em contato pelo email contato@brazmix.com";
 }
 
 ?>

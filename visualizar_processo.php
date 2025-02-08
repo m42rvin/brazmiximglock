@@ -576,33 +576,16 @@ $contestacaoMensagens = [
     </div>
 
     <div class="check-items ">
+    <input type="hidden" name="processo_id" value="<?php echo $processo['id']; ?>">
         <!-- Checkbox: Seguir Próxima Etapa -->
-        <div class="form-check ms-3">
-            <input 
-                class="form-check-input" 
-                type="checkbox" 
-                id="seguir_proxima_etapa" 
-                name="seguir_proxima_etapa"
-                <?php echo isset($processo['seguir_proxima_etapa']) && $processo['seguir_proxima_etapa'] ? 'checked' : ''; ?>
-            >
-            <label class="form-check-label" for="seguir_proxima_etapa">
-                Seguir para próxima etapa
-            </label>
-        </div>
+        <button type="submit" name="seguir_proxima_etapa" value="1" class="btn btn-primary">
+            Seguir para próxima etapa
+        </button>
 
-        <!-- Checkbox: Finalizar e Arquivar -->
-        <div class="form-check ms-3">
-            <input 
-                class="form-check-input" 
-                type="checkbox" 
-                id="finalizar_arquivar" 
-                name="finalizar_arquivar"
-                <?php echo isset($processo['finalizar_arquivar']) && $processo['finalizar_arquivar'] ? 'checked' : ''; ?>
-            >
-            <label class="form-check-label" for="finalizar_arquivar">
-                Finalizar e Arquivar
-            </label>
-        </div>
+        <button type="submit" name="finalizar_arquivar" value="1" class="btn btn-danger">
+            Finalizar e Arquivar
+        </button>
+        
     </div>
 
     <div class="d-flex align-items-center">
@@ -773,7 +756,7 @@ function listarArquivos($processos, $processo_id, $etapa)
 
     // Configura os dados do POST
     const dados = new URLSearchParams({
-        id_processo: idProcesso,
+        processo_id: idProcesso,
         finalizar_arquivar: true
     });
 

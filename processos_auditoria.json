@@ -2,7 +2,7 @@
     {
         "id": "67533c1217908",
         "pa_key": "pa_67533c2402a7b0.86119847",
-        "etapa": "2",
+        "etapa": "4",
         "refer_name": "teste 3",
         "refer_link": "tsete",
         "image": "img_auditoria\/67533c1217908.jpg",
@@ -10,10 +10,10 @@
         "observation": "teste3",
         "timestamp": "2024-12-06 15:02:12",
         "archived": false,
-        "sinalizar_notificacao": true,
+        "sinalizar_notificacao": null,
         "sinalizar_envio_data": "2025-01-21 10:44:54",
-        "seguir_proxima_etapa": false,
-        "finalizar_arquivar": false
+        "seguir_proxima_etapa": null,
+        "finalizar_arquivar": "1"
     },
     {
         "id": "67571d385ad54",
@@ -30,7 +30,7 @@
     {
         "id": "675760a649251",
         "pa_key": "pa_6757626f307989.89058702",
-        "etapa": "2",
+        "etapa": "4",
         "refer_name": "Casa Das Bombas",
         "refer_link": "https:\/\/brgarimpo.com.br\/produto\/bomba-draga-mineracao-garimpo-3-pol\/?gad_source=1&gclid=Cj0KCQiAx9q6BhCDARIsACwUxu48lmpfyc_M6ZcveDOgx2Hxoi8aC7jR29zTr2sRelQ1ZDH_H-iPus8aArZQEALw_wcB",
         "image": "img_auditoria\/675760a649251.png",
@@ -38,7 +38,12 @@
         "observation": "Teste para processo de auditoria. Teste para processo de auditoria. Teste para processo de auditoria. Teste para processo de auditoria. Teste para processo de auditoria. Teste para processo de auditoria. Teste para processo de auditoria. Teste para processo de auditoria. Teste para processo de auditoria. Teste para processo de auditoria. Teste para processo de auditoria. ",
         "timestamp": "2024-12-09 18:34:39",
         "original_image": "673216ac6ebfa",
-        "archived": false
+        "archived": false,
+        "sinalizar_notificacao": null,
+        "seguir_proxima_etapa": null,
+        "finalizar_arquivar": "true",
+        "descricao_analise_juridica": "teste",
+        "last_update": "2025-02-08 11:47:20"
     },
     {
         "id": "6759d2d62729e",

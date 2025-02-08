@@ -4,15 +4,16 @@ $jsonFile = 'processos_auditoria.json';
 $data = json_decode(file_get_contents($jsonFile), true);
 
 // Recuperar os dados do formulário (valores dos checkboxes e id do processo)
-$processoId = $_POST['id_processo'];
-$notificacao = isset($_POST['sinalizar_notificacao']) ? true : false;
-$proximaEtapa = isset($_POST['seguir_proxima_etapa']) ? true : false;
-$finalizarArquivar = isset($_POST['finalizar_arquivar']) ? true : false;
+$processoId = $_POST['processo_id'] ?? null;
+$notificacao = $_POST['sinalizar_notificacao'] ?? null;
+$proximaEtapa = $_POST['seguir_proxima_etapa'] ?? null;
+$finalizarArquivar = $_POST['finalizar_arquivar'] ?? null;
 
 // Atualizar o item correto no array
 foreach ($data as &$processo) {
-    if ($processo['id'] == $processoId) { // Usar comparação "==" para evitar problemas de tipo
-        $processo['sinalizar_notificacao'] = $notificacao;
+    if ($processo['id'] == $processoId) {
+         // Usar comparação "==" para evitar problemas de tipo
+         $processo['sinalizar_notificacao'] = $notificacao;
 
         // Verificar se a data ainda não foi definida antes de salvar
         if ($notificacao && (!isset($processo['sinalizar_envio_data']) || empty($processo['sinalizar_envio_data']))) {
