@@ -389,7 +389,7 @@ $licenses = loadCategories($licenseFile);
         <?php endforeach; ?>
     </select>
     <br>
-<label for="image">Arquivo de Licença (Opicional)</label>
+<label for="image">Arquivo de Licença (Opcional)</label>
     <input class="form-control" type="file" name="image-extra" id="image-extra"><br>   
     <label for="link_ativo">Link de Uso (opcional):</label>
     <input class="form-control" type="text" name="link_ativo" id="link_ativo" placeholder="Link ativo da imagem"><br>

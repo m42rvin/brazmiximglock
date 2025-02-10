@@ -308,5 +308,24 @@
         "finalizar_arquivar": "true",
         "descricao_analise_juridica": "teste3",
         "last_update": "2025-02-08 12:31:12"
+    },
+    {
+        "id": "67aa0ef4cf4c9",
+        "pa_key": "pa_67aa1027549ec8.84942771",
+        "etapa": "3",
+        "refer_name": "BD3-MERCLIVRE-FEV2025",
+        "refer_link": "https:\/\/produto.mercadolivre.com.br\/MLB-3799137705-bomba-draga-4-polegadas-areia-garimpo-agua-_JM",
+        "image": "img_auditoria\/67aa0ef4cf4c9.jpg",
+        "known_contacts": "CONTATO CONHECIDO \u00c9 O USU\u00c1RIO DO MERCADOLIVRE;  CASADASBOMBALOJA",
+        "observation": "Observou-se o uso inapropriado da imagem da bomba draga de 3 polegadas em um an\u00fancio do usu\u00e1rio CADASBOMBALOJA em 10\/02\/25. Conforme protocolo interno do depto de marketing, instru\u00e7\u00e3o \u00e9 abrir processo de auditoria e encaminhar aos gestores para a tomada de decis\u00e3o. ",
+        "timestamp": "2025-02-10 11:41:43",
+        "original_image": "673215e505ec6",
+        "aprove_date": "2025-02-10 11:46:31",
+        "archived": false,
+        "sinalizar_notificacao": null,
+        "sinalizar_envio_data": "2025-02-10 11:57:00",
+        "seguir_proxima_etapa": "1",
+        "finalizar_arquivar": null,
+        "resposta_processo": true
     }
 ]

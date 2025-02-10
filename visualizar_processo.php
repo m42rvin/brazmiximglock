@@ -305,10 +305,6 @@ if ($processo_encontrado): ?>
             <td><a href="<?php echo htmlspecialchars($processo_encontrado['refer_link']); ?>" target="_blank"><?php echo $processo_encontrado['refer_link'];?></a></td>
         </tr>
         <tr>
-            <th>Imagem</th>
-            <td><img src="<?php echo htmlspecialchars($processo_encontrado['image']); ?>" alt="Imagem" width="150"></td>
-        </tr>
-        <tr>
             <th>Contatos Conhecidos</th>
             <td><?php echo htmlspecialchars($processo_encontrado['known_contacts']); ?></td>
         </tr>
@@ -448,7 +444,7 @@ $contestacaoMensagens = [
         <!-- Exibir a linha da tabela se a resposta existir -->
         <?php if ($respostaEncontrada) : ?>
     <div class="container">
-    <table class="table table-bordered text-center">
+    <table class="table table-bordered text-center" style="width: 100%; margin-left:0%">
     <tbody>
     <tr>
         <td>Data Resposta</td>
@@ -671,7 +667,7 @@ foreach ($auditoria_data as $processo) {
 
 // Se encontrou os dados, exibe a tabela
 if ($processo_encontrado): ?>
-    <table class="table table-bordered text-center" style="width:100%" border="1">
+    <table class="table table-bordered text-center" style="width:60%; margin-left:20%" border="1">
         <tr>
             <th>Nome Referência</th>
             <td><?php echo htmlspecialchars($processo_encontrado['refer_name']); ?></td>
@@ -679,10 +675,6 @@ if ($processo_encontrado): ?>
         <tr>
             <th>Link Referência</th>
             <td><a href="<?php echo htmlspecialchars($processo_encontrado['refer_link']); ?>" target="_blank"><?php echo $processo_encontrado['refer_link'];?></a></td>
-        </tr>
-        <tr>
-            <th>Imagem</th>
-            <td><img src="<?php echo htmlspecialchars($processo_encontrado['image']); ?>" alt="Imagem" width="150"></td>
         </tr>
         <tr>
             <th>Contatos Conhecidos</th>
@@ -824,7 +816,7 @@ $contestacaoMensagens = [
         <!-- Exibir a linha da tabela se a resposta existir -->
         <?php if ($respostaEncontrada) : ?>
     <div class="container">
-    <table class="table table-bordered text-center">
+    <table class="table table-bordered text-center" style="width: 100%; margin-left:0%">
     <tbody>
     <tr>
         <td>Data Resposta</td>
@@ -1117,7 +1109,7 @@ $contestacaoMensagens = [
         <!-- Exibir a linha da tabela se a resposta existir -->
         <?php if ($respostaEncontrada) : ?>
     <div class="container">
-    <table class="table table-bordered text-center">
+    <table class="table table-bordered text-center" style="width: 100%; margin-left:0%">
     <tbody>
     <tr>
         <td>Data Resposta</td>

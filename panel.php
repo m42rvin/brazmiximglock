@@ -140,7 +140,6 @@ $images = loadImages($json_file);
     <div class="container">
     <div>
         <br>
-        <button type="button" disabled class="btn-action btn btn-success">Gerar Processo de Auditoria</button>
         <button type="button" disabled class="btn-action btn-generate btn btn-success">Gerar Arquivo de Auditoria</button>
         <button type="button" disabled class="btn-action btn-download btn btn-info">Download do Arquivo</button>
         <button type="button" disabled class="btn-action btn-del btn btn-danger">Deletar Arquivo</button>    

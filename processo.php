@@ -218,7 +218,6 @@ if (!$respostaEnviada && $dataAtual < $dataFinal):
 else:
 ?>
 <div class="alert alert-danger" role="alert">
-<h5>Resposta Constentação:</h5>
 <p>
 <?php
 // Carregar o conteúdo do arquivo resposta_processo.json
