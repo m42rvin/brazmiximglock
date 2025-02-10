@@ -559,7 +559,8 @@ $contestacaoMensagens = [
         <!-- Checkbox: Sinalizar Notificação -->
         <div class="form-check ms-3">
         <?php if (!isset($processo['resposta_processo']) || !$processo['resposta_processo']) : ?>
-        <input 
+            <br/>
+            <input 
             class="form-check-input" 
             type="checkbox" 
             id="sinalizar_notificacao" 
@@ -571,6 +572,10 @@ $contestacaoMensagens = [
         <label class="form-check-label" for="sinalizar_notificacao">
             Sinalizar envio de notificação
         </label>
+        <button type="submit" class="btn btn-success" name="id_processo" value="<?php echo $processo['id']; ?>">
+            <i class="fa-solid fa-floppy-disk"></i> Salvar
+        </button>
+        <br/><br/><br/>
         <?php endif; ?>
         </div>
     </div>
@@ -590,9 +595,6 @@ $contestacaoMensagens = [
 
     <div class="d-flex align-items-center">
         <!-- Botão Salvar -->
-        <button type="submit" class="btn btn-success" name="id_processo" value="<?php echo $processo['id']; ?>">
-            <i class="fa-solid fa-floppy-disk"></i> Salvar
-        </button>
     </div>
 </form>
 
@@ -650,7 +652,211 @@ function listarArquivos($processos, $processo_id, $etapa)
 
 
 ?>
+<?php
+// Carrega o arquivo JSON
+$json_file = 'processos_auditoria.json';
+$auditoria_data = json_decode(file_get_contents($json_file), true);
 
+// Obtém o ID atual
+$processo_id = $processo['id'] ?? '';
+
+// Busca os dados correspondentes ao ID
+$processo_encontrado = null;
+foreach ($auditoria_data as $processo) {
+    if ($processo['id'] === $processo_id) {
+        $processo_encontrado = $processo;
+        break;
+    }
+}
+
+// Se encontrou os dados, exibe a tabela
+if ($processo_encontrado): ?>
+    <table class="table table-bordered text-center" style="width:100%" border="1">
+        <tr>
+            <th>Nome Referência</th>
+            <td><?php echo htmlspecialchars($processo_encontrado['refer_name']); ?></td>
+        </tr>
+        <tr>
+            <th>Link Referência</th>
+            <td><a href="<?php echo htmlspecialchars($processo_encontrado['refer_link']); ?>" target="_blank"><?php echo $processo_encontrado['refer_link'];?></a></td>
+        </tr>
+        <tr>
+            <th>Imagem</th>
+            <td><img src="<?php echo htmlspecialchars($processo_encontrado['image']); ?>" alt="Imagem" width="150"></td>
+        </tr>
+        <tr>
+            <th>Contatos Conhecidos</th>
+            <td><?php echo htmlspecialchars($processo_encontrado['known_contacts']); ?></td>
+        </tr>
+        <tr>
+            <th>Observação</th>
+            <td><?php echo htmlspecialchars($processo_encontrado['observation']); ?></td>
+        </tr>
+        <tr>
+            <th>Data e Hora</th>
+            <td><?php echo htmlspecialchars($processo_encontrado['timestamp']); ?></td>
+        </tr>
+    </table>
+</div>
+<div class="d-flex align-items-start">
+        
+    <br />
+<?php else: ?>
+    <p>Erro: Processo não encontrado.</p>
+<?php endif; ?>
+
+            <table class="table table-bordered text-center">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>#</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Exemplo de uma linha com dados -->
+                <tr>
+                    <td>ID</td>
+                    <td><?php echo $processo['id'];?></td>
+                </tr>
+                <tr>
+                    <td>Abertura Processo</td>
+                    <td><?php echo $processo['timestamp'];?></td>
+                </tr>
+                <tr>
+                    <td>Aprovação Gestor</td>
+                    <td><?php echo $processo['aprove_date'];?></td>
+
+                </tr>
+                <tr>
+                    <td>Status Notificação</td>
+                    <td>
+                        <?php 
+                            echo isset($processo['sinalizar_envio_data']) && !empty($processo['sinalizar_envio_data']) 
+                                ? $processo['sinalizar_envio_data'] 
+                                : 'Envio Pendente'; 
+                        ?>
+                    </td>
+                </tr>
+                <?php
+                    if(isset($processo['sinalizar_envio_data'])){
+                        ?>
+                            <tr>
+                                <td>Prazo Resposta</td>
+                                <td>
+                        <?php
+                        if(isset($processo['resposta_processo']) && $processo['resposta_processo'] === true ){
+                           echo 'Respondido dentro do prazo.';
+                        } else {
+                            
+                        // Data de sinalização de envio (formato: YYYY-MM-DD)
+                        $sinalizarEnvioData = $processo['sinalizar_envio_data'];
+
+                        // Converter a data para um objeto DateTime
+                        $dataInicial = new DateTime($sinalizarEnvioData);
+
+                        // Adicionar 15 dias à data inicial
+                        $dataFinal = clone $dataInicial;
+                        $dataFinal->modify('+15 days');
+
+                        // Obter a data atual
+                        $dataAtual = new DateTime();
+
+                        // Calcular a diferença entre a data final e a data atual
+                        $diferenca = $dataAtual->diff($dataFinal);
+
+                        // Verificar se o prazo já expirou
+                        if ($dataAtual > $dataFinal) {
+                            echo "O prazo de 15 dias já expirou.";
+                        } else {
+                            // Exibir o contador regressivo
+                            echo "Faltam " . $diferenca->days . " dias para esgotar o prazo de resposta deste processo.";
+                        }
+                    }
+
+                        
+                        
+                        ?>
+
+                                </td>
+                            </tr>
+
+                        <?php
+                    }
+                
+                ?>
+                <tr>
+                    <td>Status da Resposta</td>
+                    <td>
+                        <?php 
+                            echo isset($processo['resposta_processo']) && $processo['resposta_processo'] === true 
+                                ? 'Respondido' 
+                                : 'Aguardando Resposta';
+                        ?>
+                    </td>
+                </tr>
+            </tbody>
+            </table>
+                <?php
+// Carregar o conteúdo do arquivo JSON de respostas
+$respostasJson = 'resposta_processo.json';
+$respostas = file_exists($respostasJson) ? json_decode(file_get_contents($respostasJson), true) : [];
+
+// Inicializar variáveis de resposta
+$respostaEncontrada = null;
+foreach ($respostas as $resposta) {
+    if ($resposta['id_processo'] === $processo['id']) {
+        $respostaEncontrada = $resposta;
+        break;
+    }
+}
+
+// Mapear os textos de contestação
+$contestacaoMensagens = [
+    'concorda_remocao' => 'Confirmo que irei interromper o uso das imagens envolvidas nesse processo com o prazo de 7 dias.',
+    'mais_informacoes' => 'Preciso de mais informações sobre o processo, solicito contato direto para melhor entendimento.',
+    'nao_concordo' => 'Não concordo com os apontamentos realizados e manterei o uso das imagens mesmo assim.',
+    'quero_vender' => 'Quero re-vender com autorização do uso de imagens da Brazmix.'
+];
+?>
+</tbody>
+</table>
+        </div>
+        <!-- Exibir a linha da tabela se a resposta existir -->
+        <?php if ($respostaEncontrada) : ?>
+    <div class="container">
+    <table class="table table-bordered text-center">
+    <tbody>
+    <tr>
+        <td>Data Resposta</td>
+        <td><?php echo $respostaEncontrada['data_resposta']; ?></td>
+    </tr>
+    <tr>
+        <td>Contestação</td>
+        <td style="max-width: 200px; word-wrap: break-word;">
+            <?php
+                $contestacao = $respostaEncontrada['contestacao'];
+                echo isset($contestacaoMensagens[$contestacao]) 
+                    ? $contestacaoMensagens[$contestacao] 
+                    : 'Resposta não reconhecida';
+            ?>
+        </td>
+    </tr>
+    <tr>
+        <td>Texto Resposta</td>
+        <td style="max-width: 200px; word-wrap: break-word;"><?php echo htmlspecialchars($respostaEncontrada['texto_resposta']); ?></td>
+    </tr>
+    <tr>
+        <td>Email Contato</td>
+        <td><?php echo $respostaEncontrada['email_resposta'];?></td>
+    </tr>
+    <tr>
+        <td>Telefone Contato</td>
+        <td><?php echo $respostaEncontrada['telefone_resposta'];?></td>
+    </tr>
+    </tbody>
+    <table>
+</div>
+    <?php endif; ?>
 <div class="card mb-4">
     <div class="card-header bg-primary text-white">
         Análise Jurídica e Administrativa

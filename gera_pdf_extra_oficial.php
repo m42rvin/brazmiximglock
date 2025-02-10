@@ -205,9 +205,24 @@ $pdf->Cell(0, 10, utf8_decode("Imagem Contestada"), 0, 1, 'C'); // Alinhado à e
 $imagePath = $processoEncontrado['image']; // Caminho da imagem
 if (file_exists($imagePath)) {
     // Define a largura da miniatura (por exemplo, 40mm), mantendo a proporção da altura automaticamente
-    $pdf->Image($imagePath, 55, $pdf->GetY(), 100); 
+    // Tamanho máximo permitido
+$maxWidth = 100; // Largura máxima
+$maxHeight = 50; // Altura máxima
+
+// Obtém as dimensões originais da imagem
+list($width, $height) = getimagesize($imagePath);
+
+// Calcula a proporção mantendo as dimensões dentro do limite
+$ratio = min($maxWidth / $width, $maxHeight / $height);
+
+// Aplica a proporção
+$newWidth = $width * $ratio;
+$newHeight = $height * $ratio;
+
+// Insere a imagem com as novas dimensões
+$pdf->Image($imagePath, 80, $pdf->GetY(), $newWidth, $newHeight);
     //$pdf->Image($reducedImagePath, 100, $pdf->GetY(), 80); 
-    $pdf->Ln(50); // Adiciona um espaço após a imagem para não sobrepor o conteúdo
+    $pdf->Ln(30); // Adiciona um espaço após a imagem para não sobrepor o conteúdo
 } else {
     $pdf->Cell(0, 10, utf8_decode("Imagem não encontrada"), 0, 1, 'L');
 }
@@ -218,6 +233,7 @@ $pdf->SetTextColor(0, 0, 255); // Cor do texto para o link: azul
 $link = $processoEncontrado['refer_link']; // Obtém o link contestado
 $pdf->SetFont('Arial', 'B', 14); // Fonte sublinhada (para o link)
 $pdf->SetTextColor(0, 0, 0);
+$pdf->Ln(10);
 $pdf->Cell(0, 10, utf8_decode("Acesso para anúncio ou site contestado:* "), 0, 1, 'C'); // Texto do link
 $pdf->SetTextColor(0, 0, 255);
 $pdf->SetFont('Arial', 'U', 11); // Fonte sublinhada
@@ -232,7 +248,7 @@ $linkText = utf8_decode($link);
 $textWidth = $pdf->GetStringWidth($linkText);
 
 // Calcula a posição X para centralizar
-$xPosition = ($pageWidth - $textWidth) / 2;
+$xPosition = 10;
 
 // Define a posição X manualmente antes de escrever o link
 $pdf->SetX($xPosition);
