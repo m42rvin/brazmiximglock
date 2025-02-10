@@ -148,6 +148,9 @@ if (!empty($processo_encontrado['original_image'])) {
                 margin: 0; /* Remove margens do corpo do conteúdo */
                 padding: 0;
             }
+            .logo-brazmix {
+                width: 200px !important;
+            }
         }
         .logo-brazmix {
             width: 400px;
@@ -159,10 +162,10 @@ if (!empty($processo_encontrado['original_image'])) {
             border: 1px solid black;
             padding: 10px;
             text-align: center;
-            margin-left: 200px;
-            transform: translateY(18px);
+            position: absolute;
+            right: 20%;
+            top: 30px;
         }
-
 
     </style>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css">
@@ -179,39 +182,39 @@ if (!empty($processo_encontrado['original_image'])) {
                     <col style="width: 200px;">
                     <col>
                 </colgroup>
-                <tr class="border-bottom">
-                    <td><strong>Nome da Contestação:</strong> </td>
-                    <td><p><?php echo htmlspecialchars($processo_encontrado['refer_name']); ?></p></td>
+                <tr class="border-bottom border-dark">
+                    <td class="align-top"><strong>Nome da Contestação:</strong> </td>
+                    <td class="align-middle"><p><?php echo htmlspecialchars($processo_encontrado['refer_name']); ?></p></td>
                 </tr>
-                <tr class="border-bottom">
-                    <td><strong>Data e hora da abertura:</strong> </td>
-                    <td><p><?php echo htmlspecialchars($processo_encontrado['timestamp']); ?></p></td>
+                <tr class="border-bottom border-dark">
+                    <td class="align-top"><strong>Data e hora da abertura:</strong> </td>
+                    <td class="align-middle"><p><?php echo htmlspecialchars($processo_encontrado['timestamp']); ?></p></td>
                 </tr>
-                <tr class="border-bottom">
-                    <td><strong>Usuário Responsável:</strong> </td>
-                    <td><p>nome_usuario</p></td>
+                <tr class="border-bottom border-dark">
+                    <td class="align-top"><strong>Usuário Responsável:</strong> </td>
+                    <td class="align-middle"><p><?php echo htmlspecialchars($processo_encontrado['username'] ?? ''); ?></p></td>
                 </tr>
-                <tr class="border-bottom">
-                    <td><strong>Contatos Conhecidos Sobre a Contestação:</strong> </td>
-                    <td><p><?php echo htmlspecialchars($processo_encontrado['known_contacts']); ?></p></td>
+                <tr class="border-bottom border-dark">
+                    <td class="align-top"><strong>Contatos Conhecidos Sobre a Contestação:</strong> </td>
+                    <td class="align-middle"><p><?php echo htmlspecialchars($processo_encontrado['known_contacts']); ?></p></td>
                 </tr>
-                <tr class="border-bottom">
-                    <td><strong>Observações Sobre a Contestação:</strong> </td>
-                    <td><p><?php echo nl2br(htmlspecialchars($processo_encontrado['observation'])); ?></p></td>
+                <tr class="border-bottom border-dark">
+                    <td class="align-top"><strong>Observações Sobre a Contestação:</strong> </td>
+                    <td class="align-middle"><p><?php echo nl2br(htmlspecialchars($processo_encontrado['observation'])); ?></p></td>
                 </tr>
-                <tr class="border-bottom">
-                    <td><strong>Imagem Capturada para Contestação:</strong></td>
-                    <td><img src="<?php echo htmlspecialchars($processo_encontrado['image']); ?>" alt="Imagem do Processo" style="max-width: 100%; height: auto;"></td>
+                <tr class="border-bottom border-dark">
+                    <td class="align-top"><strong>Imagem Capturada para Contestação:</strong></td>
+                    <td class="align-middle"><img src="<?php echo htmlspecialchars($processo_encontrado['image']); ?>" alt="Imagem do Processo" style="max-width: 100%; height: auto;"></td>
                 </tr>
-                <tr class="border-bottom">
-                    <td><strong>Endereço de website capturado para contestação:</strong> </td>
-                    <td><a href="<?php echo htmlspecialchars($processo_encontrado['refer_link']); ?>" target="_blank">
+                <tr class="border-bottom border-dark">
+                    <td class="align-top"><strong>Endereço de website capturado para contestação:</strong> </td>
+                    <td class="align-middle"><a href="<?php echo htmlspecialchars($processo_encontrado['refer_link']); ?>" target="_blank">
                         <?php echo htmlspecialchars($processo_encontrado['refer_link']); ?>
                     </a></td>
                 </tr>
-                <tr class="border-bottom">
-                    <td><strong>Comunicação gerada sobre a contestação:</strong></td>
-                    <td><?php
+                <tr class="border-bottom border-dark">
+                    <td class="align-top"><strong>Comunicação gerada sobre a contestação:</strong></td>
+                    <td class="align-middle"><?php
                     // Substitua com o ID real do processo encontrado
                     $processo_id = $processo_encontrado['id'];
                     $pdf_path = "jpg/comunicado_processo_" . $processo_id . ".jpg";
@@ -224,9 +227,9 @@ if (!empty($processo_encontrado['original_image'])) {
                     style="border: none;"/></td>
                 </tr>
                 <?php if ($resposta_encontrada): ?>
-                <tr class="border-bottom">
-                    <td><strong>Resposta ao Processo</strong></td>
-                    <td>
+                <tr class="border-bottom border-dark">
+                    <td class="align-top"><strong>Resposta ao Processo</strong></td>
+                    <td class="align-middle">
                     <?php
                         $contestacaoMensagens = [
                             'concorda_remocao' => 'Confirmo que irei interromper o uso das imagens envolvidas nesse processo com o prazo de 7 dias.',
@@ -241,63 +244,63 @@ if (!empty($processo_encontrado['original_image'])) {
                     ?>
                     </td>
                 </tr>
-                <tr class="border-bottom">
-                    <td><strong>Texto da Resposta:</strong></td>
-                    <td><p> <?php echo nl2br(htmlspecialchars($resposta_encontrada['texto_resposta'])); ?></p></td>
+                <tr class="border-bottom border-dark">
+                    <td class="align-top"><strong>Texto da Resposta:</strong></td>
+                    <td class="align-middle"><p> <?php echo nl2br(htmlspecialchars($resposta_encontrada['texto_resposta'])); ?></p></td>
                 </tr>
-                <tr class="border-bottom">
-                    <td><strong>Data da Resposta:</strong></td>
-                    <td><p> <?php echo htmlspecialchars($resposta_encontrada['data_resposta']); ?></p></td>
+                <tr class="border-bottom border-dark">
+                    <td class="align-top"><strong>Data da Resposta:</strong></td>
+                    <td class="align-middle"><p> <?php echo htmlspecialchars($resposta_encontrada['data_resposta']); ?></p></td>
                 </tr>
-                <tr class="border-bottom">
-                    <td><strong>Email de Resposta:</strong></td>
-                    <td><?php echo htmlspecialchars($resposta_encontrada['email_resposta']); ?></td>
+                <tr class="border-bottom border-dark">
+                    <td class="align-top"><strong>Email de Resposta:</strong></td>
+                    <td class="align-middle"><?php echo htmlspecialchars($resposta_encontrada['email_resposta']); ?></td>
                 </tr>
-                <tr class="border-bottom">
-                    <td><strong>Telefone de Resposta:</strong> </td>
-                    <td><?php echo htmlspecialchars($resposta_encontrada['telefone_resposta']); ?></td>
+                <tr class="border-bottom border-dark">
+                    <td class="align-top"><strong>Telefone de Resposta:</strong> </td>
+                    <td class="align-middle"><?php echo htmlspecialchars($resposta_encontrada['telefone_resposta']); ?></td>
                 </tr>
                 <?php endif; ?>
                 <?php if ($original_image): ?>
-                <tr class="border-bottom">
-                    <td></td>
-                    <td><h3>Dados EXIF da imagem original:</h3></td>
+                <tr class="border-bottom border-dark">
+                    <td class="align-top"></td>
+                    <td class="align-middle"><h3>Dados EXIF da imagem original:</h3></td>
                 </tr>
-                <tr class="border-bottom">
-                    <td><strong>Nome:</strong></td>
-                    <td><?php echo htmlspecialchars($original_image['name']); ?></td>
+                <tr class="border-bottom border-dark">
+                    <td class="align-top"><strong>Nome:</strong></td>
+                    <td class="align-middle"><?php echo htmlspecialchars($original_image['name']); ?></td>
                 </tr>
-                <tr class="border-bottom">
-                    <td><strong>Descrição:</strong> </td>
-                    <td><?php echo htmlspecialchars($original_image['description']); ?></td>
+                <tr class="border-bottom border-dark">
+                    <td class="align-top"><strong>Descrição:</strong> </td>
+                    <td class="align-middle"><?php echo htmlspecialchars($original_image['description']); ?></td>
                 </tr>
-                <tr class="border-bottom">
-                    <td><strong>Categoria:</strong> </td>
-                    <td><?php echo htmlspecialchars($original_image['category']); ?></td>
+                <tr class="border-bottom border-dark">
+                    <td class="align-top"><strong>Categoria:</strong> </td>
+                    <td class="align-middle"><?php echo htmlspecialchars($original_image['category']); ?></td>
                 </tr>
-                <tr class="border-bottom">
-                    <td><strong>Dimensões:</strong> </td>
-                    <td><?php echo htmlspecialchars($original_image['width']) . " x " . htmlspecialchars($original_image['height']); ?></td>
+                <tr class="border-bottom border-dark">
+                    <td class="align-top"><strong>Dimensões:</strong> </td>
+                    <td class="align-middle"><?php echo htmlspecialchars($original_image['width']) . " x " . htmlspecialchars($original_image['height']); ?></td>
                 </tr>
-                <tr class="border-bottom">
-                    <td><strong>Data de Criação:</strong></td>
-                    <td><?php echo htmlspecialchars($original_image['created_at']); ?></td>
+                <tr class="border-bottom border-dark">
+                    <td class="align-top"><strong>Data de Criação:</strong></td>
+                    <td class="align-middle"><?php echo htmlspecialchars($original_image['created_at']); ?></td>
                 </tr>
-                <tr class="border-bottom">
-                    <td><strong>Fabricante:</strong></td>
-                    <td><?php echo htmlspecialchars($original_image['make']); ?></td>
+                <tr class="border-bottom border-dark">
+                    <td class="align-top"><strong>Fabricante:</strong></td>
+                    <td class="align-middle"><?php echo htmlspecialchars($original_image['make']); ?></td>
                 </tr>
-                <tr class="border-bottom">
-                    <td><strong>Modelo:</strong> </td>
-                    <td><?php echo htmlspecialchars($original_image['model']); ?></td>
+                <tr class="border-bottom border-dark">
+                    <td class="align-top"><strong>Modelo:</strong> </td>
+                    <td class="align-middle"><?php echo htmlspecialchars($original_image['model']); ?></td>
                 </tr>
-                <tr class="border-bottom">
-                    <td><strong>Software:</strong> </td>
-                    <td><?php echo htmlspecialchars($original_image['Software']); ?></td>
+                <tr class="border-bottom border-dark">
+                    <td class="align-top"><strong>Software:</strong> </td>
+                    <td class="align-middle"><?php echo htmlspecialchars($original_image['Software']); ?></td>
                 </tr>
-                <tr class="border-bottom">
-                    <td><strong>Imagem:</strong></td>
-                    <td><img src="<?php echo htmlspecialchars($original_image['path']); ?>" alt="Imagem Original" style="max-width: 100%; height: auto;"></td>
+                <tr class="border-bottom border-dark">
+                    <td class="align-top"><strong>Imagem:</strong></td>
+                    <td class="align-middle"><img src="<?php echo htmlspecialchars($original_image['path']); ?>" alt="Imagem Original" style="max-width: 100%; height: auto;"></td>
                 </tr>
                 <?php endif; ?>
                 </tbody>

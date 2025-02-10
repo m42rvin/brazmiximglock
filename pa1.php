@@ -54,6 +54,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         'original_image' => $original_image,
         'aprove_date' => null,
         'archived' => false,
+        'username' => $_SESSION['username']
     ];
 
     // Carregar o conteúdo existente do JSON
