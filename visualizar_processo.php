@@ -214,9 +214,6 @@ foreach ($uploads as $upload) {
                 <span style="color:white" class="badge bg-secondary"><?php echo htmlspecialchars($processo['timestamp']); ?></span>
             </p>
         </div>
-        <?php if($processo['archived'] == true){ ?>
-            <h3>Processo Arquivado</h3>
-        <?php } ?>
 
         <!-- Botões -->
         <?php if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true): ?>
@@ -267,7 +264,24 @@ foreach ($uploads as $upload) {
         <?php endif; ?>
         <?php if($processo['archived'] === false){ ?>
             <a href="pa2.php?aprov=true&pa_id=<?php echo $processo['id']; ?>&pa_key=<?php echo $processo['pa_key']; ?>" class="btn btn-success">Aprovar processo</a>
-            <a href="pa2.php?aprov=false&pa_id=<?php echo $processo['id']; ?>&pa_key=<?php echo $processo['pa_key']; ?>" class="btn btn-danger">Reprovar processo e Arquivar</a>
+            <a href="#" class="btn btn-danger" onclick="reprovarProcesso(event, '<?php echo $processo['id']; ?>', '<?php echo $processo['pa_key']; ?>')">
+    Reprovar processo e Arquivar
+</a>
+
+    <script>
+    function reprovarProcesso(event, pa_id, pa_key) {
+        event.preventDefault(); // Impede o redirecionamento imediato
+
+        var motivo = prompt("Digite o motivo da reprovação:");
+
+        if (motivo !== null && motivo.trim() !== "") {
+            // Redireciona para o link com o motivo adicionado como parâmetro
+            window.location.href = `pa2.php?aprov=false&pa_id=${pa_id}&pa_key=${pa_key}&motivo=${encodeURIComponent(motivo)}`;
+        } else {
+            alert("É necessário informar um motivo para reprovar o processo.");
+        }
+    }
+    </script>
         <?php } ?>
     </div>
     <?php } elseif($processo['etapa'] == '2') { ?>

@@ -6,6 +6,7 @@ $jsonFile = 'processos_auditoria.json';
 $aprov = isset($_GET['aprov']) ? $_GET['aprov'] : null;
 $pa_id = isset($_GET['pa_id']) ? $_GET['pa_id'] : null;
 $pa_key = isset($_GET['pa_key']) ? $_GET['pa_key'] : null;
+$motivo = isset($_GET['motivo']) ? $_GET['motivo'] : null;
 
 // Valida os parâmetros obrigatórios
 if ($aprov === null || $pa_id === null || $pa_key === null) {
@@ -32,8 +33,10 @@ foreach ($data as &$processo) {
             $fontColor = 'white';
             $icon = '<i class="fas fa-check-circle"></i>'; // Ícone de check
         } elseif ($aprov === 'false') {
+            $processo['etapa'] = '4';
             $processo['archived'] = true; // Arquiva o processo
             $processo['aprove_date'] = date('Y-m-d H:i:s');
+            $processo['motivo'] = $motivo;
             $status = 'DESAPROVADO';
             $bgColor = 'red';
             $fontColor = 'white';
