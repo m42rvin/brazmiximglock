@@ -10,49 +10,56 @@ if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
 ?>
 
 <?php
-// Verifica se o ID do processo foi passado via GET
+/// Verifica se o ID do processo foi passado via GET
 if (!isset($_GET['pa_id'])) {
     die("Erro: ID do processo não fornecido.");
 }
 
-// Obtém o ID do processo
 $pa_id = $_GET['pa_id'];
-
-// Caminho do arquivo PDF
 $pdf_path = 'pdf/comunicado_processo_' . $pa_id . '.pdf';
 
-// Verifica se o arquivo PDF existe
+// Verifica se o PDF existe
 if (!file_exists($pdf_path)) {
-    die("Erro: O arquivo PDF não foi encontrado.");
+    die("Erro: O arquivo PDF não foi encontrado." . $pa_id);
 }
 
-// Caminho de destino para o arquivo JPG
+// Caminho de destino para a imagem JPG
 $jpg_path = 'jpg/comunicado_processo_' . $pa_id . '.jpg';
 
-// Converte o PDF em JPG usando ImageMagick
+if (!file_exists($jpg_path)) {
 $imagick = new Imagick();
 
+// Define uma alta resolução antes de carregar o PDF
+$imagick->setResolution(600, 600); // Maior DPI = Melhor qualidade
 
-// Define o número de páginas a serem convertidas (aqui, convertendo a primeira página)
-$imagick->readImage($pdf_path . '[0]'); // '[0]' para a primeira página, caso queira mais, altere o número
+// Lê a primeira página do PDF
+$imagick->readImage($pdf_path . '[0]');
+
+// Remove canal alfa para evitar fundo preto
 $imagick->setImageAlphaChannel(Imagick::ALPHACHANNEL_REMOVE);
-// Define a resolução (opcional, mas pode ajudar a melhorar a qualidade)
-$imagick->setResolution(600, 600); // 300 DPI é um bom valor para qualidade
+$imagick->mergeImageLayers(Imagick::LAYERMETHOD_FLATTEN);
 
-// Define o formato da imagem para JPG
+// Ajusta qualidade da imagem
 $imagick->setImageFormat('jpg');
+$imagick->setImageCompression(Imagick::COMPRESSION_JPEG);
+$imagick->setImageCompressionQuality(100); // 100% de qualidade
 
-// Salva a imagem na pasta "jpg"
-if ($imagick->writeImage($jpg_path)) {
-    // echo "PDF convertido com sucesso para JPG.";
-} else {
+// Aumenta a nitidez e suaviza bordas
+$imagick->setOption('pdf:use-cropbox', 'true');
+$imagick->setOption('pdf:alpha', 'remove');
+
+// Se necessário, redimensione para um tamanho maior
+$imagick->resizeImage(2480, 3508, Imagick::FILTER_LANCZOS, 1); // A4 em alta resolução
+
+// Salva a imagem gerada
+if (!$imagick->writeImage($jpg_path)) {
     die("Erro: Falha ao salvar o arquivo JPG.");
 }
 
 // Limpeza de memória
 $imagick->clear();
 $imagick->destroy();
-
+}
 ?>
 <style>
     img {

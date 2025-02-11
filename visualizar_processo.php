@@ -479,9 +479,15 @@ $contestacaoMensagens = [
     <?php endif; ?>
         <div class="d-flex align-items-start ">
         <?php if (!isset($processo['resposta_processo']) || !$processo['resposta_processo']) : ?>
+        <!-- Botão -->
+        <button style="margin-top:45px" type="button" class="btn btn-primary gera-processo" id_processo="<?php echo $processo['id']; ?>">
+            <i class="fa-solid fa-file-export"></i> Gerar PDF com Comunicado
+        </button>
+    <?php endif; ?>
+        <?php if (!isset($processo['resposta_processo']) || !$processo['resposta_processo']) : ?>
             <div class="mb-3">
                 <h5>Link para responder contestação:</h5>
-                <input readonly class="resposta-link form-control" placeholder="Digite algo..." />
+                <input style="width:200px" readonly class="resposta-link form-control" placeholder="Digite algo..." />
             </div>
             <div>
                 <h5>Chave de acesso:</h5>
@@ -538,20 +544,31 @@ $contestacaoMensagens = [
                 $chave = obterOuGerarChave($processoId);
                 
                 ?>
-                <input readonly class="outra-input form-control" value="<?php echo $chave;?>" placeholder="Digite aqui..." />
+                <input readonly style="width:100px" class="outra-input form-control" value="<?php echo $chave;?>" placeholder="Digite aqui..." />
             </div>
             <?php endif; ?>
         </div>
         <form method="POST" action="salva_processo.php">
     <div class="align-items-center">
-    <?php if (!isset($processo['resposta_processo']) || !$processo['resposta_processo']) : ?>
-        <!-- Botão -->
-        <button type="button" class="btn btn-primary gera-processo" id_processo="<?php echo $processo['id']; ?>">
-            <i class="fa-solid fa-file-export"></i> Gerar PDF com Comunicado
+    
+
+    <div class="check-items ">
+    <input type="hidden" name="processo_id" value="<?php echo $processo['id']; ?>">
+        <!-- Checkbox: Seguir Próxima Etapa -->
+        <?php
+        $desabilitar = !(isset($respostaEncontrada) || ($dataAtual > $dataFinal)) ? 'disabled' : '';
+        ?>
+
+        <button style="margin-left:100px" type="submit" name="seguir_proxima_etapa" value="1" class="btn btn-primary" <?php echo $desabilitar; ?>>
+            Seguir para próxima etapa
         </button>
-    <?php endif; ?>
 
+        <button type="submit" name="finalizar_arquivar" value="1" class="btn btn-danger" <?php echo $desabilitar; ?>>
+            Finalizar e Arquivar
+        </button>
 
+        
+    </div>
         <!-- Checkbox: Sinalizar Notificação -->
         <div class="form-check ms-3">
         <?php if (!isset($processo['resposta_processo']) || !$processo['resposta_processo']) : ?>
@@ -561,14 +578,15 @@ $contestacaoMensagens = [
             type="checkbox" 
             id="sinalizar_notificacao" 
             name="sinalizar_notificacao"
+            style="margin-left:100px;transform:translateY(5px)" 
             <?php 
                 echo isset($processo['sinalizar_notificacao']) && $processo['sinalizar_notificacao'] ? 'checked disabled' : ''; 
             ?>
         >
-        <label class="form-check-label" for="sinalizar_notificacao">
+        <label style="margin-left:130px" class="form-check-label" for="sinalizar_notificacao">
             Sinalizar envio de notificação
         </label>
-        <button type="submit" class="btn btn-success" name="id_processo" value="<?php echo $processo['id']; ?>">
+        <button style="margin-left: 20px" type="submit" class="btn btn-success" name="id_processo" value="<?php echo $processo['id']; ?>">
             <i class="fa-solid fa-floppy-disk"></i> Salvar
         </button>
         <br/><br/><br/>
@@ -576,18 +594,7 @@ $contestacaoMensagens = [
         </div>
     </div>
 
-    <div class="check-items ">
-    <input type="hidden" name="processo_id" value="<?php echo $processo['id']; ?>">
-        <!-- Checkbox: Seguir Próxima Etapa -->
-        <button type="submit" name="seguir_proxima_etapa" value="1" class="btn btn-primary">
-            Seguir para próxima etapa
-        </button>
-
-        <button type="submit" name="finalizar_arquivar" value="1" class="btn btn-danger">
-            Finalizar e Arquivar
-        </button>
-        
-    </div>
+    
 
     <div class="d-flex align-items-center">
         <!-- Botão Salvar -->

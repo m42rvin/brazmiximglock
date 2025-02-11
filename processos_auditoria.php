@@ -86,7 +86,17 @@ if (file_exists($json_file)) {
                         <th>AÇÕES</th>
                     </tr>
                 </thead>
+                
                 <tbody>
+                <colgroup>
+                    <col></col>
+                    <col></col>
+                    <col style="width: 300px;"></col>
+                    <col></col>
+                    <col></col>
+                    <col style="width:350px;"></col>
+                    <col></col>
+                </colgroup>
                     <?php foreach ($processos as $processo): ?>
                         <tr>
                             <td><?php echo htmlspecialchars($processo['id']); ?></td>
@@ -95,17 +105,17 @@ if (file_exists($json_file)) {
                             <td><a href="<?php echo htmlspecialchars($processo['refer_link']); ?>" target="_blank">Visualizar</a></td>
                             <td><a href="<?php echo htmlspecialchars($processo['image']); ?>" target="_blank">Visualizar</a></td>
                             <td><?php echo htmlspecialchars($processo['timestamp']); ?></td>
-                            <td style="display:grid">
-                                <a href="visualizar_processo.php?pa_id=<?php echo urlencode($processo['id']); ?>&pa_key=<?php echo urlencode($processo['pa_key']); ?>" class="btn btn-info">Ver Processo</a>
+                            <td style="display:flex">
+                                <a href="visualizar_processo.php?pa_id=<?php echo urlencode($processo['id']); ?>&pa_key=<?php echo urlencode($processo['pa_key']); ?>" class="btn btn-info"><i class="fa-solid fa-eye"></i></a>
                                 
                                 <?php if ($processo['etapa'] == 4): ?>
                                     <a href="excluir_processo.php?pa_id=<?php echo urlencode($processo['id']); ?>" 
                                         class="btn btn-danger"
                                         onclick="return confirm('Tem certeza que deseja excluir este processo?')">
-                                        Excluir
+                                        <i class="fa-solid fa-trash"></i>
                                         </a>
                                 <?php else: ?>
-                                    <button class="btn btn-danger" disabled>Excluir</button>
+                                    <button class="btn btn-danger" disabled><i class="fa-solid fa-trash"></i></button>
                                 <?php endif; ?>
                             </td>
                         </tr>
