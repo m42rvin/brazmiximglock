@@ -577,9 +577,28 @@ $contestacaoMensagens = [
             Seguir para próxima etapa
         </button>
 
-        <button type="submit" name="finalizar_arquivar" value="1" class="btn btn-danger" <?php echo $desabilitar; ?>>
+        <button type="submit" name="finalizar_arquivar" value="1" class="btn btn-danger" <?php echo $desabilitar; ?> onclick="return confirmarReprovacao(this)">
             Finalizar e Arquivar
         </button>
+
+<input type="hidden" name="motivo_reprovacao" id="motivo_reprovacao">
+
+<script>
+function confirmarReprovacao(botao) {
+    if (!botao.disabled) { // Verifica se o botão está habilitado
+        var motivo = prompt("Digite o motivo da finalização:");
+
+        if (motivo !== null && motivo.trim() !== "") {
+            document.getElementById("motivo_reprovacao").value = motivo;
+            return true; // Permite o envio do formulário
+        } else {
+            alert("É necessário informar um motivo para reprovar o processo.");
+            return false; // Impede o envio do formulário
+        }
+    }
+}
+</script>
+
 
         
     </div>
