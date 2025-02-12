@@ -16,18 +16,6 @@
         "finalizar_arquivar": "1"
     },
     {
-        "id": "67571d385ad54",
-        "pa_key": "pa_67571db5807712.51602798",
-        "etapa": "1",
-        "refer_name": "CASADASBOMBAS - MERCADOLIVRE",
-        "refer_link": "https:\/\/produto.mercadolivre.com.br\/MLB-1732487221-bomba-draga-4-polegadas-dragagens-irrigaco-_JM",
-        "image": "img_auditoria\/67571d385ad54.jpg",
-        "known_contacts": "NOME USU\u00c1RIO CASADASBOMBAS NA PLATAFORMA MERCADO LIVRE",
-        "observation": "PROCESSO DE AMOSTRA PARA TESTES DA FUNCIONALIDADE.PROCESSO DE AMOSTRA PARA TESTES DA FUNCIONALIDADE.PROCESSO DE AMOSTRA PARA TESTES DA FUNCIONALIDADE.PROCESSO DE AMOSTRA PARA TESTES DA FUNCIONALIDADE.PROCESSO DE AMOSTRA PARA TESTES DA FUNCIONALIDADE.PROCESSO DE AMOSTRA PARA TESTES DA FUNCIONALIDADE.PROCESSO DE AMOSTRA PARA TESTES DA FUNCIONALIDADE.PROCESSO DE AMOSTRA PARA TESTES DA FUNCIONALIDADE.PROCESSO DE AMOSTRA PARA TESTES DA FUNCIONALIDADE.PROCESSO DE AMOSTRA PARA TESTES DA FUNCIONALIDADE.PROCESSO DE AMOSTRA PARA TESTES DA FUNCIONALIDADE.PROCESSO DE AMOSTRA PARA TESTES DA FUNCIONALIDADE.",
-        "timestamp": "2024-12-09 13:41:25",
-        "archived": true
-    },
-    {
         "id": "675760a649251",
         "pa_key": "pa_6757626f307989.89058702",
         "etapa": "4",
@@ -109,7 +97,7 @@
     {
         "id": "6769a133f0f39",
         "pa_key": "pa_6769a1fc7a8164.07352726",
-        "etapa": "2",
+        "etapa": "3",
         "refer_name": "M\u00e9rito Comercial",
         "refer_link": "https:\/\/www.meritocomercial.com.br\/bomba-draga-fal-fgh-150-6-20870230002-p1019520",
         "image": "img_auditoria\/6769a133f0f39.png",
@@ -119,7 +107,10 @@
         "original_image": "673215e505ec6",
         "aprove_date": "2024-12-23 15:01:04",
         "archived": false,
-        "resposta_processo": true
+        "resposta_processo": true,
+        "sinalizar_notificacao": null,
+        "seguir_proxima_etapa": "1",
+        "finalizar_arquivar": null
     },
     {
         "id": "677c30562c7fa",
@@ -259,7 +250,7 @@
     {
         "id": "679b93d0c5407",
         "pa_key": "pa_679b93f96ef1f5.52623329",
-        "etapa": "2",
+        "etapa": "4",
         "refer_name": "TESTE 300111",
         "refer_link": "https:\/\/www.brazmix.com",
         "image": "img_auditoria\/679b93d0c5407.jpg",
@@ -269,11 +260,13 @@
         "original_image": "6732164805ed8",
         "aprove_date": "2025-01-30 12:08:07",
         "archived": false,
-        "sinalizar_notificacao": true,
+        "sinalizar_notificacao": null,
         "sinalizar_envio_data": "2025-01-30 12:11:56",
-        "seguir_proxima_etapa": false,
-        "finalizar_arquivar": false,
-        "resposta_processo": true
+        "seguir_proxima_etapa": null,
+        "finalizar_arquivar": "true",
+        "resposta_processo": true,
+        "descricao_analise_juridica": "teste",
+        "last_update": "2025-02-12 11:38:44"
     },
     {
         "id": "679b997d5782a",
@@ -287,7 +280,12 @@
         "timestamp": "2025-01-30 12:23:52",
         "original_image": "673215e505ec6",
         "aprove_date": "2025-02-03 10:51:28",
-        "archived": false
+        "archived": false,
+        "sinalizar_notificacao": "on",
+        "sinalizar_envio_data": "2025-02-12 13:30:03",
+        "seguir_proxima_etapa": null,
+        "finalizar_arquivar": null,
+        "resposta_processo": true
     },
     {
         "id": "67a77646d3eb4",

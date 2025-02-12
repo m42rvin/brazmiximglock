@@ -142,6 +142,21 @@ foreach ($uploads as $upload) {
             margin-top: 20px;
             margin-bottom: 20px;   
         }
+        table td:first-child, table th:first-child {
+            text-transform: uppercase;
+            font-weight: normal;
+        }
+        #container-etapa-3 {
+            width: 90%;
+            margin-left: 5%;
+            background: #fff;
+            padding: 5%;
+            margin-bottom: 60px;
+        }
+        h1 {
+            background:#fff;
+            margin-bottom: 30px !important;
+        }
     </style>
     <?php include 'header.php'; ?>
 </head>
@@ -707,7 +722,13 @@ foreach ($auditoria_data as $processo) {
 
 // Se encontrou os dados, exibe a tabela
 if ($processo_encontrado): ?>
-    <table class="table table-bordered text-center" style="width:60%; margin-left:20%" border="1">
+<div id="container-etapa-3">
+    <table class="table table-bordered text-center"border="1">
+        <tbody>
+            <colgroup>
+                <col style="width:50%"></col>
+                <col></col>
+            </colgroup>
         <tr>
             <th>Nome Referência</th>
             <td><?php echo htmlspecialchars($processo_encontrado['refer_name']); ?></td>
@@ -728,9 +749,8 @@ if ($processo_encontrado): ?>
             <th>Data e Hora</th>
             <td><?php echo htmlspecialchars($processo_encontrado['timestamp']); ?></td>
         </tr>
+        </tbody>
     </table>
-</div>
-<div class="d-flex align-items-start">
         
     <br />
 <?php else: ?>
@@ -852,10 +872,8 @@ $contestacaoMensagens = [
 ?>
 </tbody>
 </table>
-        </div>
         <!-- Exibir a linha da tabela se a resposta existir -->
         <?php if ($respostaEncontrada) : ?>
-    <div class="container">
     <table class="table table-bordered text-center" style="width: 100%; margin-left:0%">
     <tbody>
     <tr>
@@ -887,8 +905,8 @@ $contestacaoMensagens = [
     </tr>
     </tbody>
     <table>
-</div>
     <?php endif; ?>
+</div>
 <div class="card mb-4">
     <div class="card-header bg-primary text-white">
         Análise Jurídica e Administrativa

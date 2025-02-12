@@ -86,23 +86,23 @@ $images = json_decode($uploads_json, true); // Decodifica para array associativo
     <input type="hidden" name="id" value="<?php echo $_GET['pa_id'];?>"/>
     <input type="hidden" name="etapa" value="1"/>
     <div class="form-div">
-    <label for="refer_name">NOME DA CONTESTAÇÃO</label>
+    <label for="refer_name">NOME DA CONTESTAÇÃO:</label>
     <input required class="form-control" type="text" name="refer_name" id="refer_name" placeholder="Nome ou referência"><br>
     
-    <label for="refer_link">Link objeto de contestação</label>
+    <label for="refer_link">LINK OBJETO DE CONTESTAÇÃO:</label>
     <input required class="form-control" type="text" name="refer_link" id="refer_link" placeholder="Link para o objeto contestado"><br>
      
 
-    <label for="image">Imagem objeto de contestação:</label>
+    <label for="image">IMAGEM OBJETO DE CONTESTAÇÃO:</label>
     <input class="form-control" type="file" name="image" id="image" required><br>
 
-    <label for="known_contacts">INFORMAÇÕES DE CONTATO CONHECIDAS </label>
+    <label for="known_contacts">INFORMAÇÕES DE CONTATO CONHECIDAS: </label>
     <textarea class="form-control" id="known_contacts" name="known_contacts" rows="4" cols="50" placeholder="Coloque as formas de contato conhecidas aqui"></textarea>
     
-    <label for="observation">Observações sobre a contestação: </label>
+    <label for="observation">OBSERVAÇÕES DA CONTESTAÇÃO: </label>
     <textarea class="form-control" id="observation" name="observation" rows="4" cols="50" placeholder="Observações sobre a contestação"></textarea>
 
-    <label for="refer_image">INDIQUE A IMAGEM PROTEGIDA DESSA CONTESTAÇÃO</label>
+    <label for="refer_image">INDIQUE A IMAGEM PROTEGIDA DESSA CONTESTAÇÃO:</label>
     <div style="display: flex; flex-wrap: wrap; gap: 10px;">
         <?php foreach ($images as $image): ?>
             <label style="cursor: pointer;">

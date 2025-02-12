@@ -101,9 +101,6 @@ if (isset($_SESSION['acesso_autorizado_' . $pa_id])) {
 
     <?php if ($pa_id): ?>
         <?php if ($processoValido): ?>
-            <div class="alert alert-success">
-                Acesso autorizado! Informações do processo ID: <strong><?php echo htmlspecialchars($pa_id); ?></strong>
-            </div>
 
             <?php
             // Carregar informações do processo de processos_auditoria.json
@@ -141,7 +138,10 @@ if (isset($_SESSION['acesso_autorizado_' . $pa_id])) {
 
                   // Calcular a diferença entre a data final e a data atual
                   $diferenca = $dataAtual->diff($dataFinal);
+                  // Verifique se existe uma resposta para o processo
+                  $respostaEnviada = isset($processo['resposta_processo']) && $processo['resposta_processo'] === true;
 
+                  if(!$respostaEnviada){
                   // Verificar se o prazo já expirou
                   if ($dataAtual > $dataFinal) {
                       echo "O prazo de 15 dias já expirou.";
@@ -149,13 +149,11 @@ if (isset($_SESSION['acesso_autorizado_' . $pa_id])) {
                       // Exibir o contador regressivo
                       echo "Faltam " . $diferenca->days . " dias para esgotar o prazo de resposta deste processo.";
                   }
-                 
+                }
                  
                  ?>
                  </div>
                  <?php
-// Verifique se existe uma resposta para o processo
-$respostaEnviada = isset($processo['resposta_processo']) && $processo['resposta_processo'] === true;
 
 // Caso não exista resposta, exibe o formulário
 if (!$respostaEnviada && $dataAtual < $dataFinal):
