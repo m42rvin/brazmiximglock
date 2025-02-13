@@ -1,22 +1,2 @@
 [
-    {
-        "id": "67ae2e7986100",
-        "pa_key": "pa_67ae2eb3e7cce4.73082295",
-        "etapa": "3",
-        "refer_name": "TESTE 1 POS ENTREGA",
-        "refer_link": "http:\/\/www.brazmix.com",
-        "image": "img_auditoria\/67ae2e7986100.jpg",
-        "known_contacts": "usu\u00e1rio mercado livre; lojinha3000",
-        "observation": "verificou-se uso indevido de imagem de propriedade da brazmix.",
-        "timestamp": "2025-02-13 14:41:07",
-        "original_image": "67ae2cdd3b6b3",
-        "aprove_date": "2025-02-13 14:41:27",
-        "archived": false,
-        "username": "paulojunior",
-        "sinalizar_notificacao": null,
-        "sinalizar_envio_data": "2025-02-13 14:42:08",
-        "seguir_proxima_etapa": "1",
-        "finalizar_arquivar": null,
-        "resposta_processo": true
-    }
 ]
