@@ -172,6 +172,15 @@ if (!empty($processo_encontrado['original_image'])) {
             position: absolute;
             right: 20%;
             top: 30px;
+            font-size: 10px !important; 
+        }
+
+        .align-top, .align-middle {
+            font-size: 10px
+        }
+        table {
+            border-collapse: collapse; /* Colapsa as bordas */
+            border-spacing: 0;
         }
 
     </style>
@@ -180,9 +189,9 @@ if (!empty($processo_encontrado['original_image'])) {
 <body>
     <div class="container mt-5">
         <img class="logo-brazmix" src="logo-black.png"/>
-        <span class="sysdesc">Sistema de auditoria para segurança e <br/> licenciamento de imagens</span>
+        <span class="sysdesc">Sistema de Auditoria para Segurança e <br/> Licenciamento de Imagens</span>
         <br/><br/>
-        <h4>Resumo do Processo ID: <?php echo htmlspecialchars($processo_encontrado['id']); ?> - Status <?php echo date('d/m/Y'); ?> <?php echo ($processo_encontrado['etapa'] == 4) ? 'Finalizado' : 'Aberto'; ?></h4>
+            <h5>Resumo do Processo ID: <?php echo htmlspecialchars($processo_encontrado['id']); ?> - Status <?php echo date('d/m/Y'); ?> <?php echo ($processo_encontrado['etapa'] == 4) ? 'Finalizado' : 'Aberto'; ?></h5><br/>
         <table>
             <tbody>
                 <colgroup>
@@ -218,6 +227,10 @@ if (!empty($processo_encontrado['original_image'])) {
                     <td class="align-middle"><a href="<?php echo htmlspecialchars($processo_encontrado['refer_link']); ?>" target="_blank">
                         <?php echo htmlspecialchars($processo_encontrado['refer_link']); ?>
                     </a></td>
+                </tr>
+                <tr>
+                    <td class="align-top">Data de envio da Comunicação</td>
+                    <td class="align-middle"><?php echo $processo['sinalizar_envio_data']; ?></td>
                 </tr>
                 <tr class="border-bottom border-dark">
                     <td class="align-top"><strong>Comunicação gerada sobre a contestação:</strong></td>
@@ -269,9 +282,13 @@ if (!empty($processo_encontrado['original_image'])) {
                 </tr>
                 <?php endif; ?>
                 <?php if ($original_image): ?>
-                <tr class="border-bottom border-dark">
+                    <tr style="height: 30px">
+                        <td></td>
+                        <td></td>
+                    </tr>
+                <tr class="border-bottom border-dark page-break">
                     <td class="align-top"></td>
-                    <td class="align-middle"><h3>Dados EXIF da imagem original:</h3></td>
+                    <td class="align-middle"><h3><br/>Dados EXIF da imagem original:</h3></td>
                 </tr>
                 <tr class="border-bottom border-dark">
                     <td class="align-top"><strong>Nome:</strong></td>

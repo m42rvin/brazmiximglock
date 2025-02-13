@@ -174,7 +174,6 @@ foreach ($uploads as $upload) {
 
         <!-- Informações Gerais -->
         <ul class="list-group list-group-flush">
-            <li class="list-group-item"><strong>Etapa:</strong> <?php echo htmlspecialchars($processo['etapa']); ?></li>
             <li class="list-group-item"><strong>Nome ou Referência:</strong> <?php echo htmlspecialchars($processo['refer_name']); ?></li>
             <li class="list-group-item">
                 <strong>Link contestado:</strong> 
@@ -183,6 +182,13 @@ foreach ($uploads as $upload) {
                 </a>
             </li>
         </ul>
+
+        <!-- Data de Criação -->
+        <div class="mt-4">
+            <p><strong style="margin-left: 25px">Data de Criação:</strong> 
+               <?php echo htmlspecialchars($processo['timestamp']); ?>
+            </p>
+        </div>
 
         <!-- Imagens -->
         <div class="d-flex">
@@ -223,18 +229,12 @@ foreach ($uploads as $upload) {
             <p class="text-muted"><?php echo nl2br(htmlspecialchars($processo['observation'])); ?></p>
         </div>
 
-        <!-- Data de Criação -->
-        <div class="mt-4">
-            <p><strong>Data de Criação:</strong> 
-                <span style="color:white" class="badge bg-secondary"><?php echo htmlspecialchars($processo['timestamp']); ?></span>
-            </p>
-        </div>
 
         <!-- Botões -->
         <?php if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true): ?>
             <!-- Botão para copiar a URL -->
         <button id="copy-url-btn" class="btn btn-primary" data-clipboard-text="">
-            Copiar URL Atual
+            Copiar URL
         </button>
 
         <!-- Mensagem de confirmação -->
@@ -243,7 +243,7 @@ foreach ($uploads as $upload) {
         </div>
         <br>
             
-            <a href="processos_auditoria.php" class="btn-voltar">Voltar para a lista de processos</a>
+            <a href="processos_auditoria.php" class="btn-voltar">Voltar</a>
         <!-- Botao de copiar url -->
 
         
@@ -278,9 +278,9 @@ foreach ($uploads as $upload) {
 
         <?php endif; ?>
         <?php if($processo['archived'] === false){ ?>
-            <a href="pa2.php?aprov=true&pa_id=<?php echo $processo['id']; ?>&pa_key=<?php echo $processo['pa_key']; ?>" class="btn btn-success">Aprovar processo</a>
+            <a href="pa2.php?aprov=true&pa_id=<?php echo $processo['id']; ?>&pa_key=<?php echo $processo['pa_key']; ?>" class="btn btn-success">Aprovar Processo</a>
             <a href="#" class="btn btn-danger" onclick="reprovarProcesso(event, '<?php echo $processo['id']; ?>', '<?php echo $processo['pa_key']; ?>')">
-    Reprovar processo e Arquivar
+    Reprovar Processo
 </a>
 
     <script>
@@ -324,7 +324,14 @@ foreach ($auditoria_data as $processo) {
 
 // Se encontrou os dados, exibe a tabela
 if ($processo_encontrado): ?>
-    <table class="table table-bordered text-center" style="width:100%" border="1">
+
+<table class="table table-bordered text-center" style="width:100%" border="1">
+        <tr>
+        <td colspan="2">    
+            <h4>DADOS DA ABERTURA DO PROCESSO</h4>
+        </td>
+    </tr>        
+
         <tr>
             <th>Nome Referência</th>
             <td><?php echo htmlspecialchars($processo_encontrado['refer_name']); ?></td>
@@ -356,10 +363,11 @@ if ($processo_encontrado): ?>
 
             <table class="table table-bordered text-center">
             <thead>
-                <tr>
-                    <th>#</th>
-                    <th>#</th>
-                </tr>
+             <tr>
+                <td colspan="2">    
+                    <h4>ANDAMENTO DO PROCESSO</h4>
+                </td>
+            </tr>  
             </thead>
             <tbody>
                 <!-- Exemplo de uma linha com dados -->
@@ -476,11 +484,14 @@ $contestacaoMensagens = [
     <table class="table table-bordered text-center" style="width: 100%; margin-left:0%">
     <tbody>
     <tr>
-        <td>Data Resposta</td>
+        <td colspan="2"><h4>Dados da Resposta Recebida</h4></td>
+    </tr>
+    <tr>
+        <td>Data da Resposta</td>
         <td><?php echo $respostaEncontrada['data_resposta']; ?></td>
     </tr>
     <tr>
-        <td>Contestação</td>
+        <td>Resposta Selecionada</td>
         <td style="max-width: 200px; word-wrap: break-word;">
             <?php
                 $contestacao = $respostaEncontrada['contestacao'];
@@ -491,7 +502,7 @@ $contestacaoMensagens = [
         </td>
     </tr>
     <tr>
-        <td>Texto Resposta</td>
+        <td>Texto da Resposta</td>
         <td style="max-width: 200px; word-wrap: break-word;"><?php echo htmlspecialchars($respostaEncontrada['texto_resposta']); ?></td>
     </tr>
     <tr>
@@ -509,14 +520,14 @@ $contestacaoMensagens = [
         <div class="d-flex align-items-start ">
         <?php if (!isset($processo['resposta_processo']) || !$processo['resposta_processo']) : ?>
         <!-- Botão -->
-        <button style="margin-top:45px" type="button" class="btn btn-primary gera-processo" id_processo="<?php echo $processo['id']; ?>">
-            <i class="fa-solid fa-file-export"></i> Gerar PDF com Comunicado
+        <button style="margin-top:45px;margin-left:-80px" type="button" class="btn btn-primary gera-processo" id_processo="<?php echo $processo['id']; ?>">
+            <i class="fa-solid fa-file-export"></i> Gerar Comunicado
         </button>
     <?php endif; ?>
         <?php if (!isset($processo['resposta_processo']) || !$processo['resposta_processo']) : ?>
             <div class="mb-3">
                 <h5>Link para responder contestação:</h5>
-                <input style="width:200px" readonly class="resposta-link form-control" placeholder="Digite algo..." />
+                <input style="width:500px" readonly class="resposta-link form-control" placeholder="Digite algo..." />
             </div>
             <div>
                 <h5>Chave de acesso:</h5>
@@ -723,12 +734,18 @@ foreach ($auditoria_data as $processo) {
 // Se encontrou os dados, exibe a tabela
 if ($processo_encontrado): ?>
 <div id="container-etapa-3">
+<a target="_blank" href="resumo_processo.php?pa_id=<?php echo $processo['id'];?>" class="btn btn-success" style="margin-bottom:40px; position:absolute; margin-top:-50px; left:50%; transform:translateX(-50%)">Gerar Resumo do Processo</a>
     <table class="table table-bordered text-center"border="1">
         <tbody>
             <colgroup>
                 <col style="width:50%"></col>
                 <col></col>
             </colgroup>
+            <tr>
+        <td colspan="2">    
+                <h4>DADOS DA ABERTURA DO PROCESSO</h4>
+            </td>
+        </tr>
         <tr>
             <th>Nome Referência</th>
             <td><?php echo htmlspecialchars($processo_encontrado['refer_name']); ?></td>
@@ -759,10 +776,10 @@ if ($processo_encontrado): ?>
 
             <table class="table table-bordered text-center">
             <thead>
-                <tr>
-                    <th>#</th>
-                    <th>#</th>
-                </tr>
+            <tr><td colspan="2">    
+                <h4>ANDAMENTO DO PROCESSO</h4>
+            </td>
+        </tr>
             </thead>
             <tbody>
                 <!-- Exemplo de uma linha com dados -->
@@ -877,11 +894,14 @@ $contestacaoMensagens = [
     <table class="table table-bordered text-center" style="width: 100%; margin-left:0%">
     <tbody>
     <tr>
-        <td>Data Resposta</td>
+        <td colspan="2"><h4>Dados da Resposta Recebida</h4></td>
+    </tr>
+    <tr>
+        <td>Data da Resposta</td>
         <td><?php echo $respostaEncontrada['data_resposta']; ?></td>
     </tr>
     <tr>
-        <td>Contestação</td>
+        <td>Resposta Selecionada</td>
         <td style="max-width: 200px; word-wrap: break-word;">
             <?php
                 $contestacao = $respostaEncontrada['contestacao'];
@@ -892,7 +912,7 @@ $contestacaoMensagens = [
         </td>
     </tr>
     <tr>
-        <td>Texto Resposta</td>
+        <td>Texto da Resposta</td>
         <td style="max-width: 200px; word-wrap: break-word;"><?php echo htmlspecialchars($respostaEncontrada['texto_resposta']); ?></td>
     </tr>
     <tr>
@@ -933,7 +953,7 @@ $contestacaoMensagens = [
                 <?php listarArquivos($processos, $processo['id'], 'analise_juridica'); ?>
             </div>
             <button type="submit" class="btn btn-primary">Salvar</button>
-            <button onclick="enviarRequisicao('<?php echo $processo['id']; ?>')" type="button" class="btn btn-success">Finalizar Processo</button>
+            <button onclick="enviarRequisicao('<?php echo $processo['id']; ?>')" type="button" class="btn btn-danger">Finalizar Processo</button>
         </form>
     </div>
 </div>
@@ -965,13 +985,13 @@ $contestacaoMensagens = [
                 <?php listarArquivos($processos, $processo['id'], 'comunicacao_extra'); ?>
             </div>
             <button type="submit" class="btn btn-warning">Salvar</button>
-            <button onclick="enviarRequisicao('<?php echo $processo['id']; ?>')" type="button" class="btn btn-success">Finalizar Processo</button>
+            <button onclick="enviarRequisicao('<?php echo $processo['id']; ?>')" type="button" class="btn btn-danger">Finalizar Processo</button>
         </form>
     </div>
 </div>
 
 <div class="card">
-    <div class="card-header bg-danger text-white">
+    <div style="background:#ff9d00 !important; color: #000 !important" class="card-header bg-danger text-white">
         Processo Jurídico
     </div>
     <div class="card-body">
@@ -997,9 +1017,10 @@ $contestacaoMensagens = [
                 <!-- Lista de Arquivos para Análise Jurídica -->
                 <?php listarArquivos($processos, $processo['id'], 'processo_juridico'); ?>
             </div>
-            <button type="submit" class="btn btn-danger">Salvar</button>
-            <button onclick="enviarRequisicao('<?php echo $processo['id']; ?>')" type="button" class="btn btn-success">Finalizar Processo</button>
+            <button style="background:#ff9d00 !important; color: #000 !important" type="submit" class="btn btn-danger">Salvar</button>
+            <button onclick="enviarRequisicao('<?php echo $processo['id']; ?>')" type="button" class="btn btn-danger">Finalizar Processo</button>
         </form>
+        <a target="_blank" href="resumo_processo.php?pa_id=<?php echo $processo['id'];?>" class="btn btn-success" style="margin-top:60px; position:absolute; margin-top:60px; left:50%; transform:translateX(-50%)">Gerar Resumo do Processo</a>
     </div>
 </div>
 <script>
@@ -1037,11 +1058,12 @@ $contestacaoMensagens = [
 }
 
 </script>
-<a target="_blank" href="resumo_processo.php?pa_id=<?php echo $processo['id'];?>" class="btn btn-success ver-resumo">Ver Resumo do Processo</a>
+
 <?php } elseif($processo['etapa'] == '4') {?>
 <!-- Página Final -->
  <h1>ETAPA 4 – FINALIZAÇÃO DO PROCESSO</h1>
 <div class="processo-visualizacao">
+<a target="_blank" href="resumo_processo.php?pa_id=<?php echo $processo['id'];?>" class="btn btn-success" style="margin-bottom:40px; position:absolute; margin-top:-70px; left:50%; transform:translateX(-50%)">Gerar Resumo do Processo</a>
         <div class="d-flex align-items-start">
         <h1>Processo Finalizado</h1>
         </div>
@@ -1049,8 +1071,7 @@ $contestacaoMensagens = [
             <table class="table table-bordered text-center">
             <thead>
                 <tr>
-                    <th>#</th>
-                    <th>#</th>
+                    <td colspan="2"><h4>ANDAMENTO DO PROCESSO</h4><td>
                 </tr>
             </thead>
             <tbody>
@@ -1135,6 +1156,11 @@ $contestacaoMensagens = [
                         ?>
                     </td>
                 </tr>
+                <tr>
+                    <td>Data Finalização</td>
+                    <td><?php echo $processo['finalizar_data'];?></td>
+
+                </tr>
             </tbody>
             </table>
             
@@ -1170,11 +1196,14 @@ $contestacaoMensagens = [
     <table class="table table-bordered text-center" style="width: 100%; margin-left:0%">
     <tbody>
     <tr>
-        <td>Data Resposta</td>
+        <td colspan="2"><h4>Dados da Resposta Recebida</h4></td>
+    </tr>
+    <tr>
+        <td>Data da Resposta</td>
         <td><?php echo $respostaEncontrada['data_resposta']; ?></td>
     </tr>
     <tr>
-        <td>Contestação</td>
+        <td>Resposta Selecionada</td>
         <td style="max-width: 200px; word-wrap: break-word;">
             <?php
                 $contestacao = $respostaEncontrada['contestacao'];
@@ -1185,7 +1214,7 @@ $contestacaoMensagens = [
         </td>
     </tr>
     <tr>
-        <td>Texto Resposta</td>
+        <td>Texto da Resposta</td>
         <td style="max-width: 200px; word-wrap: break-word;"><?php echo htmlspecialchars($respostaEncontrada['texto_resposta']); ?></td>
     </tr>
     <tr>
@@ -1354,7 +1383,7 @@ $contestacaoMensagens = [
 
 
         </div>
-        <a target="_blank" href="resumo_processo.php?pa_id=<?php echo $processo['id'];?>" class="btn btn-success ver-resumo">Ver Resumo do Processo</a>
+        
 
 <!-- Página Final -->
 <?php } ?>

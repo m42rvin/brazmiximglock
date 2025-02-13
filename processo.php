@@ -198,7 +198,7 @@ if (!$respostaEnviada && $dataAtual < $dataFinal):
     </div>
     <div class="mt-4 campos-contatos">
         <h5><strong>Email</strong></h5>
-        <input required class="form-control" name="email" type="text" placeholder="Digite seu E-mail"/>
+        <input required class="form-control" name="email" type="email" placeholder="Digite seu E-mail"/>
         <br/>
         <h5><strong>Telefone</strong></h5>
         <input required class="form-control" name="telefone" type="text" placeholder="Digite seu telefone"/>
@@ -245,7 +245,7 @@ if ($contestacao !== null) {
             echo "Entendido! \nVocê poderá contatar nosso time através dos contatos abaixo. Note que ao selecionar essa opção o tempo de resposta para o processo continua a ser contabilizado e sua pronta resposta/contato é fundamental para esclarecermos tudo rapidamente e evitar desdobramentos mais complexos no futuro.\n marketing@brazmix.com  ou +55 54 3229 93 65  ";
             break;
         case 'nao_concordo':
-            echo "Agradecemos por sua resposta. \nA opção que você selecionou faz com que nosso sistema de auditoria de sequência ao processo de forma interna e nossa equipe tomará as ações necessárias para contatar você e/ou seus representantes no momento oportuno. É importante que tenha informado os dados de contato corretos para podermos seguir com as tratativas desse assunto. \nCaso mude de opinião e queira alterar seu posicionamento sobre esse processo, contate nosso time pelo endereço abaixo;\nmarketing@brazmix.com";
+            echo "Agradecemos por sua resposta. \nA opção que você selecionou faz com que nosso sistema de auditoria dê sequência ao processo de forma interna e nossa equipe tomará as ações necessárias para contatar você e/ou seus representantes no momento oportuno. É importante que tenha informado os dados de contato corretos para podermos seguir com as tratativas desse assunto. \nCaso mude de opinião e queira alterar seu posicionamento sobre esse processo, contate nosso time pelo endereço abaixo;\nmarketing@brazmix.com";
             break;
         case 'quero_vender':
             echo "Agradecemos sua resposta. Em breve entraremos em contato para apresentar os planos de uso de nossas imagens.";

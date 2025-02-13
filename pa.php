@@ -118,7 +118,7 @@ $images = json_decode($uploads_json, true); // Decodifica para array associativo
         <?php endforeach; ?>
     </div>
 
-    <button type="submit" class="btn btn-dark">Enviar</button>
+    <button type="submit" class="btn btn-success" style="width:100%">Enviar</button>
 </form>
 </div>
     

@@ -1,26 +1,14 @@
-[
-    {
-        "slug": "CC BY",
-        "name": "Atribuição (CC BY)"
+{
+    "6": {
+        "slug": "Todos os Direitos Reservados",
+        "name": "Todos os Direitos Reservados - Proibido uso, reprodução ou derivação"
     },
-    {
-        "slug": "CC BY-SA",
-        "name": "Atribuição - Compartilhamento pela mesma licença (CC BY-SA)"
+    "7": {
+        "slug": "Com Direitos p\/ Reprodução c\/ Autorização",
+        "name": "Direitos Reservados - uso, reprodução ou derivação sob autorização direta"
     },
-    {
-        "slug": "CC BY-ND",
-        "name": "Atribuição - Sem Derivações (CC BY-ND)"
-    },
-    {
-        "slug": "CC BY-NC",
-        "name": "Atribuição - Não Comercial (CC BY-NC)"
-    },
-    {
-        "slug": "CC BY-NC-SA",
-        "name": "Atribuição - Não Comercial - Compartilhamento pela mesma licença (CC BY-NC-SA)"
-    },
-    {
-        "slug": "CC BY-NC-ND",
-        "name": "Atribuição - Não Comercial - Sem Derivações (CC BY-NC-ND)"
+    "8": {
+        "slug": "Livre uso com Atribuição",
+        "name": "Livre com Atribuição - uso, reprodução ou derivação com informação da origem"
     }
-]
+}

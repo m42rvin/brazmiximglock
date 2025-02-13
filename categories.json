@@ -1,26 +1,18 @@
-[
-    {
-        "slug": "prodbruto",
-        "name": "Produto Bruto"
+{
+    "6": {
+        "slug": "imgraw",
+        "name": "Imagem Bruta (raw)"
     },
-    {
-        "slug": "prodedit",
-        "name": "Produto Editado"
+    "7": {
+        "slug": "imgedit",
+        "name": "Imagem Editada"
     },
-    {
-        "slug": "paisagem",
-        "name": "Paisagem"
+    "8": {
+        "slug": "imglicence",
+        "name": "Imagem Licenciada"
     },
-    {
-        "slug": "pessoas",
-        "name": "Pessoas"
-    },
-    {
-        "slug": "criacaodigital",
-        "name": "Criação Digital Mista"
-    },
-    {
-        "slug": "compra",
-        "name": "Compra de imagem"
+    "9": {
+        "slug": "imgcriadig",
+        "name": "Imagem Criação Digital"
     }
-]
+}

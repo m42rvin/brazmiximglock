@@ -26,6 +26,7 @@ foreach ($data as &$processo) {
         }
         if($finalizarArquivar) {
             $processo['etapa'] = '4';
+            $processo['finalizar_data'] = date('Y-m-d H:i:s');
         }
         $processo['finalizar_arquivar'] = $finalizarArquivar;
         break;
