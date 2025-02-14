@@ -295,14 +295,23 @@ function renderTable(data, title = null) {
 
             
             keyCell.innerHTML = `<strong>${newKey}</strong>`;
-            if(key === 'category'){
-                let tmpcat = _categories.filter(e => {
-                    if(e.slug == [data[key]]){
-                        return true;
-                    } 
-                })
-                data[key] = tmpcat[0].name;
-            }
+if(key === 'category'){
+    // Garante que estamos trabalhando com um array
+    let categoriasArray = Array.isArray(_categories) ? _categories : Object.values(_categories);
+    
+    // Filtra os elementos que possuem o slug desejado
+    let tmpcat = categoriasArray.filter(e => e.slug == data[key]);
+    
+    // Se encontrar algum, atribui o nome à data
+    if (tmpcat.length > 0) {
+        data[key] = tmpcat[0].name;
+    } else {
+        // Trate o caso em que nenhuma categoria foi encontrada, se necessário
+        data[key] = 'Categoria não encontrada';
+    }
+}
+
+
             row.appendChild(keyCell);
 
             // Cria a célula de valor
