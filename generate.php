@@ -14,70 +14,21 @@ error_reporting(E_ALL);
 
 header('Content-Type: text/html; charset=UTF-8'); // Garantir que a página use UTF-8
 
-require './fpdf/fpdf.php';
+// Caminho do arquivo uploads.json
+$uploadsFile = 'uploads.json';
 
-class PDF extends FPDF
-{
-    // Sobrescrever o método header para garantir que a fonte seja UTF-8
-    function Header()
-    {
-        $this->SetFont('Arial', 'B', 16);
-        $this->Cell(0, 10, utf8_decode('Relatório de Imagens'), 0, 1, 'C');
-        $this->Ln(5);
-    }
-
-    // Sobrescrever o método footer para ajustar a posição do rodapé
-    function Footer()
-    {
-        $this->SetY(-15);
-        $this->SetFont('Arial', 'I', 8);
-        $this->Cell(0, 10, utf8_decode('Página ') . $this->PageNo(), 0, 0, 'C');
-    }
+// Verifica se o arquivo existe
+if (!file_exists($uploadsFile)) {
+    die("Arquivo de uploads não encontrado.");
 }
 
-function renderPDFContent($pdf, $data, $x = 10, $y = null) {
-    // Define a posição inicial
-    if ($y !== null) {
-        $pdf->SetY($y);
-    }
-    $pdf->SetX($x);
+// Lê e decodifica o JSON
+$uploads = json_decode(file_get_contents($uploadsFile), true);
 
-    // Verifica se é necessário adicionar uma nova página, mas evita no primeiro caso
-    if ($pdf->PageNo() > 1 && $pdf->GetY() > 250) {
-        $pdf->AddPage(); // Adiciona nova página se a altura do conteúdo ultrapassar o limite
-    }
-
-    // Exibe a imagem como thumbnail no início
-    if (!empty($data['thumb_path']) && file_exists($data['thumb_path'])) {
-        $pdf->Image($data['thumb_path'], 15, $pdf->GetY() + 10, 50); // Ajuste tamanho da thumbnail
-        $imageHeight = $pdf->GetY() + 60; // Altura ajustada para a imagem
-        $pdf->SetY($imageHeight); // Move para abaixo da imagem
-    } else {
-        $pdf->Cell(0, 10, "Imagem: Não encontrada.", 0, 1);
-    }
-
-    // Cores e estilos
-    $headerColor = [220, 220, 220];
-    $rowColor1 = [245, 245, 245];
-    $rowColor2 = [255, 255, 255];
-    $currentRowColor = $rowColor1;
-
-    // Exibe o nome do arquivo
-    $pdf->SetFont('Arial', '', 10);
-    $pdf->Cell(0, 10, utf8_decode("Nome do Arquivo: " .  utf8_decode($data['name'] ?? "Informação não informada")), 0, 1);
-    $pdf->SetFont('Arial', '', 10);
-
-    // Exibe a descrição
-    $pdf->MultiCell(0, 10, utf8_decode("Descrição: " .  utf8_decode($data['description'] ?? "Informação não informada")));
-    $pdf->Ln(5);
-
-    // Exibe o link ativo
-    $pdf->SetFont('Arial', 'I', 10);
-    $pdf->Cell(0, 10, utf8_decode("Link Ativo: " .  utf8_decode($data['link_ativo'] ?? "Informação não informada")), 0, 1);
-    $pdf->Ln(5);
+function renderPDFContent($data) {
 
     // Exibe as outras informações
-    $infoFields = [
+    return [
         'Custom Name' => $data['custom_name'] ?? 'Informação não informada',
         'Categoria' => $data['category'] ?? 'Informação não informada',
         'Licença' => $data['license'] ?? 'Informação não informada',
@@ -93,48 +44,13 @@ function renderPDFContent($pdf, $data, $x = 10, $y = null) {
         'Software' => $data['Software'] ?? 'Informação não informada',
         'Data e Hora' => $data['DateTime'] ?? 'Informação não informada',
         'Tamanho do Arquivo' => $data['size'] ?? 'Informação não informada',
-        'Data de Upload' => $data['uploaded_at'] ?? 'Informação não informada'
+        'Data de Upload' => $data['uploaded_at'] ?? 'Informação não informada',
+        'Imagem' => $data['path'] ?? ''
     ];
 
-    $pdf->SetFont('Arial', 'B', 12);
-    $pdf->Cell(0, 10, utf8_decode('Informações Cadastrais'), 0, 1);
-    $pdf->SetFont('Arial', '', 10);
-
-    foreach ($infoFields as $label => $value) {
-        $pdf->Cell(0, 10, utf8_decode("$label: $value"), 0, 1);
-    }
-    $pdf->Ln(5);
-
-    // Exibe as informações do EXIF
-    if (!empty($data['exif'])) {
-        $pdf->SetFont('Arial', 'B', 12);
-        $pdf->Cell(0, 10, utf8_decode('Informações EXIF'), 0, 1);
-        $pdf->SetFont('Arial', '', 10);
-
-        foreach ($data['exif'] as $exifKey => $exifValue) {
-            if (is_array($exifValue)) {
-                $pdf->SetFont('Arial', 'I', 10);
-                $pdf->Cell(0, 10, utf8_decode("$exifKey: " . implode(", ", $exifValue)), 0, 1);
-            } else {
-                $pdf->Cell(0, 10, utf8_decode("$exifKey: $exifValue"), 0, 1);
-            }
-        }
-    } else {
-        $pdf->Cell(0, 10, "Informações EXIF: Não disponíveis.", 0, 1);
-    }
-
-    $pdf->Ln(10); // Espaço entre as seções
+    
 }
 
-// Função para garantir que os dados JSON estejam em UTF-8
-function utf8_encode_array($data) {
-    if (is_array($data)) {
-        return array_map('utf8_encode_array', $data);
-    } elseif (is_string($data)) {
-        return utf8_encode($data); // Codifica cada string individualmente para UTF-8
-    }
-    return $data;
-}
 
 // Verifica se os dados foram enviados via POST
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['generate'])) {
@@ -144,18 +60,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['generate'])) {
         die("Erro: IDs devem ser enviados como um array.");
     }
 
-    // Carrega o arquivo uploads.json
-    $jsonData = file_get_contents('uploads.json');
-    $jsonData = utf8_encode($jsonData); // Forçar UTF-8 na leitura do arquivo
-    $uploads = json_decode($jsonData, true);
-
-    if (!$uploads) {
-        die("Erro: Não foi possível ler o arquivo uploads.json.");
-    }
-
-    // Força a codificação UTF-8 em todo o conteúdo dos uploads
-    $uploads = utf8_encode_array($uploads);
-
     // Filtra os dados pelo array de IDs recebidos
     $filteredData = array_filter($uploads, function ($item) use ($ids) {
         return in_array($item['id'], $ids);
@@ -164,26 +68,61 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['generate'])) {
     if (empty($filteredData)) {
         die("Erro: Nenhum dado encontrado para os IDs fornecidos.");
     }
-
-    // Cria o PDF
-    $pdf = new PDF();
-    $pdf->AddPage();
-
-    $firstPage = true;
-    foreach ($filteredData as $data) {
-        // Adiciona nova página apenas se não for o primeiro caso
-        if (!$firstPage) {
-            $pdf->AddPage();
+?>
+<style>
+@media print {
+            .page-break {
+                page-break-before: always; /* Força uma quebra antes deste elemento */
+            }
+            .no-break {
+                page-break-inside: avoid; /* Evita que o conteúdo seja dividido */
+            }
+            body {
+                margin: 0; /* Remove margens do corpo do conteúdo */
+                padding: 0;
+            }
         }
-        $firstPage = false;
+        table {
+            font-size: 10px;
+        }
+        .sysdesc {
+            display: inline-block;
+            border: 1px solid black;
+            padding: 10px;
+            text-align: center;
+            position: absolute;
+            right: 20%;
+            top: 40px;
+            font-size: 10px !important; 
+        }
 
-        // Renderiza conteúdo de cada item
-        renderPDFContent($pdf, $data, 10, $pdf->GetY());
-    }
+</style>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css">
+<img src="logo-black.png" style="width: 200px; margin-left: 10%; margin-bottom: 50px;margin-top: 50px"/>
+<div class="sysdesc">
+Brazmix Equipamentos para Mineração Ltda,<br/> inscrita sob CNPJ 17.903.283/0001-84
+</div>
+<table style="width:80%; margin-left:10%">
+<tbody>
+    <?php foreach ($filteredData as $data): ?>
+        <?php $content = renderPDFContent($data); ?>
+        <?php foreach ($content as $key => $value): ?>
+            <tr class="border-bottom border-dark">
+                <td class="align-top"><?php echo htmlspecialchars($key); ?></td>
+                <td>
+                    <?php if ($key === 'Imagem'): ?>
+                        <img src="<?php echo htmlspecialchars($value); ?>" alt="Imagem" style="max-width: 300px;margin-bottom:50px">
+                    <?php else: ?>
+                        <?php echo htmlspecialchars($value); ?>
+                    <?php endif; ?>
+                </td>
+            </tr>
+        <?php endforeach; ?>
+    <?php endforeach; ?>
+</tbody>
 
-    // Envia o PDF para download
-    $pdf->Output('D', 'relatorio.pdf');
-    exit;
+</table>
+<?php
 } else {
     die("Erro: Nenhum dado enviado.");
 }
